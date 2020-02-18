@@ -1,5 +1,6 @@
 $('#adminpanel').click(() => {
     console.log("admin");
+    console.log("hola");
 });
 
 $(function () {
