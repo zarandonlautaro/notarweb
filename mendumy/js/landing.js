@@ -143,11 +143,11 @@ $('#register_button').click(() => {
 
 
     if (!(pass.length > 6)) {
-        $('#validate_register').empty().append("Contraseña muy corta!");
+        $('#validate_register').empty().append("La contraseña debe contener por lo menos 7 caracteres");
     } else {
         $('#validate_register').empty();
         if (!(legajo.length > 2)) {
-            $('#validate_register').empty().append("El legajo no puede estar vacio!");
+            $('#validate_register').empty().append("¡El legajo no puede estar vacio!");
         } else {
             $('#validate_register').empty();
             if (!IsEmail(email)) {
