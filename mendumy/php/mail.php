@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\Exception;
 require '..\vendor\autoload.php';
 
 // Instantiation and passing `true` enables exceptions
-
+// la variable link contendra en enlace que enviaremos al correo del usuario, de momento se encuentra localhost/mendumy/mendumy para pruebas  en localhost
 function sendMail($to, $tipo, $idusr = 0, $add = 0)
 {
     if ($tipo == 1) {
@@ -24,7 +24,7 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
             $param5 = "e";
             $param6 = $to;
 
-            $link = "http://localhost/mendumy/registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 . "&" . $param5 . "=" . $param6;
+            $link = "http://localhost/mendumy/mendumy/registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 . "&" . $param5 . "=" . $param6;
         } else {
             $link = "error";
         }
@@ -48,7 +48,7 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
             $param3 = "e";
             $param4 = $to;
 
-            $link = "http://localhost/mendumy/restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4;
+            $link = "http://localhost/mendumy/mendumy/restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4;
         } else {
             $link = "error";
         }
@@ -67,18 +67,18 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
     $mail = new PHPMailer(true);
 
     try {
-        //Server settings
+       //Server settings
         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
         $mail->isSMTP();                                            // Send using SMTP
-        $mail->Host       = '127.0.0.1';                    // Set the SMTP server to send through
-        //$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        //$mail->Username   = 'papasfritas';                     // SMTP username
-        //$mail->Password   = '123456';                               // SMTP password
-        //$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-        $mail->Port       = 2500;                                    // TCP port to connect to
+        $mail->Host       = 'smtp.gmail.com'; //'127.0.0.1';                    // Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+        $mail->Username   = 'brunomailtest@gmail.com';                     // SMTP username
+        $mail->Password   = 'brunomailtest2020';                               // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+        $mail->Port       = 587;                                    // TCP port to connect to
 
         //Recipients
-        $mail->setFrom('from@example.com', 'Mailer');
+        $mail->setFrom('brunomailtest@gmail.com', 'Mailer');
         $mail->addAddress($to);     // Add a recipient
 
         // Attachments
