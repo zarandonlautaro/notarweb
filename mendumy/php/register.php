@@ -15,11 +15,13 @@ if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email'])
     }
 
 
-
-    $secret = "6Lf9lsMUAAAAAKC8PMden4YhjyJ5AZ9yQi_ip1Kc";
-    $response = $_POST["captcha"];
+    //reCaptcha Script--------------------------------------------------------------------------------------------------
+    $secret ="6LfM59sUAAAAAIxYsIxCeHgNFOm_y0IMrjH-t2e7" ;
+    //"6Lf9lsMUAAAAAKC8PMden4YhjyJ5AZ9yQi_ip1Kc";
+    $response = $_POST["captcha"];//obtenemos el valor de captcha enviado desde landing.jp
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}");
-    $captcha_success = json_decode($verify);
+    $captcha_success = json_decode($verify);//decodifica el json y devuelve array asociativo 
+    //reCaptcha Script--------------------------------------------------------------------------------------------------
 
     if ($captcha_success->success == false) {
         //This user was not verified by recaptcha.
