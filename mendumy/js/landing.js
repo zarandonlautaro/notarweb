@@ -185,7 +185,7 @@ $('#register_button').click(() => {
                 'email': email,
                 'legajo': legajo,
                 'pass': pass,
-                'captcha': grecaptcha.getResponse()
+                'captcha': grecaptcha.getResponse() //obtiene la respuesta para el widget reCaptcha 
 
             },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
