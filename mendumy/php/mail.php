@@ -13,6 +13,7 @@ require '..\vendor\autoload.php';
 // la variable link contendra en enlace que enviaremos al correo del usuario, de momento se encuentra localhost/mendumy/mendumy para pruebas  en localhost
 function sendMail($to, $tipo, $idusr = 0, $add = 0)
 {
+    $directorio="localhost/mendumy2/mendumy/mendumy/";
     if ($tipo == 1) {
         //Body para confirmar mail
         if ($idusr != 0 && $add != "") {
@@ -24,7 +25,7 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
             $param5 = "e";
             $param6 = $to;
 
-            $link = "http://localhost/mendumy/mendumy/registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 . "&" . $param5 . "=" . $param6;
+            $link = "http://". $directorio ."registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 . "&" . $param5 . "=" . $param6;
         } else {
             $link = "error";
         }
@@ -48,7 +49,7 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
             $param3 = "e";
             $param4 = $to;
 
-            $link = "http://localhost/mendumy/mendumy/restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4;
+            $link = "http://".$directorio."restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4;
         } else {
             $link = "error";
         }
