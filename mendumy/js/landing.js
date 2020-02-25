@@ -1,3 +1,4 @@
+//Script de landing page
 $(document).on('keypress', function (e) {
     if (e.which == 13) {
         $('#login_button').click();
