@@ -1,4 +1,14 @@
 //Script de landing page
+//Si el modal de registro está abierto verificamos si se presionó la tecla enter .De ser así ejecutamos el script del boton de registro. 
+$('#exampleModalCenter').on('show.bs.modal', function () {
+    $(document).on('keypress', function (e) {
+        if (e.which == 13) {
+            $('#register_button').click();
+        }
+    });
+    
+    });
+ //funcion encargada de verificar si presionamos enter en la pantalla principal del login *verificar que no estemos en el modal de register 
 $(document).on('keypress', function (e) {
     if (e.which == 13) {
         $('#login_button').click();
@@ -222,18 +232,19 @@ $('#register_button').click(() => {
                     //Registro correcto
                     Toast.fire({
                         icon: 'success',
-                        title: 'Revise su casilla de correos!'
+                        title: '¡Revise su casilla de correos!'
                     });
-                    $('#exampleModalCenter').modal("hide");
+                    $('#exampleModalCenter').modal("hide");     
                 }
                 if (rs == 0) {
                     Toast.fire({
                         icon: 'error',
-                        title: 'Error al enviar el mail!'
+                        title: '¡Error al enviar el mail!'
                     });
                 }
                 if (rs == 3) {
-                    $('#validate_register').empty().append("Confirme que es humano!");
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Confirme que es humano!</div>');
+                       
                 }
             }
         });
