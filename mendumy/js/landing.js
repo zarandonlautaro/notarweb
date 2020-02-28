@@ -112,12 +112,19 @@ $('#login_button').click(() => {
             },
             method: 'POST',
             beforeSend: function () { //Previo a la peticion tenemos un cargando
+                $('#login_button').removeClass('btn-primary');
+                $('#login_button').addClass('btn-info');
+                $('#login_button').html( '<span class="spinner-border spinner-border-sm mr-2"></span>');
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
+                $('#login_button').html( '<span class="spinner-border spinner-border-sm mr-2"></span>'); 
+                 
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
-
+                $('#login_button').removeClass('btn-info');
+                $('#login_button').addClass('btn-primary');
+                $('#login_button').html( 'Ingresar'); 
             },
             success: function (rs) {
                 //console.log(rs);
@@ -190,14 +197,24 @@ $('#register_button').click(() => {
 
             },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
-
+                $('#register_button').removeClass('btn-primary');
+                $('#register_button').addClass('btn-dark');
+                $('#register_button').html( '<span class="spinner-border spinner-border-sm" disabled></span>');
+                
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
+                $('#register_button').removeClass('disabled');
+                $('#register_button').addClass('btn-primary');
+                $('#register_button').html('Aceptar');  
+                 
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
-
+                $('#register_button').removeClass('btn-info');
+                $('#register_button').addClass('btn-primary');
+                $('#register_button').html( 'Aceptar'); 
             },
+            
             success: function (rs) {
                 console.log(rs);
                 if (rs == 1) {
