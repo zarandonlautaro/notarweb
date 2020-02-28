@@ -1,7 +1,3 @@
-<?php
-if (session_status() == PHP_SESSION_NONE)
-    session_start();
-?>
 <div class="d-flex" id="wrapper">
     <div class="" id="sidebar-wrapper">
         <div class="sidebar-heading">Mendumy</div>
