@@ -150,27 +150,28 @@ $('#register_button').click(() => {
     let pass = $('#passR').val();
 
 
+    
     if (!(pass.length > 6)) {
-        $('#validate_register').empty().append("La contraseña debe contener por lo menos 7 caracteres");
+        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">La contraseña debe contener por lo menos 7 caracteres.</div>');
     } else {
         $('#validate_register').empty();
         if (!(legajo.length > 2)) {
-            $('#validate_register').empty().append("¡El legajo no puede estar vacio!");
+            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡El legajo no puede estar vacío!</div>');
         } else {
             $('#validate_register').empty();
             if (!IsEmail(email)) {
-                $('#validate_register').empty().append("Formato de mail incorrecto");
+                $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
             } else {
                 $('#validate_register').empty();
                 if (!is_ok(name)) {
-                    $('#validate_register').empty().append("El campo nombre, se encuentra vacio");
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo nombre, se encuentra vacío</div>');
                 } else {
                     $('#validate_register').empty();
                     if (!is_ok(lastname)) {
-                        $('#validate_register').empty().append("El campo apellido, se encuentra vacio");
+                        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo apellido, se encuentra vacío</div>');
                     } else {
                         if (!is_ok(dni)) {
-                            $('#validate_register').empty().append("El campo DNI, se encuentra vacio");
+                            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo DNI, se encuentra vacío</div>');
                         } else {
                             $('#validate_register').empty();
                         }
