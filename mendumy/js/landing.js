@@ -31,7 +31,9 @@ $(document).ready(() => {
 
     //Inicializar el datepicker de Registro/Fecha Nacimiento
     $('.datepicker').datepicker({
-        language: 'es'
+        uiLibrary: 'bootstrap4',
+        language: 'es',
+        format: 'mm/dd/yyyy'
     });
 
     //Inicializar el select de Registro/País
@@ -60,7 +62,7 @@ $(document).ready(() => {
                 let description = r.description;
                 let imgname = r.imgname;
                 $('#contenedor_cursos').append(
-                    '<div class="col-md-4 col-sm-6 portfolio-item">' +
+                    '<div class="col-md-3 col-sm-5 portfolio-item">' +
                     '<a class="portfolio-link js-scroll-trigger" href="#page-top">' +
                     '<div class="portfolio-hover">' +
                     '<div class="portfolio-hover-content" > ' +
@@ -159,41 +161,46 @@ $('#register_button').click(() => {
     let legajo = $('#legajoR').val();
     let pass = $('#passR').val();
 
-
-    
-    if (!(pass.length > 6)) {
-        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">La contraseña debe contener por lo menos 7 caracteres.</div>');
+    if (!is_ok(name)) {
+        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo nombre, se encuentra vacío</div>');
     } else {
         $('#validate_register').empty();
-        if (!(legajo.length > 2)) {
-            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡El legajo no puede estar vacío!</div>');
+        if (!is_ok(lastname)) {
+            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo apellido, se encuentra vacío</div>');
         } else {
-            $('#validate_register').empty();
-            if (!IsEmail(email)) {
-                $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
+            if (!is_ok(dni)||isNaN(dni)) {
+                $('#validate_register').empty().append('<div class="alert alert-warning" role="alert"> Formato de DNI incorrecto</div>');
             } else {
                 $('#validate_register').empty();
-                if (!is_ok(name)) {
-                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo nombre, se encuentra vacío</div>');
+               
+                if (!IsEmail(email)) {
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
                 } else {
                     $('#validate_register').empty();
-                    if (!is_ok(lastname)) {
-                        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo apellido, se encuentra vacío</div>');
+                    
+                    if (!(legajo.length > 2)) {
+                        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡El legajo no puede estar vacío!</div>');
                     } else {
-                        if (!is_ok(dni)) {
-                            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo DNI, se encuentra vacío</div>');
+                        $('#validate_register').empty();
+
+                        if (!(pass.length > 6)) {
+                            $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">La contraseña debe contener por lo menos 7 caracteres.</div>');
                         } else {
                             $('#validate_register').empty();
+                    
                         }
+                    }
                     }
                 }
             }
         }
-    }
+
+    
 
 
 
-    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni)) {
+
+    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni)&& !isNaN(dni)) {
         $.ajax({
             method: 'POST',
             url: "php/register.php",
