@@ -113,6 +113,7 @@ $('#login_button').click(() => {
     var email = $('#email').val();
     var pass = $('#pass').val();
 
+    
 
     if (pass != void 0 && email != void 0 && IsEmail(email)) {
         //Campos completos --> Realizamos el login
@@ -154,6 +155,10 @@ $('#login_button').click(() => {
 });
 
 $('#register_button').click(() => {
+
+   
+    
+    
     let name = $('#nameR').val();
     let lastname = $('#lastnameR').val();
     let dni = $('#dniR').val();
@@ -262,57 +267,34 @@ $('#register_button').click(() => {
         })
     }
 });
-
+//restaurar pass
 $('#pass_button').click(() => {
-    alert('Se lo dejo al master of PHP LEFELD');
-    /*let name = $('#nameR').val();
-    let lastname = $('#lastnameR').val();
-    let dni = $('#dniR').val();
-    let email = $('#emailR').val();
-    let legajo = $('#legajoR').val();
-    let pass = $('#passR').val();
+    
+    
+    
+    alert(grecaptcha.getResponse());
+    
+    let email = $('#emailR2').val();
+  
 
-    if (!(pass.length > 6)) {
-        $('#validate_register').empty().append("Contraseña muy corta!");
-    } else {
-        $('#validate_register').empty();
-        if (!(legajo.length > 2)) {
-            $('#validate_register').empty().append("El legajo no puede estar vacio!");
-        } else {
-            $('#validate_register').empty();
+
             if (!IsEmail(email)) {
-                $('#validate_register').empty().append("Formato de mail incorrecto");
+                $('#validate_restore').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
             } else {
-                $('#validate_register').empty();
-                if (!is_ok(name)) {
-                    $('#validate_register').empty().append("El campo nombre, se encuentra vacio");
-                } else {
-                    $('#validate_register').empty();
-                    if (!is_ok(lastname)) {
-                        $('#validate_register').empty().append("El campo apellido, se encuentra vacio");
-                    } else {
-                        if (!is_ok(dni)) {
-                            $('#validate_register').empty().append("El campo DNI, se encuentra vacio");
-                        } else {
-                            $('#validate_register').empty();
-                        }
-                    }
-                }
+                $('#validate_restore').empty();
+               
             }
-        }
-    }
-    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni)) {
+       
+
+    if (IsEmail(email)) {
         $.ajax({
             method: 'POST',
-            url: "php/register.php",
+            url: "php/restorepass.php",
             data: {
-                'name': name,
-                'lastname': lastname,
-                'dni': dni,
+
                 'email': email,
-                'legajo': legajo,
-                'pass': pass,
                 'captcha': grecaptcha.getResponse()
+
 
             },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
@@ -330,27 +312,27 @@ $('#pass_button').click(() => {
                     //Registro correcto
                     Toast.fire({
                         icon: 'success',
-                        title: 'Revise su casilla de correos!'
+                        title: '¡Revise su casilla de correos!'
                     });
                     $('#exampleModalCenter').modal("hide");
                 }
                 if (rs == 0) {
                     Toast.fire({
                         icon: 'error',
-                        title: 'Error al enviar el mail!'
+                        title: '¡Mail inexistente!'
                     });
                 }
                 if (rs == 3) {
-                    $('#validate_register').empty().append("Confirme que es humano!");
+                    $('#validate_restore').empty().append('<div class="alert alert-warning" role="alert">¡Confirme que es humano!</div>');
                 }
             }
         });
     } else {
         Toast.fire({
             icon: 'error',
-            title: 'Revisar campos del registro!'
+            title: '¡Revisar campos del registro!'
         })
-    }*/
+    }
 });
 
 
