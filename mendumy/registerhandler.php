@@ -1,6 +1,7 @@
 <?php
 include("php/mysqli.php");
-
+require 'php\directorio.php';
+  
 if (isset($_GET['id']) && isset($_GET['p']) && isset($_GET['e'])) {
     $idusr = trim(filter_var($_GET['id'], FILTER_VALIDATE_INT));
     $pass = trim(filter_var($_GET['p'], FILTER_SANITIZE_STRING));
@@ -17,7 +18,8 @@ if (isset($_GET['id']) && isset($_GET['p']) && isset($_GET['e'])) {
         VALUES (" . $idusr . ", '$email', '$pass', NOW())");
 
         if ($sql) {
-            echo 1; //Registro exitoso
+           // echo  1 .'<p> Registro exitoso, será redireccionado en 3 segundos.</p>'; //Registro exitoso
+            header("Location: http://".$directorio."php/registro_exitoso.php"); /* Redirección del navegador */
             die;
         } else {
             echo 2; //Error
