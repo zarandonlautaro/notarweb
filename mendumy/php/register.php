@@ -21,7 +21,7 @@ if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email'])
     $response = $_POST["captcha"];//obtenemos el valor de captcha enviado desde landing.jp
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}");
     $captcha_success = json_decode($verify);//decodifica el json y devuelve array asociativo 
-    //reCaptcha Script--------------------------------------------------------------------------------------------------
+    //fin reCaptcha Script--------------------------------------------------------------------------------------------------
 
     if ($captcha_success->success == false) {
         //This user was not verified by recaptcha.
