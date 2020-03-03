@@ -9,11 +9,14 @@ use PHPMailer\PHPMailer\Exception;
 // Load Composer's autoloader
 require '..\vendor\autoload.php';
 
+
+
 // Instantiation and passing `true` enables exceptions
 // la variable link contendra en enlace que enviaremos al correo del usuario, de momento se encuentra localhost/mendumy/mendumy para pruebas  en localhost
 function sendMail($to, $tipo, $idusr = 0, $add = 0)
 {
-    $directorio="localhost/mendumy2/mendumy/mendumy/";
+    //$directorio="localhost/mendumy2/mendumy/mendumy/";
+    require '..\php\directorio.php';
     if ($tipo == 1) {
         //Body para confirmar mail
         if ($idusr != 0 && $add != "") {
