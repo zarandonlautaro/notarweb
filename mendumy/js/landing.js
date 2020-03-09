@@ -6,9 +6,9 @@ $('#exampleModalCenter').on('show.bs.modal', function () {
             $('#register_button').click();
         }
     });
-    
-    });
- //funcion encargada de verificar si presionamos enter en la pantalla principal del login *verificar que no estemos en el modal de register 
+
+});
+//funcion encargada de verificar si presionamos enter en la pantalla principal del login *verificar que no estemos en el modal de register 
 $(document).on('keypress', function (e) {
     if (e.which == 13) {
         $('#login_button').click();
@@ -113,7 +113,7 @@ $('#login_button').click(() => {
     var email = $('#email').val();
     var pass = $('#pass').val();
 
-    
+
 
     if (pass != void 0 && email != void 0 && IsEmail(email)) {
         //Campos completos --> Realizamos el login
@@ -127,26 +127,33 @@ $('#login_button').click(() => {
             beforeSend: function () { //Previo a la peticion tenemos un cargando
                 $('#login_button').removeClass('btn-primary');
                 $('#login_button').addClass('btn-info');
-                $('#login_button').html( '<span class="spinner-border spinner-border-sm mr-2"></span>');
+                $('#login_button').html('<span class="spinner-border spinner-border-sm mr-2"></span>');
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
-                $('#login_button').html( '<span class="spinner-border spinner-border-sm mr-2"></span>'); 
-                 
+                $('#login_button').html('<span class="spinner-border spinner-border-sm mr-2"></span>');
+
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
                 $('#login_button').removeClass('btn-info');
                 $('#login_button').addClass('btn-primary');
-                $('#login_button').html( 'Ingresar'); 
+                $('#login_button').html('Ingresar');
             },
             success: function (rs) {
-                //console.log(rs);
+                console.log(rs);
                 if (rs == 3) {
                     window.location.replace('home.php');
                 } else {
+                    if (rs == 4) {
+                    $('#validate').html("valíde su correo");
+                    }else{
                     //Alerta visual sobre usuario/contraseña erronea
-                    $('#validate').html("Revise su email y contraseña");
+                     $('#validate').html("Revise su email y contraseña");
+                    }
                 }
+                
+                    
+
             }
         });
     } else {
@@ -156,15 +163,16 @@ $('#login_button').click(() => {
 
 $('#register_button').click(() => {
 
-   
-    
-    
+
+
+
     let name = $('#nameR').val();
     let lastname = $('#lastnameR').val();
     let dni = $('#dniR').val();
     let email = $('#emailR').val();
     let legajo = $('#legajoR').val();
     let pass = $('#passR').val();
+    let date = $('#dp2').val();
 
     if (!is_ok(name)) {
         $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo nombre, se encuentra vacío</div>');
@@ -173,16 +181,16 @@ $('#register_button').click(() => {
         if (!is_ok(lastname)) {
             $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">El campo apellido, se encuentra vacío</div>');
         } else {
-            if (!is_ok(dni)||isNaN(dni)) {
+            if (!is_ok(dni) || isNaN(dni)) {
                 $('#validate_register').empty().append('<div class="alert alert-warning" role="alert"> Formato de DNI incorrecto</div>');
             } else {
                 $('#validate_register').empty();
-               
+
                 if (!IsEmail(email)) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
                 } else {
                     $('#validate_register').empty();
-                    
+
                     if (!(legajo.length > 2)) {
                         $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡El legajo no puede estar vacío!</div>');
                     } else {
@@ -192,20 +200,20 @@ $('#register_button').click(() => {
                             $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">La contraseña debe contener por lo menos 7 caracteres.</div>');
                         } else {
                             $('#validate_register').empty();
-                    
+
                         }
-                    }
                     }
                 }
             }
         }
-
-    
-
+    }
 
 
 
-    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni)&& !isNaN(dni)) {
+
+
+
+    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni) && !isNaN(dni) && legajo.length > 2) {
         $.ajax({
             method: 'POST',
             url: "php/register.php",
@@ -216,28 +224,29 @@ $('#register_button').click(() => {
                 'email': email,
                 'legajo': legajo,
                 'pass': pass,
-                'captcha': grecaptcha.getResponse() //obtiene la respuesta para el widget reCaptcha 
+                'captcha': grecaptcha.getResponse(), //obtiene la respuesta para el widget reCaptcha 
+                'date': date
 
             },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
                 $('#register_button').removeClass('btn-primary');
                 $('#register_button').addClass('btn-dark');
-                $('#register_button').html( '<span class="spinner-border spinner-border-sm" disabled></span>');
-                
+                $('#register_button').html('<span class="spinner-border spinner-border-sm" disabled></span>');
+
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
                 $('#register_button').removeClass('disabled');
                 $('#register_button').addClass('btn-primary');
-                $('#register_button').html('Aceptar');  
-                 
+                $('#register_button').html('Aceptar');
+
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
                 $('#register_button').removeClass('btn-info');
                 $('#register_button').addClass('btn-primary');
-                $('#register_button').html( 'Aceptar'); 
+                $('#register_button').html('Aceptar');
             },
-            
+
             success: function (rs) {
                 console.log(rs);
                 if (rs == 1) {
@@ -246,7 +255,7 @@ $('#register_button').click(() => {
                         icon: 'success',
                         title: '¡Revise su casilla de correos!'
                     });
-                    $('#exampleModalCenter').modal("hide");     
+                    $('#exampleModalCenter').modal("hide");
                 }
                 if (rs == 0) {
                     Toast.fire({
@@ -256,7 +265,19 @@ $('#register_button').click(() => {
                 }
                 if (rs == 3) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Confirme que es humano!</div>');
-                       
+
+                }
+                if (rs == 4) {
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo ya registrado!</div>');
+
+                }
+                if (rs == 1) {
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo enviado con exito!</div>');
+
+                }
+                if (rs == 0) {
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Error al enviar correo!</div>');
+
                 }
             }
         });
@@ -268,23 +289,38 @@ $('#register_button').click(() => {
     }
 });
 //restaurar pass
+
+var onloadCallback = function () {
+    //necesitamos dos captchas diferentes para cada modal,ya que al poner uno solo tenemos errores.La forma de poner multiples captchas 
+    //es con Explicit rendering sacado de https://developers.google.com/recaptcha/docs/display
+    widgetId1 = grecaptcha.render('recaptcha1', {
+        'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+        'theme': 'light'
+    });
+    widgetId2 = grecaptcha.render('recaptcha2', {
+        'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+        'theme': 'light'
+    });
+};
+
 $('#pass_button').click(() => {
-    
-    
-    
-    alert(grecaptcha.getResponse());
-    
+
+   
+
+
     let email = $('#emailR2').val();
-  
+    let captcha = grecaptcha.getResponse(widgetId2) ;
+    //alert(captcha);
+    //console.log(captcha);
+
+    if (!IsEmail(email)) {
+        $('#validate_restore').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
+    } else {
+        $('#validate_restore').empty();
+
+    }
 
 
-            if (!IsEmail(email)) {
-                $('#validate_restore').empty().append('<div class="alert alert-warning" role="alert">Formato de mail incorrecto.</div>');
-            } else {
-                $('#validate_restore').empty();
-               
-            }
-       
 
     if (IsEmail(email)) {
         $.ajax({
@@ -293,21 +329,31 @@ $('#pass_button').click(() => {
             data: {
 
                 'email': email,
-                'captcha': grecaptcha.getResponse()
+                'captcha': captcha // grecaptcha.getResponse()
 
 
             },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
+                $('#pass_button').removeClass('btn-primary');
+                $('#pass_button').addClass('btn-dark');
+                $('#pass_button').html('<span class="spinner-border spinner-border-sm" disabled></span>');
 
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
+                $('#pass_button').removeClass('disabled');
+                $('#pass_button').addClass('btn-primary');
+                $('#pass_button').html('Aceptar');
+
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
-
+                $('#pass_button').removeClass('btn-info');
+                $('#pass_button').addClass('btn-primary');
+                $('#pass_button').html('Aceptar');
             },
             success: function (rs) {
                 console.log(rs);
+
                 if (rs == 1) {
                     //Registro correcto
                     Toast.fire({
@@ -352,4 +398,3 @@ function is_ok(input) {
         return 0;
     }
 }
-

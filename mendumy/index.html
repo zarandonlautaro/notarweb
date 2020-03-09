@@ -167,7 +167,7 @@
                 <div class="modal-body">
                     <div class="row mb-2">
                         <div class="col-6">
-                            <input class="form-control" type="text" id="nameR" placeholder="Nombre">
+                            <input class="form-control" type="text" id="nameR" placeholder="Nombre" >
                         </div>
                         <div class="col-6">
                             <input class="form-control" type="text" id="lastnameR" placeholder="Apellido">
@@ -209,7 +209,7 @@
                     </div>
 
                     <div class="row text-xs-center">
-                        <div id="recaptcha1" class="g-recaptcha" data-sitekey="6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB"></div>
+                        <div id="recaptcha1" class="g-recaptcha" ></div>
                     </div>
 
 
@@ -248,13 +248,12 @@
                         </div>
                     </div>
                     <div class="row text-xs-center">
-                        <div id="recaptcha2" class="g-recaptcha" data-sitekey="6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB"></div>
+                        <div id="recaptcha2" class="g-recaptcha"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div id="pass_button">
-                        <button type="button" class="btn btn-primary">Aceptar</button>
-                    </div>
+                    
+                    <button  id="pass_button" type="button" class="btn btn-primary">Aceptar</button>
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -267,7 +266,10 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js"></script>
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js"></script>
-
+    <!-- recaptcha v2 JavaScript -->
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async defer>
+</script>
 
     <!-- Plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

@@ -23,12 +23,12 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
 
             $param1 = "id";
             $param2 = $idusr;
-            $param3 = "p";
+            $param3 = "token";
             $param4 = $add;
-            $param5 = "e";
-            $param6 = $to;
+            
+           
 
-            $link = "http://". $directorio ."registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 . "&" . $param5 . "=" . $param6;
+            $link = "http://". $directorio ."registerhandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 ;
         } else {
             $link = "error";
         }
@@ -37,22 +37,25 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
         $body =
             "<html>
         <body>
-            <h3>Registro exitoso!</h3>
-            Presione <a target='_blank' href= '" . $link . "'>aquí</a> para confirmar el registro!
+            <h3>¡Registro exitoso!</h3>
+            Presione <a target='_blank' href= '" . $link . "'>aquí</a> para confirmar el registro.
         </body>
         </html>";
     }
 
     if ($tipo == 2) {
-        //Body para confirmar mail
+        //mail de recuperacion de contraseña
         if ($idusr != 0) {
 
             $param1 = "id";
             $param2 = $idusr;
             $param3 = "e";
             $param4 = $to;
+            $param5 = 'token';
+            $param6 = $add;
+            
 
-            $link = "http://".$directorio."restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4;
+            $link = "http://".$directorio."restorepasshandler.php?" . $param1 . "=" . $param2 . "&" . $param3 . "=" . $param4 ."&" . $param5 . "=" . $param6;
         } else {
             $link = "error";
         }

@@ -6,7 +6,8 @@
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="../css/home.css" rel="stylesheet">
   <link rel="shortcut icon" type="./image/png" href="./img/favicon.png" />
-  <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+ 
+ 
 </head>
 
 <body class="d-flex justify-content-center align-items-center  ">
@@ -39,9 +40,8 @@
 
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="./js/fontawesome-all.min.js"></script>
-  <script src="../js/home.js"></script>
-  <script src="../js/sweetalert2.js"></script>
+  <script src="../js/fontawesome-all.min.js"></script>
+
   
 </body>
 

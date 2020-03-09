@@ -1,6 +1,7 @@
 <?php
 include("mysqli.php");
 include("mail.php");
+require_once('../php/funcs.php');
 
 if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['legajo']) && isset($_POST['pass']) && isset($_POST['dni'])) {
     $name = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
@@ -9,13 +10,17 @@ if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email'])
     $email = trim(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL));
     $legajo = trim(filter_var($_POST['legajo'], FILTER_SANITIZE_STRING));
     $pass = trim(filter_var($_POST['pass'], FILTER_SANITIZE_STRING));
+    $datea= trim(filter_var($_POST['date'], FILTER_SANITIZE_STRING));
+    $fecha = strtotime($datea); //Convierte el string a formato de fecha en php
+    $dateb = date('Y-m-d',$fecha); //Lo comvierte a formato de fecha en MySQL
+ 
     if (!($name || $lastname || $email || $legajo || $pass)) { //Filtrado de variables
         echo 2; //Quiere romper algo
         die;
     }
+    //hace falta validar del lado del servidor
 
-
-    //reCaptcha Script--------------------------------------------------------------------------------------------------
+    //reCaptcha Script del lado del servidor--------------------------------------------------------------------------------------------------
     $secret ="6LfM59sUAAAAAIxYsIxCeHgNFOm_y0IMrjH-t2e7" ;
     //"6Lf9lsMUAAAAAKC8PMden4YhjyJ5AZ9yQi_ip1Kc";
     $response = $_POST["captcha"];//obtenemos el valor de captcha enviado desde landing.jp
@@ -28,13 +33,27 @@ if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email'])
         echo 3; //No hizo el captcha
         die;
     } else if ($captcha_success->success == true) {
+        //generamos hashes
+       	$pass_hash = hash("SHA256", $pass);
+        $token = generateToken();
+        $active=0;
 
-        //This user is verified by recaptcha
-        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, legajo, dni, active) VALUES ('$name', '$lastname', '$legajo','$dni', 0) ");
+        //insertamos el usuario nuevo en la tabla user
+        if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE username='$email'")->num_rows !=0){
+            echo 4;//correo en uso
+            die; 
+        }
+        
+        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, legajo, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");
         $sqlid = MySQLDB::getInstance()->query("SELECT LAST_INSERT_ID() as idusr");
         $id = $sqlid->fetch_assoc();
-        if (sendMail($email, 1, $id['idusr'], hash("SHA256", $pass)) && $sql) {
+        $iduser=$id['idusr'];
+        $auth = MySQLDB::getInstance()->query("INSERT INTO auth (idusr) VALUES ('$iduser') ");
+        //$sql = MySQLDB::getInstance()->query("INSERT INTO auth (idusr, last_auth) VALUES ( '$iduser', NOW() )"); //ultima logeo
+
+        if (sendMail($email, 1, $iduser, $token) && $sql) {
             echo 1;
+            die;
         } else {
             echo 0;
             die;
