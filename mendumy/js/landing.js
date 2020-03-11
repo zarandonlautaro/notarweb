@@ -172,6 +172,7 @@ $('#register_button').click(() => {
     let email = $('#emailR').val();
     let legajo = $('#legajoR').val();
     let pass = $('#passR').val();
+    let rePass = $('#passRe').val();
     let date = $('#dp2').val();
 
     if (!is_ok(name)) {
@@ -200,6 +201,12 @@ $('#register_button').click(() => {
                             $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">La contraseña debe contener por lo menos 7 caracteres.</div>');
                         } else {
                             $('#validate_register').empty();
+                            if(!validaPassword(pass, rePass)){
+                                $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">Las contraseñas no coinciden</div>');
+
+                            }else{
+                                $('#validate_register').empty();
+                            }
 
                         }
                     }
@@ -213,7 +220,7 @@ $('#register_button').click(() => {
 
 
 
-    if (is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni) && !isNaN(dni) && legajo.length > 2) {
+    if (validaPassword(pass, rePass)&&is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni) && !isNaN(dni) && legajo.length > 2) {
         $.ajax({
             method: 'POST',
             url: "php/register.php",
@@ -224,6 +231,7 @@ $('#register_button').click(() => {
                 'email': email,
                 'legajo': legajo,
                 'pass': pass,
+                'rePass': rePass,
                 'captcha': grecaptcha.getResponse(), //obtiene la respuesta para el widget reCaptcha 
                 'date': date
 
@@ -271,12 +279,12 @@ $('#register_button').click(() => {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo ya registrado!</div>');
 
                 }
-                if (rs == 1) {
-                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo enviado con exito!</div>');
-
-                }
                 if (rs == 0) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Error al enviar correo!</div>');
+
+                }
+                if (rs == 2) {//este cartel lo veremos si alguien se saltea la validacion del lado del cliente
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Error de validación!</div>');
 
                 }
             }
@@ -397,4 +405,16 @@ function is_ok(input) {
     } else {
         return 0;
     }
+}
+
+function validaPassword(var1, var2)
+{
+    if (( var1 < var2)||(var1 > var2) ) { 
+        return false;
+    } else {
+        return true;
+    }
+
+
+
 }

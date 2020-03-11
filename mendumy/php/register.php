@@ -2,8 +2,38 @@
 include("mysqli.php");
 include("mail.php");
 require_once('../php/funcs.php');
+$valido=false;
+//validaciones del lado del servidor
+if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['legajo']) && isset($_POST['pass']) && isset($_POST['rePass'])  && isset($_POST['dni'])&& isset($_POST['date'])){
+$name = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
+$lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
+$dni = trim(filter_var($_POST['dni'], FILTER_SANITIZE_STRING));
+$email = trim(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL));
+$legajo = trim(filter_var($_POST['legajo'], FILTER_SANITIZE_STRING));
+$pass = trim(filter_var($_POST['pass'], FILTER_SANITIZE_STRING));
+$rePass = trim(filter_var($_POST['rePass'], FILTER_SANITIZE_STRING));
+$datea= trim(filter_var($_POST['date'], FILTER_SANITIZE_STRING));
+$fecha = strtotime($datea); //Convierte el string a formato de fecha en php
+$dateb = date('Y-m-d',$fecha); //Lo comvierte a formato de fecha en MySQL
+$valido=true;
 
-if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['legajo']) && isset($_POST['pass']) && isset($_POST['dni'])) {
+if(!isEmail($email))
+{
+    //$errors[] = "Dirección de correo inválida";
+    echo 2;//error de validacion
+    die;
+}
+
+if(!validaPassword($pass, $rePass))
+{
+    //$errors[] = "Las contraseñas no coinciden";
+    echo 2;//error de validacion
+    die;
+}
+
+}
+
+if ($valido) {
     $name = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
     $lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
     $dni = trim(filter_var($_POST['dni'], FILTER_SANITIZE_STRING));
@@ -60,6 +90,6 @@ if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email'])
         }
     }
 } else {
-    echo 2;
+    echo 2;//error de validación
     die;
 }

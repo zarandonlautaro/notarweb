@@ -18,7 +18,7 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
             $id=$rs["id"];
             $_SESSION['idusr'] =$id;
             $_SESSION['rol'] = $rs['rol'];
-            $auth = MySQLDB::getInstance()->query("UPDATE auth SET  last_auth=now() WHERE id = '$id'");
+            $auth = MySQLDB::getInstance()->query("UPDATE auth SET  last_auth=now() WHERE idusr = '$id'");
             echo 3; //Login OK
             die;
         
@@ -29,7 +29,7 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
              }
             
     } else {
-        echo $email.'<br>'. $pass_hash;//2 //ERROR usr/pass
+        echo 2 ;//ERROR usr/pass
         die;
     }
 } else {

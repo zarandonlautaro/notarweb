@@ -20,7 +20,7 @@ if (isset($_POST['password'])&&isset($_POST['con_password'])) {
         
         die;
     }else{
-        echo "La contraseña y su confirmacion deben ser iguales o longitud menor a 7 caracteres";
+        echo "La contraseña y su confirmación deben ser iguales y longitud mayor a 7 caracteres";
         die;
     }
    // $check = MySQLDB::getInstance()->query("UPDATE recover SET token_password='$token', password_request=0,last_modification=NOW() WHERE idusr = '$user_id'");
