@@ -269,18 +269,18 @@
 	
 	function generaTokenPass($user_id)
 	{
-	
-		$token = generateToken();
-
-
-		$check = MySQLDB::getInstance()->query("UPDATE recover SET token_password='$token', password_request=1,last_modification=NOW() WHERE idusr = '$user_id'");
 		
-		if($check==0){
+		$token = generateToken();
+		$sql=MySQLDB::getInstance()->query("SELECT * FROM recover WHERE idusr = '$user_id'");
+		if($sql->num_rows==1){
+		$check = MySQLDB::getInstance()->query("UPDATE recover SET token_password='$token', password_request=1,last_modification=NOW() WHERE idusr = '$user_id'");
+		}else{
 
 		$check = MySQLDB::getInstance()->query("INSERT INTO recover (idusr,token_password, password_request, last_modification) VALUES ('$user_id','$token',1,NOW())");
+		 echo "cantidad de filas afectadas :".$check->num_rows;
 		}
-
-
+				
+		
 		return $token;
 
 	}

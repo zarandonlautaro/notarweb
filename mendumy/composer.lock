@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f800fb97c4c81dee54ccb59c33ffb245",
+    "content-hash": "cdac52f36b10026da0c6607808eecbfc",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -674,16 +674,16 @@
         },
         {
             "name": "mercadopago/dx-php",
-            "version": "dev-master",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mercadopago/dx-php.git",
-                "reference": "39e3c873c87fbcaf7746991649277708e0312f46"
+                "reference": "0986581bba62e24491febea37f0f5c000fb03ced"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mercadopago/dx-php/zipball/39e3c873c87fbcaf7746991649277708e0312f46",
-                "reference": "39e3c873c87fbcaf7746991649277708e0312f46",
+                "url": "https://api.github.com/repos/mercadopago/dx-php/zipball/0986581bba62e24491febea37f0f5c000fb03ced",
+                "reference": "0986581bba62e24491febea37f0f5c000fb03ced",
                 "shasum": ""
             },
             "require": {
@@ -729,7 +729,7 @@
                 }
             ],
             "homepage": "https://github.com/mercadopago/dx-php",
-            "time": "2019-11-18T20:42:44+00:00"
+            "time": "2020-01-21T16:13:16+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -797,11 +797,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mercadopago/dx-php": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

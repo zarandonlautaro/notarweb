@@ -1,6 +1,7 @@
 <div class="d-flex" id="wrapper">
+    <!--INICIO DE BARRA LATERAL DESPLAZABLE -->
     <div class="" id="sidebar-wrapper">
-        <div class="sidebar-heading">Mendumy</div>
+        <div class="sidebar-heading text-warning">Mendumy</div>
         <div class="list-group list-group-flush">
             <a id="cursos" class="list-group-item list-group-item-action">
                 <div class="row boton_sidebar">
@@ -23,14 +24,14 @@
                 </div>
             </a>
             <?php
-            if ($_SESSION['rol'] > 1) {
+            if ($_SESSION['rol'] ==0) {
             ?>
                 <a id="adminpanel" class="list-group-item list-group-item-action">
-                    <div class="row boton_sidebar">
+                    <div class="row boton_sidebar ">
                         <div class="col-2 text-center">
                             <i class="fas fa-cogs"></i>
                         </div>
-                        <div class="col-10">
+                        <div class="col-10 ">
                             Administrador
                         </div>
                     </div>
@@ -41,7 +42,7 @@
             <a href="php/cerrar_sesion.php" class="list-group-item list-group-item-action">
                 <div class="row boton_sidebar">
                     <div class="col-2 text-center">
-                        <i class="fas fa-sign-out-alt"></i>
+                        <i class="fas fa-sign-out-alt"></i> 
                     </div>
                     <div class="col-10">
                         Cerrar sesión
@@ -50,14 +51,16 @@
             </a>
         </div>
     </div>
+   <!--FIN DE BARRA LATERAL DESPLAZABLE -->
+    <!--INICIO DE CONTENIDO DE PAGINA -->
     <div id="page-content-wrapper" style="background: rgba(200, 200, 200, 0.5);">
         <nav class="navbar navbar-expand-lg">
             <button id="menu-toggle">Menú <i class="fas fa-bars"></i></button>
-            <!--Boton burgerrr-->
+            <!--BOTON BURGER-->
         </nav>
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
-                <h1 class="display-4">Hola de nuevo!
+                <h1 class="display-4">¡Hola <?php echo $nombre; ?>!
                 </h1>
                 <p class="lead">¿Listo para continuar?
                 </p>
@@ -162,4 +165,5 @@
         </div>
 
     </div>
+    <!--INICIO DE CONTENIDO DE PAGINA -->
 </div>

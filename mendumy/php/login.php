@@ -16,8 +16,9 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
         if($rs["active"]==1){
         
             $id=$rs["id"];
-            $_SESSION['idusr'] =$id;
+            $_SESSION['id'] =$id;
             $_SESSION['rol'] = $rs['rol'];
+            $_SESSION['nombre'] = $rs['name'];
             $auth = MySQLDB::getInstance()->query("UPDATE auth SET  last_auth=now() WHERE idusr = '$id'");
             echo 3; //Login OK
             die;

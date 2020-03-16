@@ -1,6 +1,14 @@
 <?php
-if (session_status() == PHP_SESSION_NONE)
+include("./php/directorio.php");
+if (session_status() == PHP_SESSION_NONE){
     session_start();
+
+    $nombre=$_SESSION['nombre'];
+    ;}
+   
+
+if(!isset($_SESSION['id'])){
+header("Location: http://".$directorio); /* Redirección del navegador */}
 ?>
 
   <!DOCTYPE html>

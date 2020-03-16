@@ -1,17 +1,19 @@
+'use strict';
 $('#adminpanel').click(() => {
     console.log("admin");
 });
-
+/*
 $(function () {
-    // Sidebar toggle behavior
+
+    // Sidebar toggle behavior //comportamiento de barra lateral
     $('#sidebarCollapse').on('click', function () {
-        $('#sidebar, #content').toggleClass('active');
+        $('#sidebar, #content').toggleClass('active');   
     });
-});
+});*/
 
 $("#menu-toggle").click(function (e) {
     e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
+    $("#wrapper").toggleClass("toggled");//agregamos la classe toggle al wrapper para que aparezca y desaparezca la barra lateral 
 });
 
 //Realizamos la carga de cursos cuando la página ya está lista
@@ -22,18 +24,22 @@ function carga(comprados) {
         method: "POST",
         data: { "comprados": comprados },
         beforeSend: function () { //Previo a la peticion tenemos un cargando
-            $('#contenedor_home').empty();
-            $('#carga_cursos').show("fast");
+            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
         },
         success: function (rs) {
-            $('#carga_cursos').hide("fast");
+            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
             if (rs == 0) { //No hay cursos
                 cuerpo = "<div class='text-center'><h3>No hay cursos</h3></div>";
                 $('#curso' + i).empty();
                 $('#curso' + i).append(cuerpo);
             }
             if (rs != 0 && rs != 4) {
-                let courses = JSON.parse(rs);
+                
+                   let courses = JSON.parse(rs);
+                
+                console.log(courses);
+                alert(courses);
                 var fila = 0;
                 $.each(courses, (i, r) => {
                     if ((i % 3) == 0) {
@@ -70,7 +76,6 @@ function carga(comprados) {
                         form.action = "/procesar-pago";
                         form.id = "form_pago_" + r['preferenceid'];
                         document.getElementById('pago' + r['preferenceid']).appendChild(form);
-
                         var script = document.createElement("script");
                         script.type = "text/javascript";
                         script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
