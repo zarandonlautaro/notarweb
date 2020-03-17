@@ -1,149 +1,126 @@
--- phpMyAdmin SQL Dump
--- version 5.0.1
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 14-03-2020 a las 17:10:53
--- Versión del servidor: 10.4.11-MariaDB
--- Versión de PHP: 7.4.3
+/*
+SQLyog Ultimate v11.33 (64 bit)
+MySQL - 10.4.11-MariaDB : Database - mendumy
+*********************************************************************
+*/
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
+/*!40101 SET NAMES utf8 */;
 
+/*!40101 SET SQL_MODE=''*/;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`mendumy` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
---
--- Base de datos: `mendumy`
---
+USE `mendumy`;
 
--- --------------------------------------------------------
+/*Table structure for table `auth` */
 
---
--- Estructura de tabla para la tabla `auth`
---
+DROP TABLE IF EXISTS `auth`;
 
 CREATE TABLE `auth` (
-  `id_auth` int(10) UNSIGNED NOT NULL,
-  `idusr` int(10) UNSIGNED NOT NULL,
-  `last_auth` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_auth` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idusr` int(10) unsigned NOT NULL,
+  `last_auth` date DEFAULT NULL,
+  PRIMARY KEY (`id_auth`) USING BTREE,
+  KEY `idusr` (`idusr`),
+  CONSTRAINT `auth_ibfk_1` FOREIGN KEY (`idusr`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `auth`
---
+/*Data for the table `auth` */
 
-INSERT INTO `auth` (`id_auth`, `idusr`, `last_auth`) VALUES
-(1, 1, '2019-11-26');
+insert  into `auth`(`id_auth`,`idusr`,`last_auth`) values (2,2,'2020-03-16');
 
--- --------------------------------------------------------
+/*Table structure for table `categories` */
 
---
--- Estructura de tabla para la tabla `categories`
---
+DROP TABLE IF EXISTS `categories`;
 
 CREATE TABLE `categories` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `categories`
---
+/*Data for the table `categories` */
 
-INSERT INTO `categories` (`id`, `name`) VALUES
-(1, 'Contaduría');
+insert  into `categories`(`id`,`name`) values (1,'Contaduría');
 
--- --------------------------------------------------------
+/*Table structure for table `commentscourse` */
 
---
--- Estructura de tabla para la tabla `commentscourse`
---
+DROP TABLE IF EXISTS `commentscourse`;
 
 CREATE TABLE `commentscourse` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idvideo` varchar(50) DEFAULT NULL,
   `comment` varchar(100) DEFAULT NULL,
-  `commentdate` datetime DEFAULT NULL
+  `commentdate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `commentscourse` */
 
---
--- Estructura de tabla para la tabla `course`
---
+/*Table structure for table `course` */
+
+DROP TABLE IF EXISTS `course`;
 
 CREATE TABLE `course` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `price` float DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
   `category` int(11) DEFAULT NULL,
   `creationdate` datetime NOT NULL,
   `modificationdate` datetime DEFAULT NULL,
-  `imgname` varchar(100) DEFAULT 'default.jpg'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `imgname` varchar(100) DEFAULT 'default.jpg',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `course`
---
+/*Data for the table `course` */
 
-INSERT INTO `course` (`id`, `price`, `name`, `description`, `category`, `creationdate`, `modificationdate`, `imgname`) VALUES
-(1, 50, 'Curso 1', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(2, 100, 'Curso 2', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(3, 135, 'Curso 3', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(4, 300, 'Curso 4', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(5, 100, 'Curso 5', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(6, 50, 'Curso 6', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg'),
-(7, 100, 'Curso 7', 'Lorem Imptun Inspute Ashen', 1, '0000-00-00 00:00:00', NULL, 'default.jpg');
+insert  into `course`(`id`,`price`,`name`,`description`,`category`,`creationdate`,`modificationdate`,`imgname`) values (1,50,'Curso 1','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(2,100,'Curso 2','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(3,135,'Curso 3','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(4,300,'Curso 4','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(5,100,'Curso 5','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(6,50,'Curso 6','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg'),(7,100,'Curso 7','Lorem Imptun Inspute Ashen',1,'0000-00-00 00:00:00',NULL,'default.jpg');
 
--- --------------------------------------------------------
+/*Table structure for table `courseuser` */
 
---
--- Estructura de tabla para la tabla `courseuser`
---
+DROP TABLE IF EXISTS `courseuser`;
 
 CREATE TABLE `courseuser` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idcourse` int(11) DEFAULT NULL,
-  `iduser` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `iduser` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `courseuser`
---
+/*Data for the table `courseuser` */
 
-INSERT INTO `courseuser` (`id`, `idcourse`, `iduser`) VALUES
-(1, 1, 1),
-(2, 2, 1);
+insert  into `courseuser`(`id`,`idcourse`,`iduser`) values (1,1,2),(2,2,2);
 
--- --------------------------------------------------------
+/*Table structure for table `recover` */
 
---
--- Estructura de tabla para la tabla `recover`
---
+DROP TABLE IF EXISTS `recover`;
 
 CREATE TABLE `recover` (
-  `id_recover` int(10) UNSIGNED NOT NULL,
-  `idusr` int(10) UNSIGNED NOT NULL,
+  `id_recover` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idusr` int(10) unsigned NOT NULL,
   `password_request` tinyint(10) NOT NULL DEFAULT 0,
   `token_password` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `last_modification` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `last_modification` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_recover`),
+  KEY `idusr` (`idusr`),
+  CONSTRAINT `recover_ibfk_1` FOREIGN KEY (`idusr`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `recover` */
 
---
--- Estructura de tabla para la tabla `users`
---
+insert  into `recover`(`id_recover`,`idusr`,`password_request`,`token_password`,`last_modification`) values (9,2,0,'a5ef1e82f18c058117bd50f374e7cbf9','2020-03-14 16:24:19');
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `rol` int(11) DEFAULT 1,
   `name` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
   `lastname` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -154,152 +131,29 @@ CREATE TABLE `users` (
   `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `creation_date` datetime NOT NULL,
   `date_birth` date DEFAULT NULL,
-  `token` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `token` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `users`
---
+/*Data for the table `users` */
 
-INSERT INTO `users` (`id`, `rol`, `name`, `lastname`, `legajo`, `dni`, `active`, `password`, `username`, `creation_date`, `date_birth`, `token`) VALUES
-(1, 1, 'Nicol?s', 'Lefeld', '112269', NULL, 0, '', '', '0000-00-00 00:00:00', NULL, '');
+insert  into `users`(`id`,`rol`,`name`,`lastname`,`legajo`,`dni`,`active`,`password`,`username`,`creation_date`,`date_birth`,`token`) values (2,0,'Bruno','Di Giorgio','112132','33443123',1,'8bb0cf6eb9b17d0f7d22b456f121257dc1254e1f01665370476383ea776df414','brunobocalomejor@gmail.com','2020-03-14 13:16:31','2020-03-04','517c3ffaa85c03ecd9dc67fc4603fc70');
 
--- --------------------------------------------------------
+/*Table structure for table `videoscourse` */
 
---
--- Estructura de tabla para la tabla `videoscourse`
---
+DROP TABLE IF EXISTS `videoscourse`;
 
 CREATE TABLE `videoscourse` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idcourse` varchar(50) DEFAULT NULL,
   `videofile` varchar(100) DEFAULT NULL,
-  `uploaddate` datetime DEFAULT NULL
+  `uploaddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Índices para tablas volcadas
---
+/*Data for the table `videoscourse` */
 
---
--- Indices de la tabla `auth`
---
-ALTER TABLE `auth`
-  ADD PRIMARY KEY (`id_auth`) USING BTREE,
-  ADD KEY `idusr` (`idusr`);
-
---
--- Indices de la tabla `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `commentscourse`
---
-ALTER TABLE `commentscourse`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `course`
---
-ALTER TABLE `course`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `courseuser`
---
-ALTER TABLE `courseuser`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `recover`
---
-ALTER TABLE `recover`
-  ADD PRIMARY KEY (`id_recover`),
-  ADD KEY `idusr` (`idusr`);
-
---
--- Indices de la tabla `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `videoscourse`
---
-ALTER TABLE `videoscourse`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `auth`
---
-ALTER TABLE `auth`
-  MODIFY `id_auth` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `commentscourse`
---
-ALTER TABLE `commentscourse`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `course`
---
-ALTER TABLE `course`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT de la tabla `courseuser`
---
-ALTER TABLE `courseuser`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `recover`
---
-ALTER TABLE `recover`
-  MODIFY `id_recover` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `videoscourse`
---
-ALTER TABLE `videoscourse`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `auth`
---
-ALTER TABLE `auth`
-  ADD CONSTRAINT `auth_ibfk_1` FOREIGN KEY (`idusr`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `recover`
---
-ALTER TABLE `recover`
-  ADD CONSTRAINT `recover_ibfk_1` FOREIGN KEY (`idusr`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
