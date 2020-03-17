@@ -8,7 +8,7 @@ if (isset($_POST['idcourse'])) {
         die;
     }
 
-    $sql = MySQLDB::getInstance()->query("SELECT id FROM courseuser WHERE idcourse = $idcourse AND iduser = " . $_SESSION['idusr'] . " ");
+    $sql = MySQLDB::getInstance()->query("SELECT id FROM courseuser WHERE idcourse = $idcourse AND iduser = " . $_SESSION['id'] . " ");
     if ($sql->num_rows) {
         echo 3; //Comprado
 
