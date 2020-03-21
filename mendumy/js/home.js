@@ -2,14 +2,14 @@
 $('#adminpanel').click(() => {
     console.log("admin");
 });
-/*
+
 $(function () {
 
     // Sidebar toggle behavior //comportamiento de barra lateral
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar, #content').toggleClass('active');   
     });
-});*/
+});
 
 $("#menu-toggle").click(function (e) {
     e.preventDefault();
@@ -22,7 +22,10 @@ function carga(comprados) {
     $.ajax({
         url: "php/traer_cursos_main.php",
         method: "POST",
+        //dataType: "json", //preguntar por que en la version 7.4 de php tengo problemas 
         data: { "comprados": comprados },
+        
+        
         beforeSend: function () { //Previo a la peticion tenemos un cargando
             $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
             $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
@@ -36,10 +39,12 @@ function carga(comprados) {
             }
             if (rs != 0 && rs != 4) {
                 
-                   let courses = JSON.parse(rs);
-                
-                console.log(courses);
-                alert(courses);
+              //console.log(rs);
+              //  let courses = eval(rs);
+                let courses = JSON.parse(rs);
+                    
+
+                //alert(courses);
                 var fila = 0;
                 $.each(courses, (i, r) => {
                     if ((i % 3) == 0) {
@@ -48,7 +53,7 @@ function carga(comprados) {
                     }
                     if (r['bought']) { //CURSOS COMPRADOS
                         $('#fila' + fila).append(
-                            '<div class="col-xl-4 mt-4">' +
+                            '<div class="col-xl-4 mt-2">' +
                             '<div class="mendocard shadow-lg" style="width: 18rem;" curso=' + r['id'] + ' id=curso' + r['id'] + '>' +
                             '<img src="imgcourses/' + r['imgname'] + '" class="mendocard-picture">' +
                             '<div class="">' +
@@ -60,7 +65,7 @@ function carga(comprados) {
                             '</div>');
                     } else if (!(r['bought'])) { //CURSOS SIN COMPRAR
                         $('#fila' + fila).append(
-                            '<div class="col-xl-4 mt-4">' +
+                            '<div class="col-xl-4 mt-2">' +
                             '<div class="mendocard shadow-lg" style="width: 18rem;" curso=' + r['id'] + ' id=curso' + r['id'] + '>' +
                             '<img src="imgcourses/' + r['imgname'] + '" class="mendocard-picture">' +
                             '<div class="">' +
@@ -70,7 +75,7 @@ function carga(comprados) {
                             '</div>' +
                             '</div>' +
                             '</div>');
-
+                                    
                         var form = document.createElement("form");
                         form.method = "POST";
                         form.action = "/procesar-pago";
@@ -106,6 +111,10 @@ function carga(comprados) {
                                     $('#video').attr('src', "coursesvideos/" + id + ".mp4");
                                     $('#modalvideo').modal("show");
                                 }
+                                if(rs==2){
+
+
+                                }
                             }
                         });
                     });
@@ -115,7 +124,67 @@ function carga(comprados) {
     });
 }
 
+function admin(ok) {
+    if(ok){
+        $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+        $('#contenedor_home').append(
+    '<div class=".container-fluid w-100">'
+      +  '<div class=" d-flex">'+
 
+           ' <div class="justify-content-center align-items-center " id="page-content-wrapper" style="background: rgba(200, 200, 200, 0.5);">'
+                +'<div class="container d-flex justify-content-center ">'+
+
+                    '<div id="loginbox" style="margin-top:50px;background:white;" class="mainbox col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-2 mb-5 ">'+
+
+                       + '<div class="panel panel-info">'+
+                            '<div class="modal-header">'
+                                +'<div class="panel-title">Cambiar Password</div>'+
+                                '<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="index.php">Iniciar Sesi&oacute;n</a></div>'
+                          + '</div>'+
+
+                           '<div style="padding-top:30px" class="panel-body">'
+
+                                +'<form id="loginform" class="form-horizontal" role="form" action="restorepasshandler.php" method="POST" autocomplete="off">'
+
+                                    +'<input type="hidden" id="user_id" name="user_id" value="<?php echo $idusr; ?>" />'
+
+                                  + '<input type="hidden" id="token" name="token" value="<?php echo $token; ?>" />'
+
+                                    +'<div class="form-group">'
+                                        +'<label for="password" class="col-12 control-label">Nuevo Password</label>'
+                                        +'<div class="col-12">'
+                                            +'<input type="password" class="form-control" name="password" placeholder="Password" required>'
+                                        +'</div>'
+                                    +'</div>'
+
+                                    +'<div class="form-group">'
+                                       + '<label for="con_password" class="col-12 control-label">Confirmar Password</label>'
+                                        +'<div class="col-12">'
+                                           + '<input type="password" class="form-control" name="con_password" placeholder="Confirmar Password" required>'
+                                        +'</div>'
+                                    +'</div>'
+
+                                    +'<div style="margin-top:10px" class="form-group">'
+                                        +'<div class="col-sm-12 controls">'
+                                            +'<button id="btn-login" type="submit" class="btn btn-warning">Modificar</a>'
+                                        +'</div>'
+                                    +'</div>'
+                                +'</form>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>'
+                +'</div>'
+
+
+            +'</div>'
+        +'</div>'
+    +'</div>'
+
+            
+        );
+    }
+
+}
 $(document).ready(function () {
     carga(false);
     $("#cursos").click(function () {
@@ -124,4 +193,9 @@ $(document).ready(function () {
     $("#cursos_comprados").click(function () {
         carga(true);
     });
+    $("#adminpanel").click(function () {
+        admin(true);
+    });
+
+
 });

@@ -160,7 +160,7 @@
             </div>
 
             <!-- RENDER COURSES BY JQUERY -->
-            <div id="contenedor_home" class="">
+            <div id="contenedor_home" class="mb-2">
             </div>
         </div>
 

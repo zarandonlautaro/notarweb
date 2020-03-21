@@ -1,6 +1,6 @@
 <?php
 include('mysqli.php');
-
+require('../vendor/autoload.php');
 
 if (isset($_POST['comprados'])) {
     $comprados = $_POST['comprados'];
@@ -32,8 +32,9 @@ if (isset($_POST['comprados'])) {
                         'category' => $rs['category'], 'imgname' => $rs['imgname'], 'bought' => true
                     );
                 } else {
-
                     
+                    
+                  
                     $price = $rs['price'];
                     // SDK de Mercado Pago
                     //require __DIR__  . '/vendor/autoload.php';
@@ -46,23 +47,33 @@ if (isset($_POST['comprados'])) {
                     $item = new MercadoPago\Item();
                     $item->title =$rs['name'];  //'Curso';
                     $item->quantity = 1;
-                    $item->unit_price = $price;//intval($price);
+                    $item->unit_price =$price;//intval($price);
                     $preference->items = array($item);
-                    $preference->save();
-
+                    $preference->save(); //inicializa
+                    
                     
                     
 
                     $cursos[] = array(
-                        'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                        'category' => $rs['category'], 'imgname' => $rs['imgname'], 'bought' => false ,'preferenceid' => $preference->id
+                        "id" => $rs['id'], "name" => $rs['name'], "description" => $rs['description'],
+                        "category" => $rs['category'],"imgname" => $rs['imgname'],"bought"=> false ,"preferenceid"=> $preference->id
                     );
                 }
             }
-            echo json_encode($cursos); //Array de cursos
+            //print_r($cursos);
+            if(is_array($cursos)){
+        
+                
+                echo json_encode($cursos);
+                die;
+
+                
+
+            }else{echo "error";}
         } else {
             echo 0; //No hay cursos para mostrar
             die;
         }
     }
 }
+?>

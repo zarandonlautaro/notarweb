@@ -40,8 +40,10 @@ header("Location: http://".$directorio); /* Redirección del navegador */}
     </div>
   </div>
 
+  
 
-  <script src="vendor/jquery/jquery.min.js"></script>
+
+   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="js/fontawesome-all.min.js"></script>
   <script src="js/home.js"></script>
