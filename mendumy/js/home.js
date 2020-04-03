@@ -151,14 +151,11 @@ function carga(comprados) {
 
                             }else{
                                 console.log("Elemento no comprado");  
-                                console.log(rs);
-                                var preferenceid=rs;
+                                console.log(rs["preferenceid"]);
+                                var preferenceid=rs["preferenceid"];
                                 //var img=  $('#img'+id);
 
-                                $('#pago').append(
-
-
-                                )
+                              
 
                                 var form = document.createElement("form");
                                 form.method = "POST";
