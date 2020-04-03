@@ -9,6 +9,7 @@ if (session_status() == PHP_SESSION_NONE){
 
 if(!isset($_SESSION['id'])){
 header("Location: http://".$directorio); /* Redirección del navegador */}
+
 ?>
 
   <!DOCTYPE html>
@@ -21,6 +22,7 @@ header("Location: http://".$directorio); /* Redirección del navegador */}
   <link href="css/home.css" rel="stylesheet">
   <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
   <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+  
 </head>
 
 <body>
@@ -43,10 +45,11 @@ header("Location: http://".$directorio); /* Redirección del navegador */}
   
 
 
-   <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="js/fontawesome-all.min.js"></script>
   <script src="js/home.js"></script>
+  <script src="js/admin.js"></script>
   <script src="js/sweetalert2.js"></script>
 </body>
 
