@@ -1,7 +1,4 @@
 'use strict';
-$('#adminpanel').click(() => {
-    console.log("admin");
-});
 
 
 
@@ -63,7 +60,7 @@ function carga(comprados) {
                             '<div class="">' +
                             '<h5 class="pt-2">' + r['name'] + '</h5>' +
                             '<p class="">' + r['description'] + '</p>' +
-                            '<button class="curso btn btn-block btn-warning text-white" tipo=Ver curso=' + r['id'] + ' id=curso' + r['id'] +'> Ver </button>' +
+                            '<button class="curso btn btn-block btn-info text-white" tipo=Ver curso=' + r['id'] + ' id=curso' + r['id'] +'> Ver </button>' +
                             '</div>' +
                             '</div>' +
                             '</div>');
@@ -139,7 +136,7 @@ function carga(comprados) {
                             $('#curso' + id).html(tipo);
                         },
                         success: function (courses) {
-
+                            console.log(courses);
                             let r = JSON.parse(courses);
                             let rs=r[0];
                             console.log(rs[0]);
@@ -156,7 +153,9 @@ function carga(comprados) {
                                 //var img=  $('#img'+id);
 
                               
-
+                                if(preferenceid!=0){
+                                //creamos formulario de pago  
+                                $('#pago').empty();
                                 var form = document.createElement("form");
                                 form.method = "POST";
                                 form.action = "/procesar-pago";
@@ -167,8 +166,22 @@ function carga(comprados) {
                                 script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
                                 script.setAttribute("data-preference-id", preferenceid);
                                 document.getElementById('form_pago').appendChild(script);
-
+                                }else{
+                                    var cartel=rs['cartel'];
+                                    $('#pago').empty().append(cartel);
+                                }
+                                
+                                
                                 $('#exampleModal').modal('show');
+                                //cuando se cierra el modal recargamos los cursos
+                                $("#exampleModal").on("hidden.bs.modal", function () {
+                                    
+                                        $('#jumbotron').removeClass('d-none');
+                                        $('#jumbotron').addClass('d-block');
+                                       carga(false);
+                                 
+                                    
+                                });
                             }
         
                         }
@@ -184,80 +197,80 @@ function carga(comprados) {
 }
 
 
-
 function admin(ok) {
     if (ok) {
-        $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-        $('#contenedor_home').append(
-            '<div class=".container-fluid w-100">'
-            + '<div class=" d-flex">' +
+        $.ajax({
 
-            ' <div class="justify-content-center align-items-center " id="page-content-wrapper" style="background: rgba(200, 200, 200, 0.5);">'
-            + '<div class="container d-flex justify-content-center ">' +
+            url: "./php/admin.php",
+            type: "post",
+            data: ok,
+         
 
-            '<div id="loginbox" style="margin-top:50px;background:white;" class="mainbox col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-2 mb-5 ">' +
+            beforeSend: function() { //Previo a la peticion tenemos un cargando
+               
+                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            },
+            error: function(error) { //Si ocurre un error en el ajax
+                //alert("Error, reintentar. "+error);
+               
+            },
+            complete: function() { //Al terminar la peticion, sacamos la "carga" visual
+               
+            },
 
-            + '<div class="panel panel-info">' +
-            '<div class="modal-header">'
-            + '<div class="panel-title">Cambiar Password</div>' +
-            '<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="index.php">Iniciar Sesi&oacute;n</a></div>'
-            + '</div>' +
+            success: function(data) {
+               
+                $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+               //console.log(data);
+                //$('#alert').addClass('alert-warning');
+                $('#contenedor_home').empty().append(data);
 
-            '<div style="padding-top:30px" class="panel-body">'
+                $.getScript("./js/admin.js", function(){ 
+                    
+          
+                });
 
-            + '<form id="loginform" class="form-horizontal" role="form" action="restorepasshandler.php" method="POST" autocomplete="off">'
+            }
 
-            + '<input type="hidden" id="user_id" name="user_id" value="<?php echo $idusr; ?>" />'
-
-            + '<input type="hidden" id="token" name="token" value="<?php echo $token; ?>" />'
-
-            + '<div class="form-group">'
-            + '<label for="password" class="col-12 control-label">Nuevo Password</label>'
-            + '<div class="col-12">'
-            + '<input type="password" class="form-control" name="password" placeholder="Password" required>'
-            + '</div>'
-            + '</div>'
-
-            + '<div class="form-group">'
-            + '<label for="con_password" class="col-12 control-label">Confirmar Password</label>'
-            + '<div class="col-12">'
-            + '<input type="password" class="form-control" name="con_password" placeholder="Confirmar Password" required>'
-            + '</div>'
-            + '</div>'
-
-            + '<div style="margin-top:10px" class="form-group">'
-            + '<div class="col-sm-12 controls">'
-            + '<button id="btn-login" type="submit" class="btn btn-warning">Modificar</a>'
-            + '</div>'
-            + '</div>'
-            + '</form>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-
-
-            + '</div>'
-            + '</div>'
-            + '</div>'
-
-
-        );
+        });
+        
     }
 
 }
 
-
 $(document).ready(function () {
+   
     carga(false);
     $("#cursos").click(function () {
+         $('#jumbotron').removeClass('d-none');
+         $('#jumbotron').addClass('d-block');
         carga(false);
     });
     $("#cursos_comprados").click(function () {
+        $('#jumbotron').removeClass('d-block');
+        $('#jumbotron').addClass('d-none');
         carga(true);
     });
     $("#adminpanel").click(function () {
-        admin(true);
+        $('#jumbotron').removeClass('d-block');
+        $('#jumbotron').addClass('d-none');
+       
     });
 
+
+    $('#adminpanel').click(() => {
+            admin(true);
+            console.log("Admin");
+        
+            
+
+
+
+    });
+
+        
+    
+    
+    
 });
