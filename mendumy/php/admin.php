@@ -77,13 +77,6 @@
                                 <input type="file" class="form-control-file" id="imagen" name="imagen" required>
                             </div>
                         </div>
-
-                        <div class="form-group form-group-sm col-12">
-                            <label for="video" class="col-sm-12 col-form-label">Video</label>
-                            <div class="col-sm-12">
-                                <input type="file" class=" form-control-file" name="video" id="video" required>
-                            </div>
-                        </div>
                         <div class="form-group">
 
                             <div class="col">
