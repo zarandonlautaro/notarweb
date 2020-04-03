@@ -2,6 +2,7 @@
 include('mysqli.php');
 require('../vendor/autoload.php');
 
+
 if (isset($_POST['comprados'])) {
     $comprados = $_POST['comprados'];
 
@@ -13,7 +14,7 @@ if (isset($_POST['comprados'])) {
             while ($rs = $sql->fetch_assoc()) {
                 $cursos[] = array(
                     'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'bought' => true
+                    'category' => $rs['category'], 'imgname' => $rs['imgname'],'bought' => true
                 );
             }
             echo json_encode($cursos); //Array de cursos
@@ -22,7 +23,10 @@ if (isset($_POST['comprados'])) {
             die;
         }
     } else if ($comprados == "false") {//el caso de que queramos mostrar todos los cursos
-        $sql = MySQLDB::getInstance()->query("SELECT id,name,description, category, imgname, price FROM course ORDER BY creationdate DESC");
+        $sql = MySQLDB::getInstance()->query("SELECT id,price,name,description, category, imgname FROM course ORDER BY creationdate DESC");
+
+                    
+
         if ($sql->num_rows) {
             while ($rs = $sql->fetch_assoc()) {
                 $sqlcheck = MySQLDB::getInstance()->query("SELECT id FROM courseuser WHERE idcourse= " . $rs['id'] . " AND iduser = " . $_SESSION['id'] . " ");
@@ -34,15 +38,16 @@ if (isset($_POST['comprados'])) {
                 } else {
                     
                     
-                  
+                 /* 
                     $price = $rs['price'];
-                    // SDK de Mercado Pago
+                     // SDK de Mercado Pago
                     //require __DIR__  . '/vendor/autoload.php';
                     require('../vendor/autoload.php');
                     // Agrega credenciales
                     MercadoPago\SDK::setAccessToken('TEST-8911236071524493-111921-6afe41586f766724a77ca2518e96a003-179632899');
                     // Crea un objeto de preferencia
                     $preference = new MercadoPago\Preference();
+                   
                     // Crea un ítem en la preferencia
                     $item = new MercadoPago\Item();
                     $item->title =$rs['name'];  //'Curso';
@@ -50,20 +55,20 @@ if (isset($_POST['comprados'])) {
                     $item->unit_price =$price;//intval($price);
                     $preference->items = array($item);
                     $preference->save(); //inicializa
-                    
+                    */
                     
                     
 
                     $cursos[] = array(
                         "id" => $rs['id'], "name" => $rs['name'], "description" => $rs['description'],
-                        "category" => $rs['category'],"imgname" => $rs['imgname'],"bought"=> false ,"preferenceid"=> $preference->id
+                        "category" => $rs['category'],"imgname" => $rs['imgname'],"bought"=> false ,//"preferenceid"=>$preference->id
                     );
                 }
             }
             //print_r($cursos);
             if(is_array($cursos)){
         
-                
+              
                 echo json_encode($cursos);
                 die;
 

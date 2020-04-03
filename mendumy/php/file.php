@@ -1,5 +1,6 @@
 <?php
-require_once('../php/funcs.php'); 
+require_once('../php/funcs.php');
+include("mysqli.php"); 
 //print_r( $_FILES['imagen']['name']);
 /*if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0){
 print_r($_POST);}
@@ -15,10 +16,10 @@ if (isset($_FILES['imagen']) && isset($_FILES['video']) && isset($_POST['nombre'
         echo resultBlock($msg,2);
         die;
     }
-    $name = trim(filter_var($_POST['nombre'], FILTER_SANITIZE_STRING));
-    $precio = trim(filter_var($_POST['precio'], FILTER_SANITIZE_STRING));
-    $categoria = trim(filter_var($_POST['categoria'], FILTER_SANITIZE_STRING));
-    $descripcion = trim(filter_var($_POST['descripcion'], FILTER_SANITIZE_STRING));
+    $name= trim(filter_var($_POST['nombre'], FILTER_SANITIZE_STRING));
+    $price = trim(filter_var($_POST['precio'], FILTER_SANITIZE_STRING));
+    $category = trim(filter_var($_POST['categoria'], FILTER_SANITIZE_STRING));
+    $description = trim(filter_var($_POST['descripcion'], FILTER_SANITIZE_STRING));
   
     $imageExtension=$imagen["type"];
     $allowedfileExtensions = array('image/jpg', 'image/jpeg','image/gif', 'image/png');
@@ -27,13 +28,15 @@ if (isset($_FILES['imagen']) && isset($_FILES['video']) && isset($_POST['nombre'
         $allowedfileExtensions2 = array('video/mp4', 'video/wmv','video/flv', 'video/mov','video/avi');
         if (in_array($videoExtension, $allowedfileExtensions2)) {
             /*creamos un nombre para el archivo codificando el nombre del directorio 
-            temporario del archivo (este siempre es diferente)*/    
-            $rutaImagen="../imgcourses/".md5($imagen["tmp_name"]).".".extension($imageExtension);
-            $rutaVideo="../coursesvideos/".md5($video["tmp_name"]).".".extension($videoExtension);
+            temporario del archivo (este siempre es diferente)*/
+            $imgname=md5($imagen["tmp_name"]).extension($imageExtension);
+            $videoname=md5($video["tmp_name"]).extension($videoExtension);
+            $rutaImagen="../imgcourses/".$imgname;
+            $rutaVideo="../coursesvideos/".$videoname;
             //cargamos el formulario en la base de datos
-            $sql=true;
-            /*Se hacer una query revisar campos de los registros ver si se puede normalizar*/
-
+    
+            $sql = MySQLDB::getInstance()->query("INSERT INTO course (price, name, description, category, creationdate, modificationdate , imgname,videoname) VALUES ('$price', '$name', '$description','$category',NOW(), NULL ,'$imgname','$videoname') ");
+            
             if($sql){
                 //movemos la imagen y el video desde su ubicación temporaria hasta los directorios imgcourses y coursesvideo respectivamente
                 move_uploaded_file($imagen["tmp_name"],$rutaImagen);

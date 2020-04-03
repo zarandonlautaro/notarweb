@@ -24,7 +24,7 @@
                 </div>
             </a>
             <?php
-            if ($_SESSION['rol'] ==0) {
+            if ($_SESSION['rol'] == 0) {
             ?>
                 <a id="adminpanel" class="list-group-item list-group-item-action">
                     <div class="row boton_sidebar ">
@@ -42,7 +42,7 @@
             <a href="php/cerrar_sesion.php" class="list-group-item list-group-item-action">
                 <div class="row boton_sidebar">
                     <div class="col-2 text-center">
-                        <i class="fas fa-sign-out-alt"></i> 
+                        <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div class="col-10">
                         Cerrar sesión
@@ -51,7 +51,7 @@
             </a>
         </div>
     </div>
-   <!--FIN DE BARRA LATERAL DESPLAZABLE -->
+    <!--FIN DE BARRA LATERAL DESPLAZABLE -->
     <!--INICIO DE CONTENIDO DE PAGINA -->
     <div id="page-content-wrapper" style="background: rgba(200, 200, 200, 0.5);">
         <nav class="navbar navbar-expand-lg">
@@ -64,7 +64,39 @@
                 </h1>
                 <p class="lead">¿Listo para continuar?
                 </p>
+
+                <!-- Button trigger modal -->
+              <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Launch demo modal
+                </button>-->
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Comprar Curso</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id='pago' class="modal-body">
+                                
+                            </div>
+                           <!-- <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
+
+
         </div>
         <div class="container-fluid">
             <!-- SKELETON -->
@@ -161,6 +193,9 @@
 
             <!-- RENDER COURSES BY JQUERY -->
             <div id="contenedor_home" class="mb-2">
+
+
+
             </div>
         </div>
 
