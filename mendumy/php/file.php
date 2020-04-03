@@ -6,11 +6,12 @@ include("mysqli.php");
 print_r($_POST);}
 */
 
-if (isset($_FILES['imagen']) && isset($_FILES['video']) && isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['categoria']) && isset($_POST['descripcion'])) {
+if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['categoria']) && isset($_POST['descripcion'])) {
     //Almacenamos en variables llegadas por métodos post
-    if($_FILES['video']['error'] === 0 && $_FILES['imagen']['error'] === 0){
+    if($_FILES['imagen']['error'] == 0){
     $imagen = $_FILES['imagen'];
-    $video = $_FILES['video'];
+    
+
     }else{
         $msg[]="Error al cargar los archivos";
         echo resultBlock($msg,2);
@@ -24,39 +25,45 @@ if (isset($_FILES['imagen']) && isset($_FILES['video']) && isset($_POST['nombre'
     $imageExtension=$imagen["type"];
     $allowedfileExtensions = array('image/jpg', 'image/jpeg','image/gif', 'image/png');
     if (in_array($imageExtension, $allowedfileExtensions)) {
-        $videoExtension=$video["type"];
-        $allowedfileExtensions2 = array('video/mp4', 'video/wmv','video/flv', 'video/mov','video/avi');
-        if (in_array($videoExtension, $allowedfileExtensions2)) {
+       
+       
             /*creamos un nombre para el archivo codificando el nombre del directorio 
             temporario del archivo (este siempre es diferente)*/
-            $imgname=md5($imagen["tmp_name"]).extension($imageExtension);
-            $videoname=md5($video["tmp_name"]).extension($videoExtension);
+            $imgname=md5($imagen["tmp_name"]).".".extension($imageExtension);
             $rutaImagen="../imgcourses/".$imgname;
-            $rutaVideo="../coursesvideos/".$videoname;
+            
             //cargamos el formulario en la base de datos
-    
-            $sql = MySQLDB::getInstance()->query("INSERT INTO course (price, name, description, category, creationdate, modificationdate , imgname,videoname) VALUES ('$price', '$name', '$description','$category',NOW(), NULL ,'$imgname','$videoname') ");
+
+            $sql = MySQLDB::getInstance()->query("SELECT * FROM categories where name='$category'");
+            $id = $sql->fetch_assoc();
+            $categoryid=$id['id'];
+            //verificamos que no exista un curso con el mismo nombre
+            $sql = MySQLDB::getInstance()->query("SELECT * FROM course where name='$name'");
+        if($sql->num_rows==0){
+
+        
+            $sql = MySQLDB::getInstance()->query("INSERT INTO course (price, name, description, category, creationdate, modificationdate , imgname) VALUES ('$price', '$name', '$description','$categoryid',NOW(), NULL ,'$imgname') ");
             
             if($sql){
                 //movemos la imagen y el video desde su ubicación temporaria hasta los directorios imgcourses y coursesvideo respectivamente
                 move_uploaded_file($imagen["tmp_name"],$rutaImagen);
-                move_uploaded_file($video["tmp_name"],$rutaVideo);
+                
                 
                 $msg[]="¡Curso subido con éxito!";
                 echo resultBlock($msg,1);
                 die;
 
             }else{
-                $msg[]="¡Error al cargar a la base de datos!";
+                $msg[]="¡Error al cargar la base de datos!";
                 echo resultBlock($msg,2);
                 die;
             }
-
-        }else{
-            $msg[]="extensión de video no valida </br> Formatos permitidos[mp4,wmv,flv,mov,avi]";
-            echo resultBlock($msg,2);
-            die;
-        }
+        }else{ 
+            $msg[]="¡Nombre de curso no disponible!";
+                echo resultBlock($msg,2);
+                die;
+           }
+       
     }else{
         $msg[]="Extensión de imagen no valida </br> Formatos permitidos[jpg,jpeg,gif,png]";
         echo resultBlock($msg,2);
