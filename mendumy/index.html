@@ -22,6 +22,28 @@
 
     <!-- Custom styles for this template -->
     <link href="css/agency.css" rel="stylesheet">
+<!--
+    <script type="text/javascript">
+        var verifyCallback = function (response) {
+            alert(response);
+        };
+        var onloadCallback = function () {
+            //necesitamos dos captchas diferentes para cada modal,ya que al poner uno solo tenemos errores.La forma de poner multiples captchas 
+            //es con Explicit rendering sacado de https://developers.google.com/recaptcha/docs/display
+            widgetId1 = grecaptcha.render('recaptcha1', {
+                'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+                'theme': 'light'
+            });
+            widgetId2 = grecaptcha.render('recaptcha2', {
+                'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+                'theme': 'light'
+            });
+        };
+    </script>-->
+
+
+
+
 </head>
 
 <body id="page-top">
@@ -54,7 +76,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <img src="img/logo_transparent.png" width="170" alt="">
+                                <div class="container d-flex align-items-center justify-content-center "
+                                    style="height: 204px;">
+                                    <img class="w-100" src="img/logo.jfif" alt="logo">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -133,7 +158,7 @@
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="https://www.instagram.com/notarweb/"  target="_blank">
+                            <a href="https://www.instagram.com/notarweb/" target="_blank">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         </li>
@@ -167,7 +192,7 @@
                 <div class="modal-body">
                     <div class="row mb-2">
                         <div class="col-6">
-                            <input class="form-control" type="text" id="nameR" placeholder="Nombre" >
+                            <input class="form-control" type="text" id="nameR" placeholder="Nombre">
                         </div>
                         <div class="col-6">
                             <input class="form-control" type="text" id="lastnameR" placeholder="Apellido">
@@ -214,16 +239,18 @@
                     </div>
 
                     <div class="row text-xs-center">
-                        <div id="recaptcha1" class="g-recaptcha" ></div>
+                        <div id="recaptcha1" class="g-recaptcha"></div>
                     </div>
 
 
                 </div>
-                <div class="container d-flex justify-content-end mb-3 " >
-                    
-                        <button  id="register_button" type="button" class="btn btn-md p-1  btn-primary mr-2 col-xs-12 col-xl-2">Aceptar</button>
-                        <button type="button" class="btn btn-outline-secondary mr-2 col-xs-12 col-xl-2" data-dismiss="modal">Cerrar</button>
-                   
+                <div class="container d-flex justify-content-end mb-3 ">
+
+                    <button id="register_button" type="button"
+                        class="btn btn-md p-1  btn-primary mr-2 col-xs-12 col-xl-2">Aceptar</button>
+                    <button type="button" class="btn btn-outline-secondary mr-2 col-xs-12 col-xl-2"
+                        data-dismiss="modal">Cerrar</button>
+
                 </div>
             </div>
         </div>
@@ -257,8 +284,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    
-                    <button  id="pass_button" type="button" class="btn btn-primary">Aceptar</button>
+
+                    <button id="pass_button" type="button" class="btn btn-primary">Aceptar</button>
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -272,9 +299,8 @@
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js"></script>
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js"></script>
     <!-- recaptcha v2 JavaScript -->
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-    async defer>
-</script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+    </script>
 
     <!-- Plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -287,7 +313,7 @@
     <script src="js/agency.js"></script>
     <script src="js/sweetalert2.js"></script>
     <script src="js/landing.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  
 
 </body>
 
