@@ -143,8 +143,13 @@ function carga(comprados) {
                             console.log(rs['videoname']);
 
                             if (rs['bought']==true) {
+                                console.log("cargó el curso");
+                                $('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La carga de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+                                $('#exampleModal').modal('show');
+
+                                /*  $('#contenedor_home').empty().append('Aqui estará el curso');
                                 $('#video').attr('src', "coursesvideos/" + rs['videoname']);
-                                $('#modalvideo').modal("show");
+                                $('#modalvideo').modal("show");*/
 
                             }else{
                                 console.log("Elemento no comprado");  
@@ -262,15 +267,19 @@ $(document).ready(function () {
     $('#adminpanel').click(() => {
             admin(true);
             console.log("Admin");
-        
-            
+     });
+     $('#subirvideo').click(() => {
+        $('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La subida de videos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+        $('#exampleModal').modal('show');
+
+ });
+ $('#modificarcurso').click(() => {
+    $('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La modificación de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+    $('#exampleModal').modal('show');
+});
+   
 
 
 
-    });
-
-        
-    
-    
     
 });
