@@ -1,7 +1,9 @@
 <div class="d-flex" id="wrapper">
     <!--INICIO DE BARRA LATERAL DESPLAZABLE -->
     <div class="" id="sidebar-wrapper">
-        <div class="sidebar-heading text-warning">Mendumy</div>
+        <!--<div class="sidebar-heading text-warning">NOTAR WEB</div>-->
+        <div class="sidebar-heading text-warning" style="width: 240px;"> <img class="w-100" src="img/logo.jfif"  alt="logo"> </div>
+
         <div class="list-group list-group-flush">
             <a id="cursos" class="list-group-item list-group-item-action">
                 <div class="row boton_sidebar">
@@ -26,19 +28,61 @@
             <?php
             if ($_SESSION['rol'] == 0) {
             ?>
-                <a id="adminpanel" class="list-group-item list-group-item-action">
+
+                <div class="list-group-item list-group-item-action">
+
+                    <a class="list-group-item list-group-item-action row boton_sidebar " data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
+                        <div class="row boton_sidebar ">
+                            <div class="col-2 text-center">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="col-10 ">
+                                Administrador
+
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="collapse  p-0" id="collapseExample2">
+
+                        <a id="adminpanel" class="list-group-item list-group-item-action" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Subir curso
+                        </a>
+                        <a id="subirvideo" class="list-group-item list-group-item-action" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Subir videos
+                        </a>
+                        <a id="modificarcurso" class="list-group-item list-group-item-action" data-toggle="collapse" href="#" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Modificar Cursos
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- <a id="adminpanel" class="list-group-item list-group-item-action">
                     <div class="row boton_sidebar ">
                         <div class="col-2 text-center">
                             <i class="fas fa-cogs"></i>
                         </div>
                         <div class="col-10 ">
                             Administrador
+
                         </div>
                     </div>
-                </a>
+                </a>-->
             <?php
             }
             ?>
+            <!--Prueba de nuevo sidebar------------------------------------------------------------->
+            <!-- Nav Item - Pages Collapse Menu -->
+
+
+
+
+
+
+
+            <!--FIN Prueba de nuevo sidebar------------------------------------------------------------->
             <a href="php/cerrar_sesion.php" class="list-group-item list-group-item-action">
                 <div class="row boton_sidebar">
                     <div class="col-2 text-center">
@@ -66,7 +110,7 @@
                 </p>
 
                 <!-- Button trigger modal -->
-              <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                     Launch demo modal
                 </button>-->
 
@@ -81,9 +125,9 @@
                                 </button>
                             </div>
                             <div id='pago' class="modal-body">
-                                
+
                             </div>
-                           <!-- <div class="modal-footer">
+                            <!-- <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary">Save changes</button>
                             </div>-->
