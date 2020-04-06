@@ -311,8 +311,9 @@ var onloadCallback = function () {
     });
 };
 
-$('#pass_button').click(() => {
 
+
+    function passRestore() {
    
 
 
@@ -387,7 +388,7 @@ $('#pass_button').click(() => {
             title: '¡Revisar campos del registro!'
         })
     }
-});
+}
 
 
 function IsEmail(email) {
@@ -418,3 +419,16 @@ function validaPassword(var1, var2)
 
 
 }
+
+$(document).ready(function (){
+    $('#pass_button').click(() => {
+
+        passRestore();
+    })
+
+
+
+
+
+
+})
