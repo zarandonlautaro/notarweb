@@ -107,3 +107,4 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
         return array("status" => 3, "msg" => "El mail no pudo ser enviado. {$mail->ErrorInfo}");
     }
 }
+?>

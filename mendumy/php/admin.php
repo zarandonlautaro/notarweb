@@ -23,7 +23,7 @@
                         <div class="form-group d-flex">
 
                             <div class="col-6">
-                                <input id="precio" type="text" class="form-control form-control-sm" name="precio" placeholder="Precio" required>
+                                <input id="precio" type="text" class="form-control form-control-sm"  title="Precio"name="precio" placeholder="Precio" required>
                             </div>
                             <div class="custom-control custom-checkbox  col-6">
                                 <input type="checkbox" class="custom-control-input" id="cb-gratis">
@@ -55,7 +55,7 @@
                             <!-- Separador -->
                         </div>
                         <div class="form-group form-group-sm col-12">
-                            <label for="imagen" class="col-sm-12 col-form-label">Imagen</label>
+                            <label for="imagen" class="col-sm-12 col-form-label">Imagen de portada</label>
                             <div class="col-sm-12">
                                 <input type="file" class="form-control-file" id="imagen" name="imagen" required>
                             </div>

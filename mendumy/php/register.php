@@ -93,3 +93,4 @@ if ($valido) {
     echo 2;//error de validación
     die;
 }
+?>
