@@ -144,12 +144,12 @@ function carga(comprados) {
 
                             if (rs['bought'] == true) {
                                 console.log("cargó el curso");
-                                $('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La carga de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
-                                $('#exampleModal').modal('show');
+                                //$('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La carga de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+                                //$('#exampleModal').modal('show');
 
-                                /*  $('#contenedor_home').empty().append('Aqui estará el curso');
+                                //$('#contenedor_home').empty().append('Aqui estará el curso');
                                 $('#video').attr('src', "coursesvideos/" + rs['videoname']);
-                                $('#modalvideo').modal("show");*/
+                                $('#modalvideo').modal("show");
 
                             } else {
                                 console.log("Elemento no comprado");
@@ -244,6 +244,48 @@ function admin(ok) {
 
 }
 
+function subirvideo(ok) {
+    if (ok) {
+        $.ajax({
+
+            url: "./php/subirvideo.php",
+            type: "post",
+            data: ok,
+
+
+            beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            },
+            error: function (error) { //Si ocurre un error en el ajax
+                //alert("Error, reintentar. "+error);
+
+            },
+            complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+            },
+
+            success: function (data) {
+
+                $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+                //console.log(data);
+                //$('#alert').addClass('alert-warning');
+                $('#contenedor_home').empty().append(data);
+
+                $.getScript("./js/subirvideo.js", function () {
+
+
+                });
+
+            }
+
+        });
+
+    }
+
+}
+
 $(document).ready(function () {
 
     carga(false);
@@ -270,8 +312,9 @@ $(document).ready(function () {
     });
 
     $('#subirvideo').click(() => {
-        $('#pago').empty().append('<h2 class="alert alert-info"> <strong>La subida de videos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
-        $('#exampleModal').modal('show');
+        //$('#pago').empty().append('<h2 class="alert alert-info"> <strong>La subida de videos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+        //$('#exampleModal').modal('show');
+        subirvideo(true);
 
     });
 

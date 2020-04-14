@@ -15,11 +15,11 @@ if (isset($_POST['idcourse'])) {
     $sql = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse = $idcourse AND iduser = " . $iduser . " ");
     if ($sql->num_rows) {
 
-        $sql = MySQLDB::getInstance()->query("SELECT id FROM course  WHERE id = $idcourse ");
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM course  WHERE id = $idcourse ");
         $rs = $sql->fetch_assoc();
         if ($rs) {
             $curso[] = array(
-                'id' => $rs['id']/*, 'videoname' => $rs['videoname']*/, 'bought' => true
+                'id' => $rs['id'], 'videoname' => $rs['videoname'], 'bought' => true
             );
             echo json_encode($curso);
             die;

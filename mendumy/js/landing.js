@@ -170,7 +170,7 @@ $('#register_button').click(() => {
     let lastname = $('#lastnameR').val();
     let dni = $('#dniR').val();
     let email = $('#emailR').val();
-    let legajo = $('#legajoR').val();
+    let legajo = $("#input-select option:selected").val(); //estará determinado por la opción seleccionada
     let pass = $('#passR').val();
     let rePass = $('#passRe').val();
     let date = $('#dp2').val();
@@ -192,8 +192,8 @@ $('#register_button').click(() => {
                 } else {
                     $('#validate_register').empty();
 
-                    if (!(legajo.length > 2)) {
-                        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡El legajo no puede estar vacío!</div>');
+                    if ((legajo.length<0)) {
+                        $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Seleccione una opción correcta!</div>');
                     } else {
                         $('#validate_register').empty();
 
@@ -220,7 +220,7 @@ $('#register_button').click(() => {
 
 
 
-    if (validaPassword(pass, rePass)&&is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni) && !isNaN(dni) && legajo.length > 2) {
+    if (validaPassword(pass, rePass)&&is_ok(name) && is_ok(lastname) && is_ok(legajo) && IsEmail(email) && is_ok(pass) && pass.length > 6 && is_ok(dni) && !isNaN(dni) && legajo.length > 0) {
         $.ajax({
             method: 'POST',
             url: "php/register.php",

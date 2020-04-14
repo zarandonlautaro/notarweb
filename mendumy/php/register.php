@@ -74,7 +74,7 @@ if ($valido) {
             die; 
         }
         
-        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, legajo, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");
+        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, idprofesion, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");
         $sqlid = MySQLDB::getInstance()->query("SELECT LAST_INSERT_ID() as idusr");
         $id = $sqlid->fetch_assoc();
         $iduser=$id['idusr'];
@@ -93,4 +93,3 @@ if ($valido) {
     echo 2;//error de validación
     die;
 }
-?>

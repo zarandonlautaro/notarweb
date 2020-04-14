@@ -1,103 +1,115 @@
-<?php
-include("mysqli.php");
-include("mail.php");
-require_once('../php/funcs.php');
-$valido=false;
-//validaciones del lado del servidor
-if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['legajo']) && isset($_POST['pass']) && isset($_POST['rePass'])  && isset($_POST['dni'])&& isset($_POST['date'])){
-$name = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
-$lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
-$dni = trim(filter_var($_POST['dni'], FILTER_SANITIZE_STRING));
-$email = trim(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL));
-$legajo = trim(filter_var($_POST['legajo'], FILTER_SANITIZE_STRING));
-$pass = trim(filter_var($_POST['pass'], FILTER_SANITIZE_STRING));
-$rePass = trim(filter_var($_POST['rePass'], FILTER_SANITIZE_STRING));
-$datea= trim(filter_var($_POST['date'], FILTER_SANITIZE_STRING));
-$fecha = strtotime($datea); //Convierte el string a formato de fecha en php
-$dateb = date('Y-m-d',$fecha); //Lo comvierte a formato de fecha en MySQL
-$valido=true;
+<!DOCTYPE html>
+<html lang="en">
 
-if(!isEmail($email))
-{
-    //$errors[] = "Dirección de correo inválida";
-    echo 2;//error de validacion
-    die;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-if(!validaPassword($pass, $rePass))
-{
-    //$errors[] = "Las contraseñas no coinciden";
-    echo 2;//error de validacion
-    die;
-}
+<body>
 
-}
+    <form id="testform">
+        <fieldset id="input1" class="clonedInput custom-file">
+            <!-- <input type="text" class="form-control col-3 " id="file1name" name="file1name" placeholder="Nombre de archivo 1">-->
+            <label class="custom-file-label" for="file1">Seleccionar Archivo</label>
+            <input type="file" class="custom-file-input " name="file1" id="file1" />
 
-if ($valido) {
-    $name = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
-    $lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
-    $dni = trim(filter_var($_POST['dni'], FILTER_SANITIZE_STRING));
-    $email = trim(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL));
-    $legajo = trim(filter_var($_POST['legajo'], FILTER_SANITIZE_STRING));
-    $pass = trim(filter_var($_POST['pass'], FILTER_SANITIZE_STRING));
-    $datea= trim(filter_var($_POST['date'], FILTER_SANITIZE_STRING));
-    $fecha = strtotime($datea); //Convierte el string a formato de fecha en php
-    $dateb = date('Y-m-d',$fecha); //Lo comvierte a formato de fecha en MySQL
- 
-    if (!($name || $lastname || $email || $legajo || $pass)) { //Filtrado de variables
-        echo 2; //Quiere romper algo
-        die;
+
+        </fieldset>
+        <fieldset class="custom-file mt-3">
+
+            <button class="btn btn-outline-success" id="btnAdd" type="button" title="agregar nueva tema"><i class="fas fa-plus"></i></button>
+            <button class="btn btn-outline-danger" id="btnDel" type="button" title="eliminar tema"><i class="fas fa-minus"></i></button>
+
+        </fieldset>
+
+
+
+
+
+    </form>
+
+</body>
+
+
+<script src="vendor/jquery/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+//funciones para inputs dinamicos----------------------------------------------------------------------------
+    function agregarinput() {
+        $('#file1').val("");
+        $('#btnDel').attr('disabled', 'disabled');
+        $('#btnAdd').click(function() {
+            var num = $('.clonedInput').length; // length devuelve la cantidad de elementos de una seleccion
+            var newNum = new Number(num + 1); // the numeric ID of the new input field being added
+
+            var newElem = '<fieldset id="input' + newNum + '" class="clonedInput custom-file">' +
+                '<label class="custom-file-label" for="file' + newNum + '">Seleccionar Archivo</label>' +
+                '<input type="file" class="custom-file-input " name="file' + newNum + '" id="file' + newNum + '" /></fieldset>';
+
+            $('#input' + num).after(newElem);
+            // enable the "remove" button
+            $('#btnDel').attr('disabled', false);
+
+            // business rule: you can only add 10 names
+            if (newNum == 10)
+                $('#btnAdd').attr('disabled', 'disabled');
+            nombreInputfile();
+
+            /*
+            // clonamos el elemento actual y le ponemos un id=id+numero de elemento
+            var newElem = $('#input' + num).clone().attr('id', 'input' + newNum);
+            // cambiamos el nombre del elemento
+            newElem.children(':last').attr('id', 'input' + newNum).attr('name', 'file' + newNum);
+            //newElem.children(':first').attr('placeholder', 'Nombre de archivo ' + newNum);
+            //$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            */
+
+        });
+
+
+
     }
-    //hace falta validar del lado del servidor
 
-    //reCaptcha Script del lado del servidor--------------------------------------------------------------------------------------------------
-    $secret ="6Lfd_OYUAAAAABZ7fyRXqzykSuTAALwCppR7SFG3" ;
-    //"6Lf9lsMUAAAAAKC8PMden4YhjyJ5AZ9yQi_ip1Kc";
-    $response = $_POST["captcha"];//obtenemos el valor de captcha enviado desde landing.jp
-    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}");
-    $captcha_success = json_decode($verify);//decodifica el json y devuelve array asociativo 
-    //fin reCaptcha Script--------------------------------------------------------------------------------------------------
+    function quitarinput() {
 
-    if ($captcha_success->success == false) {
-        //This user was not verified by recaptcha.
-        echo 3; //No hizo el captcha
-        die;
-    }else if ($captcha_success->success == true) {
-        //generamos hashes
-       	$pass_hash = hash("SHA256", $pass);
-        $token = generateToken();
-        $active=0;
+        $('#btnDel').click(function() {
+            var num = $('.clonedInput').length; // how many "duplicatable" input fields we currently have
+            $('#input' + num).remove(); // remove the last element
 
-      
-        //insertamos el usuario nuevo en la tabla user
-        if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE username='$email'")->num_rows !=0){
-            echo 4;//correo en uso
-            die; 
-        }
-    
+            // enable the "add" button
+            $('#btnAdd').attr('disabled', false);
 
-        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, legajo, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");
-        $sqlid = MySQLDB::getInstance()->query("SELECT LAST_INSERT_ID() as idusr");
-        $id = $sqlid->fetch_assoc();
-        $iduser=$id['idusr'];
-        $auth = MySQLDB::getInstance()->query("INSERT INTO auth (idusr) VALUES ('$iduser') ");
-        //$sql = MySQLDB::getInstance()->query("INSERT INTO auth (idusr, last_auth) VALUES ( '$iduser', NOW() )"); //ultima logeo
-        
-        
+            // if only one element remains, disable the "remove" button
+            if (num - 1 == 1)
+                $('#btnDel').attr('disabled', 'disabled');
+        });
 
 
-        if (sendMail($email, 1, $iduser, $token) && $sql) {
-            echo 1;
-            die;
-        } else {
-            echo 0;
-            die;
-        }
-        
     }
-} else {
-    echo 2;//error de validación
-    die;
-}
-?>
-  
+
+    function nombreInputfile() {
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            console.log(fileName);
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    }
+
+    $(document).ready(function() {
+
+        nombreInputfile();
+        agregarinput();
+        quitarinput();
+
+
+    });
+</script>
+
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/fontawesome-all.min.js"></script>
+
+</html>
