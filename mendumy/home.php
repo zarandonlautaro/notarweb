@@ -50,6 +50,7 @@ header("Location: http://".$directorio); /* Redirección del navegador */}
   <script src="js/fontawesome-all.min.js"></script>
   <script src="js/home.js"></script>
   <script src="js/admin.js"></script>
+  <script src="js/subirvideo.js"></script>
   <script src="js/sweetalert2.js"></script>
 </body>
 
