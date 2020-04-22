@@ -56,6 +56,15 @@ body {
   color: rgba(254, 209, 54, 1);
   cursor: pointer;
 }
+.boton_video{
+  color: black;
+  cursor: pointer;
+}
+.boton_video:active {
+  color: rgb(54, 214, 254);
+  cursor: pointer;
+}
+
 
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;

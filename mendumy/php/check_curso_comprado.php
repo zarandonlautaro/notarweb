@@ -19,7 +19,7 @@ if (isset($_POST['idcourse'])) {
         $rs = $sql->fetch_assoc();
         if ($rs) {
             $curso[] = array(
-                'id' => $rs['id'], 'videoname' => $rs['videoname'], 'bought' => true
+                'id' => $rs['id'], 'imgname' => $rs['imgname'] , 'name' => $rs['name'], 'description' => $rs['description'],'bought' => true
             );
             echo json_encode($curso);
             die;

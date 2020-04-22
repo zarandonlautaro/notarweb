@@ -107,7 +107,7 @@ function carga(comprados) {
 
                     let id = $(this).attr("curso");
                     let tipo = $(this).attr("tipo");
-                    console.log(id);
+                    //console.log(id);
                     //Comprobamos que tenga el curso comprado
 
                     $.ajax({
@@ -136,22 +136,58 @@ function carga(comprados) {
                             $('#curso' + id).html(tipo);
                         },
                         success: function (courses) {
-                            console.log(courses);
+                            //console.log(courses);
                             let r = JSON.parse(courses);
                             let rs = r[0];
-                            console.log(rs[0]);
-                            console.log(rs['videoname']);
-
+                            //console.log(rs[0]);
+                            // console.log(rs['videoname']);
+                            //--------------------------------------------------------------------CURSO COMPRADO----------------------------------------------------------------------------
                             if (rs['bought'] == true) {
-                                console.log("cargó el curso");
+
                                 //$('#pago').empty().append('<h2 class="display-5 alert alert-info"> <strong>La carga de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
                                 //$('#exampleModal').modal('show');
 
                                 //$('#contenedor_home').empty().append('Aqui estará el curso');
-                                $('#video').attr('src', "coursesvideos/" + rs['videoname']);
-                                $('#modalvideo').modal("show");
+                                //$('#video').attr('src', "coursesvideos/" + rs['videoname']);
+                                //$('#modalvideo').modal("show");
+
+                                $('#jumbotron').removeClass('d-none');
+                                $('#jumbotron').addClass('d-block');
+                                $('#jumbotron').empty().append(
+                                    '<div class="container">' +
+                                    /*'<h1 class="display-4"> '+rs['name  ']+' </h1>'+
+                                    
+                                    '<p class="lead">¿Listo para continuar? </p>'+*/
+                                    '<div class="" style="max-width: 540px;" >' +
+                                    '<div class="row no-gutters">' +
+                                    '<div class="col-md-4">' +
+                                    '<img src="imgcourses/' + rs['imgname'] + '" class="card-img" alt="foto de curso">' +
+                                    '</div>' +
+                                    '<div class="col-md-8">' +
+                                    '<div class="card-body">' +
+                                    '<h5 class="card-title">' + rs['name'] + '<h5>' +
+                                    '<p class="card-text">' + rs['description'] + '</p>' +
+                                    '<p class="card-text"><small class="text-muted">' + rs['description'] + '</small></p>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+
+
+
+
+
+
+                                    '</div>'
+
+                                );
+
+                                mostrarcurso(id);
+
+
 
                             } else {
+                                //------------------------------------------------------------------CURSO NO COMPRADO---------------------------------------------------------------------------                                
                                 console.log("Elemento no comprado");
                                 console.log(rs["preferenceid"]);
                                 var preferenceid = rs["preferenceid"];
@@ -201,6 +237,226 @@ function carga(comprados) {
     });
 }
 
+//-------------------------------TRAE CONTENIDO DE CURSOS AL BOODY---------------------------------------
+function mostrarcurso(idcurso) {
+    $('#jumbotron').removeClass('d-none');
+    $('#jumbotron').addClass('d-block');
+    // console.log("id del curso a mostrar" + idcurso);
+    $.ajax({
+
+        url: "./php/consulta_cursos.php",//hacemos una peticion al archivo de altabajamodificacion consulta
+        type: "post",
+        data: { 'idcurso': idcurso },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+            //escondemos el jumbotron de bienvenida
+
+            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+
+            let rs = JSON.parse(data);
+            //console.log(rs);
+            //$('#alert').addClass('alert-warning');
+            //limpiamos contenedor 
+            $('#contenedor_home').empty().append('<div id="accordion" > </div>');
+            //agregamos acordeon con temas  y videos
+
+            let videos = "Videos:";
+            $.each(rs, (i, r) => {
+
+                videos += '<div class="list-group list-group-flush">';
+                //console.log(r['videos'][0]['title']);
+
+                $.each(r['videos'], (j, r1) => {
+
+                    videos += '<a href="#" class="list-group-item list-group-item-action  boton_video " id="' + r1['id'] + '" curso="' + idcurso + '"tema="' + r['name'] + '">' +
+                        '<i class="text-success fas fa-play-circle"></i>  ' + r1['title'] + '</a>';
+                    //console.log(r1['title']);
+                });
+
+                videos += '</div>';
+
+                $('#accordion').append(
+
+                    '<!--Elemento colapsable-->' +
+                    '<div class="card">' +
+                    '<!--Cabecera de elemento de acordeon-->' +
+                    '<div class="card-header" id="heading' + i + '">' +
+                    ' <h5 class="mb-0">' +
+                    '<button class="btn  " data-toggle="collapse" data-target="#collapse' + i + '" aria-expanded="true" aria-controls="collapse' + i + '">' +
+                    '<i class=" text-info fas fa-plus"></i>   ' + r['name'] +
+                    '</button>' +
+                    '</h5>' +
+                    '</div>' +
+                    '<!--Elemento colapsable al tocar cabecera-->' +
+                    '<div id="collapse' + i + '" class="collapse" aria-labelledby="heading' + i + '" data-parent="#accordion">' +
+                    '<div class="card-body">' +
+                    videos +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<!--Elemento no colapsable-->'
+
+
+
+
+                );
+                //console.log("elemento " + i + " es " + r['name']);
+                videos = [];
+                videos = "Videos:";
+
+
+            });
+
+
+            //Funcion que se ejecuta cuando presionamos un videos
+            $(".boton_video").click(function () {
+
+                $('.modal-body').empty();
+                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast");
+                $('#carga_cursos').hide("fast");
+
+                $('#jumbotron').removeClass('d-block');
+                $('#jumbotron').addClass('d-none');
+                let idcourse = $(this).attr("curso");
+                let id = $(this).attr("id");
+                let tema = $(this).attr("tema");
+                //console.log(tema);
+                //console.log(rs[0]['videos'][0]['archivos']);
+                let description;
+                let namevideo;
+                let imgvideo;
+                let title;
+                let archivos = '<ul class="list-group list-group-flush"><div class="card-body pb-0"> <h6 class="card-title">Archivos adjuntos</h6></div>';
+                let datosVideo;
+                let videocard;
+                $.each(rs, (i, r) => {
+
+
+
+                    if (r['name'] == tema) {
+
+
+                        $.each(r['videos'], (j, r1) => {
+
+
+                            if (r1['id'] == id) {
+
+                                description = r1['description'];
+                                namevideo = r1['name'];
+                                imgvideo = r1['imgvideo'];
+                                title = r1['title'];
+                                datosVideo = description + "  " + namevideo + "  " + imgvideo + "  " + title;
+
+                                $.each(r1['archivos'], (z, r2) => {
+
+
+                                    archivos += '<a  class="list-group-item list-group-item-action text-info" download="' + r2['name'] + '" href="coursefiles/' + r2['filename'] + '"><i class="fas fa-file-alt"></i>' + ': ' + r2['name'] + ' </a>';
+                                });
+
+                            }
+
+
+                        });
+                    }
+
+                });
+                archivos += '</ul>';
+                console.log(archivos);
+                //preparamos video card del curso
+                videocard =
+                    '<div class=" row justify-content-center" >' +
+                    '<div class="col-xl-6 mt-2">' +
+                    '<div class="  mendocard shadow-lg w-100" style="width: 18rem;">' +
+                    '<img src="imgcourses/' + imgvideo + '" class="mendocard-picture">' +
+                    '<div class="">' +
+                    '<h5 class="pt-2">' + title + '</h5>' +
+
+                    '<p class=""> ' + description + ' </p>' +
+                    archivos +
+                    '<div class="container d-flex justify-content-around mb-3 mt-3 ">' +
+                    '<button class=" btn btn-md p-1  btn-outline-dark mr-2 col-xs-12 col-xl-4"  id="' + idcourse + '">Volver</button>' +
+                    '<button class=" btn btn-md p-1  btn-warning mr-2 col-xs-12 col-xl-4" id="video' + id + '">Ver </button>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+
+
+
+
+
+
+
+
+                /*' <div class="card" style="width: 18rem;">' +
+                    '<img src = "imgcourses/' + imgvideo + '" class="card-img-top" alt = "imagen de video">' +
+                    '<div class="card-body pt-2 pb-0">' +
+                    '<h5 class="card-title">' + title + '</h5>' +
+                    '<p class="card-text">' + description + '</p>' +
+                    ' </div>' + archivos +
+                    '<div class="card-body">' +
+                    '<a href="#" class="card-link" id="'+idcourse+'">Volver</a>' +
+                    '<a href="#" class="card-link" id="video'+id+'">Ver video</a>' +
+                    '</div>'
+                '</div >';*/
+
+
+                $('#contenedor_home').empty().append(videocard);
+
+                $('#video' + id).click(function () {
+
+                    $('#video').attr('src', "coursesvideos/" + namevideo);
+                    $('#modalvideo').modal("show");
+
+                });
+                $('#' + idcourse).click(function () {
+                    console.log(idcourse);
+                    mostrarcurso(idcourse);
+
+                });
+
+                console.log("el id del video seleccionado es: " + id);
+            });
+
+
+
+
+
+
+            // $.getScript("./js/mostrarcurso.js", function () { });
+
+
+
+
+        }
+
+    });
+
+
+
+}
+
+
+
+//-------------------------------CARGA CURSO ------------------------------------------------------------   
 
 function admin(ok) {
     if (ok) {
@@ -242,6 +498,18 @@ function admin(ok) {
 
     }
 
+}
+function jumbotron() {
+    $('#jumbotron').empty().append(
+        '<div class="container">' +
+        '<h1 class="display-4">¡Hola' +
+        '</h1>' +
+        '<p class="lead">¿Listo para continuar?' +
+        '</p>' +
+
+        '</div>'
+
+    );
 }
 
 function subirvideo(ok) {
@@ -290,6 +558,7 @@ $(document).ready(function () {
 
     carga(false);
     $("#cursos").click(function () {
+        jumbotron();
         $('#jumbotron').removeClass('d-none');
         $('#jumbotron').addClass('d-block');
         carga(false);

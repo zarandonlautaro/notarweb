@@ -72,7 +72,7 @@ function consultarcursos() {
             "dato": dato
         },
         success: function(rs) {
-            console.log(rs);
+            //console.log(rs);
             $("#select-course").empty().append(rs);;
 
         }
