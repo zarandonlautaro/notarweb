@@ -1,3 +1,4 @@
+//script encargado de subir cursos
 function subir() {
 
     let descripcion = $('#descripcion').val();
