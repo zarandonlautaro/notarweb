@@ -1,19 +1,28 @@
 <?php
 //ABMC =ALTA BAJA MODIFICACION Y CONSULTA
 include("mysqli.php");
+
 //lectura de parámetros elemento puede ser: curso,tema o video
-if (isset($_POST['elemento']) && isset($_POST['operacion']) && isset($_POST['dato'])) {
+if (isset($_POST['elemento']) && isset($_POST['operacion'])){
 
     //filtrado de variables
     $elemento = trim(filter_var($_POST['elemento'], FILTER_SANITIZE_STRING));
     $operacion = trim(filter_var($_POST['operacion'], FILTER_SANITIZE_STRING));
     //$dato = trim(filter_var($_POST['dato'], FILTER_SANITIZE_STRING)); dato se filtrara segun el caso
-    $dato=$_POST['dato'];
+    if(isset($_POST['dato'])){
+        $dato=$_POST['dato'];
+    }else{
+        $dato="";
+    }
+   
 
-    if (!($elemento) || !($operacion) || !($dato)) { //Filtrado de variables
+    if (!($elemento) || !($operacion) ) { //Filtrado de variables
         echo "4"; //Quiere romper algo
         die;
     }
+}else{
+    echo "Faltaron algunos campos.";
+    die;
 }
 
 //Switch para seleccionar elemento sobre el cual queremos hacer ABM o consulta
@@ -71,11 +80,36 @@ function curso($operacion, $dato)
             die;
         }else{
             //consulta que devuelve los datos de otra forma
-            echo "consulta de cursos otros";
-            die;
+            $sql = MySQLDB::getInstance()->query("SELECT * FROM course where id='$dato' ");
+           
+            if ($sql->num_rows) {
+                $rs = $sql->fetch_assoc();
+
+                $curso = array(
+                    'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
+                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price']
+                );
+
+                echo json_encode($curso);
+                die;
+            }
+
         }
     }
+    function modificacioncurso(){
+        $formulario=$_POST;
+        if(isset($_FILES['imagen'])){
+            $imagen=$_FILES['imagen'];
+            //hacemos un update teniendo en cuenta la imagen
+        }else{
+            //hacemos un update y borramos la imagen vieja
+        }
 
+        //print_r($formulario);
+        //print_r($imagen);
+      
+        die;
+    }
 
 
 
@@ -88,7 +122,7 @@ function curso($operacion, $dato)
             //bajacurso($dato);
             break;
         case "modificacion":
-            //modificacioncurso($dato);
+            modificacioncurso($dato);
             break;
         case "consulta":
             consultacursos($dato);

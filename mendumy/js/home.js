@@ -16,7 +16,8 @@ $("#menu-toggle").click(function (e) {
 });
 
 //Realizamos la carga de cursos cuando la página ya está lista
-function carga(comprados) {
+function carga(comprados,listar) {
+    
     var cuerpo = "";
     $.ajax({
         url: "php/traer_cursos_main.php",
@@ -45,64 +46,114 @@ function carga(comprados) {
 
 
                 //alert(courses);
-                var fila = 0;
-                $.each(courses, (i, r) => {
-                    if ((i % 3) == 0) {
-                        fila++;
-                        $('#contenedor_home').append('<div class="row" id="fila' + fila + '"> </div>');
-                    }
-                    if (r['bought']) { //CURSOS COMPRADOS
-                        $('#fila' + fila).append(
+                if (!listar) {
+                   
+                    var fila = 0;
+                    $.each(courses, (i, r) => {
+                        if ((i % 3) == 0) {
+                            fila++;
+                            $('#contenedor_home').append('<div class="row" id="fila' + fila + '"> </div>');
+                        }
+                        if (r['bought']) { //CURSOS COMPRADOS
+                            $('#fila' + fila).append(
 
-                            '<div class="col-xl-4 mt-2">' +
-                            '<div class="  mendocard shadow-lg" style="width: 18rem;" curso=' + r['id'] + '>' +
-                            '<img src="imgcourses/' + r['imgname'] + '"' + 'id=img' + r['id'] + '" class="mendocard-picture">' +
-                            '<div class="">' +
-                            '<h5 class="pt-2">' + r['name'] + '</h5>' +
-                            '<p class="">' + r['description'] + '</p>' +
-                            '<button class="curso btn btn-block btn-info text-white" tipo=Ver curso=' + r['id'] + ' id=curso' + r['id'] + '> Ver </button>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>');
-                    } else if (!(r['bought'])) { //CURSOS SIN COMPRAR
-                        $('#fila' + fila).append(
+                                '<div class="col-xl-4 mt-2">' +
+                                '<div class="  mendocard shadow-lg" style="width: 18rem;" curso=' + r['id'] + '>' +
+                                '<img src="imgcourses/' + r['imgname'] + '"' + 'id=img' + r['id'] + '" class="mendocard-picture">' +
+                                '<div class="">' +
+                                '<h5 class="pt-2">' + r['name'] + '</h5>' +
+                                '<p class="">' + r['description'] + '</p>' +
+                                '<button class="curso btn btn-block btn-info text-white" tipo=Ver curso=' + r['id'] + ' id=curso' + r['id'] + '> Ver </button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>');
+                        } else if (!(r['bought'])) { //CURSOS SIN COMPRAR
+                            let color;
+                            let tipo;
+                            if (r['price'] == 0) {
+                                color = 'warning';
+                                tipo = "¡Curso Gratuito!";
+                            } else {
+                                color = 'success';
+                                tipo = "¡Comprar Curso!";
+                            }
+                            $('#fila' + fila).append(
 
-                            '<div class="col-xl-4 mt-2">' +
-                            '<div class="mendocard shadow-lg " style="width: 18rem;" curso=' + r['id'] + '>' +
-                            '<img src="imgcourses/' + r['imgname'] + '"' + 'img=' + r['imgname'] + '" class="mendocard-picture">' +
-                            '<div class="">' +
-                            '<h5 class="pt-2">' + r['name'] + '</h5>' +
-                            '<p class="">' + r['description'] + '</p>' +
-                            '<button class="curso btn btn-block btn-success " tipo=Comprar curso=' + r['id'] + ' id=curso' + r['id'] + '> Comprar </button>' +
-                            '<p class="" id="pago' + r["preferenceid"] + '"></p>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>');
+                                '<div class="col-xl-4 mt-2">' +
+                                '<div class="mendocard shadow-lg " style="width: 18rem;" curso=' + r['id'] + '>' +
+                                '<img src="imgcourses/' + r['imgname'] + '"' + 'img=' + r['imgname'] + '" class="mendocard-picture">' +
+                                '<div class="">' +
+                                '<h5 class="pt-2">' + r['name'] + '</h5>' +
+                                '<p class="">' + r['description'] + '</p>' +
+                                '<button class="curso btn btn-block btn-'+color+' " tipo=Comprar curso=' + r['id'] + ' id=curso' + r['id'] + '> '+tipo+' </button>' +
+                                '<p class="" id="pago' + r["preferenceid"] + '"></p>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>');
 
-                        /*var form = document.createElement("form");
-                        form.method = "POST";
-                        form.action = "/procesar-pago";
-                        form.id = "form_pago_" + r['preferenceid'];
-                        document.getElementById('pago' + r['preferenceid']).appendChild(form);
-                        var script = document.createElement("script");
-                        script.type = "text/javascript";
-                        script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
-                        script.setAttribute("data-preference-id", r['preferenceid']);
-                        document.getElementById('form_pago_' + r['preferenceid']).appendChild(script);*/
+                            /*var form = document.createElement("form");
+                            form.method = "POST";
+                            form.action = "/procesar-pago";
+                            form.id = "form_pago_" + r['preferenceid'];
+                            document.getElementById('pago' + r['preferenceid']).appendChild(form);
+                            var script = document.createElement("script");
+                            script.type = "text/javascript";
+                            script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
+                            script.setAttribute("data-preference-id", r['preferenceid']);
+                            document.getElementById('form_pago_' + r['preferenceid']).appendChild(script);*/
 
-                    }
-
-
+                        }
 
 
+
+
+                    });
+                } else {
+                    let tabla='<div class="container"> <table class="table table-light table-responsive-sm ">'+
+                    '<thead class="thead-dark">'+
+                                            '<tr>'+
+                                                '<th scope="col">#</th>'+
+                                                '<th scope="col">Curso</th>'+
+                                                '<th colspan="2" scope="col" class="text-center">Opciones</th>'+
+                        
+                                                '</tr>'+
+                                            '</thead>';
+                    $.each(courses, (i, r) => {
+
+                            tabla+=
+                                            '<tbody>'+
+                                                '<tr>'+
+                                                    '<th scope="row">'+(i+1)+'</th>'+
+                                                    '<td>'+r['name']+'</td>'+
+                                                    '<td colspan="2">'+
+                        
+                                                        '<div class="row d-flex justify-content-around">'+
+                                                        '<div class="col "> <button class="modificar-curso btn btn-dark"  id="'+r['id']+'" >Modificar</button> </div>'+
+                                                            '<div class="col "> <button class="modificar-videos btn btn-info" id="'+r['id']+'" >Modificar Videos</button> </div>'+
+                                                            '<div class="col"> <button class="eliminar-curso btn btn-danger" id="'+r['id']+'" >Eliminar</button></div>'+
+                                                        '</div>'+
+                        
+                                                    '</td>'+
+                        
+                                                '</tr>';
+                    
+                            
+                     });
+                     tabla+='</tbody></table> </div>';
+                     $('#contenedor_home').append(tabla);
+
+
+                }
+                $(".modificar-curso").click(function () {
+                    
+                    let id = $(this).attr("id");
+                    modificarcurso(id);
                 });
-
 
 
                 $(".curso").click(function () {
                     $(this).removeClass('btn-success');
                     $(this).addClass('btn-dark');
-
                     $('.modal-body').empty();
 
                     let id = $(this).attr("curso");
@@ -219,7 +270,7 @@ function carga(comprados) {
 
                                     $('#jumbotron').removeClass('d-none');
                                     $('#jumbotron').addClass('d-block');
-                                    carga(false);
+                                    carga(false, false);
 
 
                                 });
@@ -458,11 +509,11 @@ function mostrarcurso(idcurso) {
 
 //-------------------------------CARGA CURSO ------------------------------------------------------------   
 
-function admin(ok) {
+function subircurso(ok) {
     if (ok) {
         $.ajax({
 
-            url: "./php/admin.php",
+            url: "./php/admin.php",//script para subir cursos a la base de datos
             type: "post",
             data: ok,
 
@@ -499,7 +550,15 @@ function admin(ok) {
     }
 
 }
-function jumbotron() {
+function jumbotron(accion) {
+
+
+    if(accion==true){
+        
+    $('#jumbotron').removeClass('d-none');
+    $('#jumbotron').addClass('d-block');
+
+    /*//script para cambiar el jumbotron
     $('#jumbotron').empty().append(
         '<div class="container">' +
         '<h1 class="display-4">¡Hola' +
@@ -508,65 +567,109 @@ function jumbotron() {
         '</p>' +
 
         '</div>'
-
-    );
+        );*/
+    }else{
+        
+        $('#jumbotron').removeClass('d-block');
+        $('#jumbotron').addClass('d-none');
+    }
 }
 
 function subirvideo(ok) {
+    jumbotron(false);
     if (ok) {
         $.ajax({
 
             url: "./php/subirvideo.php",
             type: "post",
             data: ok,
-
-
+    
+    
             beforeSend: function () { //Previo a la peticion tenemos un cargando
-
+    
                 $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
                 $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
-
+    
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
-
+    
             },
-
+    
             success: function (data) {
-
+    
                 $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
                 //console.log(data);
                 //$('#alert').addClass('alert-warning');
                 $('#contenedor_home').empty().append(data);
-
+    
                 $.getScript("./js/subirvideo.js", function () {
-
-
+    
+    
                 });
-
+    
             }
-
+    
         });
 
     }
 
 }
+function modificarcurso(id) {
+    $('#contenedor_home').empty();
+    jumbotron(false);
+
+    $.ajax({
+
+        url: "./php/admin.php",//script para subir cursos a la base de datos
+        type: "post",
+        data:  {"id":id},
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            $('#contenedor_home').empty().append(data);
+
+            $.getScript("./js/modificarcurso.js", function () {
+
+
+            });
+
+        }
+
+    });
+
+}
 
 $(document).ready(function () {
 
-    carga(false);
+    carga(false, false);
     $("#cursos").click(function () {
-        jumbotron();
-        $('#jumbotron').removeClass('d-none');
-        $('#jumbotron').addClass('d-block');
-        carga(false);
+        jumbotron(true);
+        carga(false, false);
     });
     $("#cursos_comprados").click(function () {
         $('#jumbotron').removeClass('d-block');
         $('#jumbotron').addClass('d-none');
-        carga(true);
+        carga(true, false);
     });
     $("#adminpanel").click(function () {
         $('#jumbotron').removeClass('d-block');
@@ -576,22 +679,24 @@ $(document).ready(function () {
 
 
     $('#adminpanel').click(() => {
-        admin(true);
+        subircurso(true);
         console.log("Admin");
     });
 
     $('#subirvideo').click(() => {
         //$('#pago').empty().append('<h2 class="alert alert-info"> <strong>La subida de videos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
         //$('#exampleModal').modal('show');
+       
         subirvideo(true);
 
     });
 
-    $('#modificarcurso').click(() => {
-        $('#pago').empty().append('<h2 class=" alert alert-info"> <strong>La modificación de cursos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
-        $('#exampleModal').modal('show');
-    });
+    
+    $('#modificarcurso').click(() =>{ 
+        jumbotron(false);
+        carga(false,true);
 
+     });
 
 
 
