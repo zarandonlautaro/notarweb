@@ -8,11 +8,7 @@ print_r($_POST);}
 //print_r($_POST);
 //print_r($files);
 
-//die;
-
-
-
-
+//
 if (isset($_FILES['imagen']) && isset($_FILES['video']) && isset($_POST['titulo']) && isset($_POST['tema']) && isset($_POST['descripcion']) && isset($_POST['curso'])) {
     //Almacenamos en variables llegadas por métodos post
     if($_POST['tema']==0||!(isset($_POST['tema']))){

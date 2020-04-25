@@ -33,7 +33,7 @@ if (isset($_POST['comprados'])) {
                 if ($sqlcheck->num_rows) {
                     $cursos[] = array(
                         'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                        'category' => $rs['category'], 'imgname' => $rs['imgname'], 'bought' => true
+                        'category' => $rs['category'], 'imgname' => $rs['imgname'],'price'=>$rs['price'], 'bought' => true
                     );
                 } else {
                     
@@ -61,7 +61,7 @@ if (isset($_POST['comprados'])) {
 
                     $cursos[] = array(
                         "id" => $rs['id'], "name" => $rs['name'], "description" => $rs['description'],
-                        "category" => $rs['category'],"imgname" => $rs['imgname'],"bought"=> false ,//"preferenceid"=>$preference->id
+                        "category" => $rs['category'],"imgname" => $rs['imgname'],'price'=>$rs['price'],"bought"=> false ,//"preferenceid"=>$preference->id
                     );
                 }
             }
