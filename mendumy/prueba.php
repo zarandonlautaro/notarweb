@@ -9,27 +9,35 @@
 </head>
 
 <body>
+    <table class="table table-responsive-sm ">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th colspan="2" scope="col" class="text-center">Opciones</th>
 
-    <form id="testform">
-        <fieldset id="input1" class="clonedInput custom-file">
-            <!-- <input type="text" class="form-control col-3 " id="file1name" name="file1name" placeholder="Nombre de archivo 1">-->
-            <label class="custom-file-label" for="file1">Seleccionar Archivo</label>
-            <input type="file" class="custom-file-input " name="file1" id="file1" />
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Contabilidad</td>
+                <td colspan="2">
 
+                    <div class="row d-flex justify-content-around">
+                        <div class="col "> <button class="modificar-curso btn btn-dark">Modificar</button> </div>
+                        <div class="col "> <button class="modificar-videos btn btn-info" >Modificar Videos</button> </div>
+                        <div class="col"> <button class="eliminar-curso btn btn-danger">Eliminar</button></div>
+                    </div>
 
-        </fieldset>
-        <fieldset class="custom-file mt-3">
+                </td>
 
-            <button class="btn btn-outline-success" id="btnAdd" type="button" title="agregar nueva tema"><i class="fas fa-plus"></i></button>
-            <button class="btn btn-outline-danger" id="btnDel" type="button" title="eliminar tema"><i class="fas fa-minus"></i></button>
+            </tr>
 
-        </fieldset>
+        </tbody>
+    </table>
+<div class="container"></div>
 
-
-
-
-
-    </form>
 
 </body>
 
@@ -38,7 +46,7 @@
 
 
 <script type="text/javascript">
-//funciones para inputs dinamicos----------------------------------------------------------------------------
+    //funciones para inputs dinamicos----------------------------------------------------------------------------
     function agregarinput() {
         $('#file1').val("");
         $('#btnDel').attr('disabled', 'disabled');
