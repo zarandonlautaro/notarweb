@@ -6,7 +6,7 @@
 
 <div class="container d-flex justify-content-center  " id="ventana-admin">
 
-    <div id="loginbox" style="margin-top:50px;background:white;" class="mainbox-sm col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1 mb-5 ">
+    <div id="loginbox" style="background:white;" class="mainbox-sm col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1 mb-5 ">
 
         <div class="panel panel-info">
             <div class="modal-header">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="input-group input-group-sm col-12">
                         <div class="input-group-prepend ">
-                            <label class="input-group-text" for="input-select">Categoria</label>
+                            <label class="input-group-text" for="input-select" required>Categoria</label>
                         </div>
 
                         <select class="custom-select custom-select col-6" id="input-select" title="seleccionar categoría">
@@ -62,16 +62,16 @@
                     </div>
                     <div class="form-group form-group-sm col-12">
 
-                        <?php  if($id==""){?>
-                        <label for="imagen" class="col-sm-12 col-form-label">Imagen de portada</label>
-                        <?php }else{ ?>
+                        <?php if ($id == "") { ?>
+                            <label for="imagen" class="col-sm-12 col-form-label">Imagen de portada</label>
+                        <?php } else { ?>
 
-                        <input type="hidden" id="<?php echo $id ?>" name="id" value="<?php echo $id ?>" />          
-                        <div class="custom-control custom-checkbox  col-12 mb-2 ">
-                            <input type="checkbox" class="custom-control-input" id="cb-imagen">
-                            <label class="custom-control-label" for="cb-imagen">Cambiar imagen</label>
-                        </div>
-                        <?php }?>  
+                            <input type="hidden" id="<?php echo $id ?>" name="id" value="<?php echo $id ?>" />
+                            <div class="custom-control custom-checkbox  col-12 mb-2 ">
+                                <input type="checkbox" class="custom-control-input" id="cb-imagen">
+                                <label class="custom-control-label" for="cb-imagen">Cambiar imagen</label>
+                            </div>
+                        <?php } ?>
                         <div class="col-sm-12">
                             <input type="file" class="form-control-file" id="imagen" name="imagen" required>
                         </div>
@@ -79,12 +79,12 @@
                     <div class="form-group">
 
                         <div class="col">
-                            <textarea id="descripcion" class="form-control form-control-sm" name="descripcion" placeholder="Descripción" data-dispats="alert" required></textarea>
+                            <textarea id="descripcion" class="form-control form-control-sm" name="descripcion" placeholder="Descripción" data-dispats="alert"></textarea>
                         </div>
                     </div>
                     <div style="margin-top:10px" class="form-group">
                         <div class="col-sm-12 controls">
-                            <button id="cargarVideo" type="submit" value="Subir" idcurso="<?php echo $id ?>" class="btn btn-warning">Enviar</button>
+                            <button id="cargarCurso" type="submit" value="Subir" idcurso="<?php echo $id ?>" class="btn btn-warning">Enviar</button>
                         </div>
                     </div>
                     <div id="alert">
