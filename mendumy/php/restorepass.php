@@ -16,6 +16,7 @@ if (isset($_POST['email'])) {
     //"6Lf9lsMUAAAAAKC8PMden4YhjyJ5AZ9yQi_ip1Kc";
     $response = $_POST["captcha"]; //obtenemos el valor de captcha enviado desde landing.jp
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}");
+    //puede ser reemplazada por curl_get_file_contents() ya que algunos servidores no la soportan
     $captcha_success = json_decode($verify); //decodifica el json y devuelve array asociativo 
     //fin reCaptcha Script--------------------------------------------------------------------------------------------------
 
