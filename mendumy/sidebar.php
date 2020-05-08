@@ -102,7 +102,7 @@
             <button id="menu-toggle">Menú <i class="fas fa-bars"></i></button>
             <!--BOTON BURGER-->
         </nav>
-        <div class="jumbotron jumbotron-fluid" id="jumbotron">
+        <div class="jumbotron jumbotron-fluid p-4" id="jumbotron">
             <div class="container">
                 <h1 class="display-4">¡Hola <?php echo $nombre; ?>!
                 </h1>
