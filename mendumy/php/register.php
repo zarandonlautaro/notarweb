@@ -72,6 +72,10 @@ if ($valido) {
         if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE username='$email'")->num_rows !=0){
             echo 4;//correo en uso
             die; 
+        }  
+        if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE dni='$dni'")->num_rows !=0){
+            echo 5;//correo en uso
+            die; 
         }
         
         $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, idprofesion, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");

@@ -282,6 +282,10 @@ $('#register_button').click(() => {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo ya registrado!</div>');
 
                 }
+                if (rs == 5) {
+                    $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">DNI ya registrado!</div>');
+
+                }
                 if (rs == 0) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Error al enviar correo!</div>');
 
