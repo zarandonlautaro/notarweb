@@ -2,8 +2,6 @@
 function subir() {
 
     let descripcion = $('#descripcion').val();
-
-    
     let elemento='curso';
     let operacion='modificacion';
 
@@ -27,23 +25,23 @@ function subir() {
             processData: false,
 
             beforeSend: function () { //Previo a la peticion tenemos un cargando
-                $('#cargarVideo').removeClass('btn-warning');
-                $('#cargarVideo').addClass('btn-dark');
-                $('#cargarVideo').html('<span class="spinner-border spinner-border-sm" disabled></span>');
+                $('#cargarCurso').removeClass('btn-warning');
+                $('#cargarCurso').addClass('btn-dark');
+                $('#cargarCurso').html('<span class="spinner-border spinner-border-sm" disabled></span>');
 
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
-                $('#cargarVideo').removeClass('disabled');
-                $('#cargarVideo').addClass('btn-primary');
-                $('#cargarVideo').html('Enviar');
+                $('#cargarCurso').removeClass('disabled');
+                $('#cargarCurso').addClass('btn-primary');
+                $('#cargarCurso').html('Enviar');
 
             },
             complete: function () { //Al terminar la peticion, sacamos la "carga" visual
-                $('#cargarVideo').removeClass('btn-info');
-                $('#cargarVideo').removeClass('btn-dark');
-                $('#cargarVideo').addClass('btn-warning');
-                $('#cargarVideo').html('Enviar');
+                $('#cargarCurso').removeClass('btn-info');
+                $('#cargarCurso').removeClass('btn-dark');
+                $('#cargarCurso').addClass('btn-warning');
+                $('#cargarCurso').html('Enviar');
             },
 
             success: function (data) {
@@ -181,7 +179,7 @@ function cartel(contenido) {
 
 function cargarform() {
 
-    let id = $('#cargarVideo').attr("idcurso");//Tomamos el valor del id guardado en un atributo del boton enviar 
+    let id = $('#cargarCurso').attr("idcurso");//Tomamos el valor del id guardado en un atributo del boton enviar 
 
     let elemento = 'curso';
     let operacion = 'consulta';
@@ -204,19 +202,22 @@ function cargarform() {
                 $('#cb-gratis').attr("checked", "checked");
                 $('#precio').attr("disabled", "disabled");
             }
+            
             $('#input-select option').each(function () {
-                if ($(this).val() == rs['category']) {
+                console.log($(this).val()+" "+$(this).text());
 
+                if ($(this).val() == rs['category']) {
+                    
                     $('#categoria').val($(this).text());
                     $(this).attr("selected",rs['category']);
                 }
             });
-            $('#imagen').attr("disabled","disabled");
 
+            $('#imagen').attr("disabled","disabled");
             $('#nombre').val(rs['name']);
             $('#precio').val(rs['price']);
             $('#descripcion').val(rs['description']);
-           
+        
 
         }
 
@@ -232,9 +233,9 @@ $(document).ready(function () {
   
 
     
-    $("#cargarVideo").click(function (e) {
+    $("#cargarCurso").click(function (e) {
         e.preventDefault(); //prevenimos accion por defecto del form
-        //let id = $('#cargarVideo').attr("idcurso");//Tomamos el valor del id guardado en un atributo del boton enviar 
+        //let id = $('#cargarCurso').attr("idcurso");//Tomamos el valor del id guardado en un atributo del boton enviar 
 
         subir();
     });

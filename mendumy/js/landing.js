@@ -29,6 +29,9 @@ const Toast = Swal.mixin({
 
 $(document).ready(() => {
 
+    //$('#modalcartel').modal('show');
+    //$('#modalcartel').modal({backdrop: 'static', keyboard: false});
+
     //Inicializar el datepicker de Registro/Fecha Nacimiento
     $('.datepicker').datepicker({
         uiLibrary: 'bootstrap4',
@@ -273,7 +276,7 @@ $('#register_button').click(() => {
                 }
                 if (rs == 3) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Confirme que es humano!</div>');
-
+                    grecaptcha.reset(widgetId1);
                 }
                 if (rs == 4) {
                     $('#validate_register').empty().append('<div class="alert alert-warning" role="alert">¡Correo ya registrado!</div>');
