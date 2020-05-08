@@ -79,12 +79,10 @@ if (isset($_POST['operacion'])&&$_POST['operacion']=='agregaconsulta'){
     //Select las categorias
     $sql = MySQLDB::getInstance()->query("SELECT * FROM categories ");
         if ($sql->num_rows) {
-            $i=0;
             $categorias='<option selected>Seleccionar...</option>';
             while ($rs = $sql->fetch_assoc()) {
-                $option='<option value="'.$i.'">'.$rs['name'].'</option>';
+                $option='<option value="'.$rs['id'].'">'.$rs['name'].'</option>';
                 $categorias=$categorias.$option;
-                $i++;
             }
             
         }
