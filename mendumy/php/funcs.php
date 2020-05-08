@@ -1,4 +1,39 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);//funcion encargada de convertir los links dentro de un texto en enlaces html
+//funcion encargada de convertir los links dentro de un texto en enlaces html
+function make_clickable($text) { 
+    $regex = '#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#'; 
+    return preg_replace_callback($regex, function ($matches) { 
+     return "<a target=\"_blank\" href='{$matches[0]}\'>{$matches[0]}</a></br>"; 
+    }, $text); 
+} 
+//funcion para eliminar archivos
+function filedelete($id,$namefile){
+    $sql2 = MySQLDB::getInstance()->query("DELETE FROM  files WHERE id='$id'");
+	$rutaImg="../coursefiles/" .$namefile;
+                            if($sql2){
+								unlink($rutaImg);
+								return true;
+                            }else{false;}
+	}
+						
+
+function curl_get_file_contents($URL)
+    {
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $URL);
+        $contents = curl_exec($c);
+        curl_close($c);
+
+        if ($contents) return $contents;
+        else return FALSE;
+	}
+	
+
+
 	function limpia_espacios($cadena){
 
 	$cadena = str_replace(' ', '', $cadena);
@@ -393,4 +428,4 @@
 	// 	return $result;
 		
 	// }
-	?>
+?>
