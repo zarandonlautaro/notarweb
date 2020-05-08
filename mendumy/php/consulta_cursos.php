@@ -19,9 +19,7 @@ if (!isset($_SESSION['id'])) {
         //verificamos por seguridad que el curso haya sido comprado con anterioridad
         $sql = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse = $idcourse AND iduser = $iduser  ");
 
-        /* $sql = MySQLDB::getInstance()->query("SELECT course.id,name,description, category, imgname FROM course 
-        INNER JOIN courseuser ON courseuser.idcourse = course.id
-        WHERE courseuser.iduser = " . $_SESSION['id'] . " ORDER BY creationdate DESC");*/
+
 
         if ($sql->num_rows) {
             $sql = MySQLDB::getInstance()->query("SELECT * FROM themes  WHERE idcourse = $idcourse ");
@@ -42,12 +40,12 @@ if (!isset($_SESSION['id'])) {
 
                     if (!isset($archivos)) {
                         $videos[] = array(
-                            'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'], 'imgvideo' => $rs1['imgvideo'],
+                            'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'],
                             'description' => $rs1['description']
                         );
                     } else {
                         $videos[] = array(
-                            'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'], 'imgvideo' => $rs1['imgvideo'],
+                            'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'],
                             'description' => $rs1['description'], 'archivos' => $archivos
                         );
                     }
