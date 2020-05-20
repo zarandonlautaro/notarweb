@@ -1,6 +1,8 @@
 <?php
+use MercadoPago\Preference;
 include("mysqli.php");
 require('../vendor/autoload.php');
+include("vars.php");
 //print_r($_SESSION);
 //die;
 $iduser=$_SESSION['id'];
@@ -28,6 +30,9 @@ if (isset($_POST['idcourse'])) {
         echo 3; //Comprado
 
     } else {
+        $sql1 = MySQLDB::getInstance()->query("SELECT * FROM users  WHERE id = '$iduser' ");
+        $user = $sql1->fetch_assoc();
+        $dni=$user['dni'];
 
         $sql = MySQLDB::getInstance()->query("SELECT id,name,description, category, imgname, price FROM course  WHERE id = $idcourse ");
         if ($sql->num_rows) {
@@ -40,7 +45,7 @@ if (isset($_POST['idcourse'])) {
                 //require __DIR__  . '/vendor/autoload.php';
                 require('../vendor/autoload.php');
                 // Agrega credenciales
-                MercadoPago\SDK::setAccessToken('TEST-8911236071524493-111921-6afe41586f766724a77ca2518e96a003-179632899');
+                MercadoPago\SDK::setAccessToken($accesstoken);
                 // Crea un objeto de preferencia
                 $preference = new MercadoPago\Preference();
 
@@ -49,7 +54,34 @@ if (isset($_POST['idcourse'])) {
                 $item->title = $rs['name'];  //'Curso';
                 $item->quantity = 1;
                 $item->unit_price = $price; //intval($price);
+                $item->id=$idcourse;
                 $preference->items = array($item);
+                //Creamos un payer
+                $payer = new MercadoPago\Payer();
+                $payer->identification = array(
+                    "type" => "DNI",
+                    "number" => $dni
+                  );
+                $payer->id=$iduser;
+                $preference->payer=$payer;
+                //urls a las que redirecciona al terminar la transaccion
+                $preference->back_urls = array(
+                    "success" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=success&idcourse=".$idcourse."",
+                    "failure" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=fairule&idcourse=".$idcourse."",
+                    "pending" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=pending&idcourse=".$idcourse."",
+                );
+
+                $preference->payment_methods = array(
+                    "excluded_payment_methods" => array(
+                        array("id" => "cargavirtual")
+
+                    )
+                    
+                );
+
+
+                $preference->auto_return = "approved";
+                $preference->external_reference=$iduser;
                 $preference->save(); //inicializa
             
                 $curso[] = array(
