@@ -63,7 +63,7 @@ function carga(comprados, listar) {
                                 '<div class="">' +
                                 '<h5 class="pt-2">' + r['name'] + '</h5>' +
                                 '<p class="">' + r['description'] + '</p>' +
-                                '<button class="curso btn btn-block btn-info text-white" tipo=Ver curso=' + r['id'] + ' id=curso' + r['id'] + '> Ver </button>' +
+                                '<button class="curso btn btn-block btn-info text-white" title="'+r['name']+'" tipo="Ver" curso="' + r['id'] + '" id=curso' + r['id'] + '> Ver </button>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>');
@@ -85,7 +85,7 @@ function carga(comprados, listar) {
                                 '<div class="">' +
                                 '<h5 class="pt-2">' + r['name'] + '</h5>' +
                                 '<p class="">' + r['description'] + '</p>' +
-                                '<button class="curso btn btn-block btn-' + color + ' " tipo=Comprar curso=' + r['id'] + ' id=curso' + r['id'] + '> ' + tipo + ' </button>' +
+                                '<button class="curso btn btn-block btn-' + color + ' "  title="'+r['name']+'" tipo=Comprar curso=' + r['id'] + ' id=curso' + r['id'] +'> ' + tipo + ' </button>' +
                                 '<p class="" id="pago' + r["preferenceid"] + '"></p>' +
                                 '</div>' +
                                 '</div>' +
@@ -109,6 +109,7 @@ function carga(comprados, listar) {
 
 
                     });
+                    resultadocompra();
                 } else {
                     //------------------mostramos los cursos en el body en forma de tabla con la opcion de modificar y eliminar---------- 
                     jumbotron(true, 'Modificar Cursos', '');
@@ -261,8 +262,8 @@ function cargacurso() {
 
                 } else {
                     //------------------------------------------------------------------CURSO NO COMPRADO---------------------------------------------------------------------------                                
-                    console.log("Elemento no comprado");
-                    console.log(rs["preferenceid"]);
+                    //console.log("Elemento no comprado");
+                    //console.log(rs["preferenceid"]);
                     var preferenceid = rs["preferenceid"];
                     //var img=  $('#img'+id);
 
@@ -272,7 +273,7 @@ function cargacurso() {
                         $('#pago').empty();
                         var form = document.createElement("form");
                         form.method = "POST";
-                        form.action = "/procesar-pago";
+                        form.action = "/mendumy2/mendumy/mendumy/home.php";//"/procesar-pago";
                         form.id = "form_pago";
                         document.getElementById('pago').appendChild(form);
                         var script = document.createElement("script");
@@ -280,6 +281,8 @@ function cargacurso() {
                         script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
                         script.setAttribute("data-preference-id", preferenceid);
                         document.getElementById('form_pago').appendChild(script);
+
+                        
                     } else {
                         var cartel = rs['cartel'];
                         $('#pago').empty().append(cartel);
@@ -460,7 +463,7 @@ function mostrarcurso(idcurso, modificar) {
                     //console.log(rs[0]['videos'][0]['archivos']);
                     let description;
                     let videoID;
-                    let imgvideo;
+                    //let imgvideo;
                     let title;
                     let archivos = '<ul class="list-group list-group-flush"><div class="card-body pb-0"> <h6 class="card-title">Archivos adjuntos</h6></div>';
                     let datosVideo;
@@ -479,9 +482,9 @@ function mostrarcurso(idcurso, modificar) {
 
                                     description = r1['description'];
                                     videoID = r1['name'];
-                                    imgvideo = r1['imgvideo'];
+                                    //imgvideo = r1['imgvideo'];
                                     title = r1['title'];
-                                    datosVideo = description + "  " + videoID + "  " + imgvideo + "  " + title;
+                                    //datosVideo = description + "  " + videoID + "  " + imgvideo + "  " + title;
 
                                     $.each(r1['archivos'], (z, r2) => {
 
@@ -879,7 +882,36 @@ function modificarcurso(id) {
     });
 
 }
+function cartelModal(contenido,tipo){
+    let cartel='<div  class="text-center alert alert-'+tipo+' fade show mb-4" role="alert">'+contenido+'</div>';
 
+
+    $('#pago').empty().append(cartel);
+    $('#exampleModal').modal('show');
+}
+function resultadocompra(){
+    
+
+    let params = new URLSearchParams(location.search);
+    let result = params.get('result');
+    let idcourse=params.get('idcourse');
+    let id='#curso'+idcourse;
+    let curso=$(id).attr('title');
+
+    //console.log(id);
+        switch (result){
+            case "success": 
+            cartelModal('¡Felicidades, has adquirido el curso <b>'+curso+'</b>!',"success");
+            //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            ;break;
+            case "pending": 
+            cartelModal('¡Gracias por iniciar la compra de <b>'+curso+'</b>!, una vez que se registre el pago podrás ingresar al curso.',"info");
+            //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            ;break;
+        }
+      
+
+}
 $(document).ready(function () {
 
     carga(false, false);
