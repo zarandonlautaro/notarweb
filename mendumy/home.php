@@ -4,7 +4,18 @@ if (session_status() == PHP_SESSION_NONE){
     session_start();
 
     $nombre=$_SESSION['nombre'];
-    ;}
+  
+
+    if(isset($_POST['back_url'])){
+      $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+      
+      header("Location: ".$_POST['back_url']); /* Redirección del navegador */
+      
+      }
+
+  
+  
+  }
    
 
 if(!isset($_SESSION['id'])){
