@@ -2,6 +2,8 @@
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 //php mailer configurations
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -83,9 +85,9 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
         $mail->Password   = 'brunomailtest2020';                               // SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
         $mail->Port       = 587;                                    // TCP port to connect to
-
+        $mail->CharSet = 'UTF-8';
         //Recipients
-        $mail->setFrom('brunomailtest@gmail.com', 'Mailer');
+        $mail->setFrom('brunomailtest@gmail.com', 'Mendumy');
         $mail->addAddress($to);     // Add a recipient
 
         // Attachments
