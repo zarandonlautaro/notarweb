@@ -70,10 +70,21 @@ if (isset($_POST['idcourse'])) {
                     "failure" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=fairule&idcourse=".$idcourse."",
                     "pending" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=pending&idcourse=".$idcourse."",
                 );
-
+                
+                
+                //excluimos algunos medios de pago
                 $preference->payment_methods = array(
+
+                    "excluded_payment_types" => array (
+                        array ( "id" => "bank_transfer",    "name" => "Bank Transfer" ),
+                        array ( "id" => "atm",                "name" => "ATM Bank Transfer" ),
+                        array("id" => "ticket")
+                    ),	
+
                     "excluded_payment_methods" => array(
-                        array("id" => "cargavirtual")
+                        array("id" => "cargavirtual"),
+                        array("id" => "atm"),
+                        
 
                     )
                     

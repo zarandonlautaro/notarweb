@@ -61,6 +61,12 @@ if (!isset($_SESSION['id'])) {
             }
             echo json_encode($temas); //  Array de cursos
             die;
+        }else{
+            if($_POST["modificar"]){
+               echo json_encode(2);//debe tener el curso asignado para poder modificarlo
+               die; 
+            }
+
         }
     }
 }
