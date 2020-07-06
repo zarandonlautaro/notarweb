@@ -1,6 +1,6 @@
 /*SPINNER LOADER
 */
-
+.cursor-pointer{cursor:pointer !important;}
 .loader,
 .loader:after {
   border-radius: 50%;
