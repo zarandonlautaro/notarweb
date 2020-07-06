@@ -16,26 +16,40 @@ $("#menu-toggle").click(function (e) {
 });
 
 //Realizamos la carga de cursos cuando la página ya está lista
-function carga(comprados, listar) {
+//operacion, categoria,subcategoria
+//comprados, listar
+function carga(operacion, categoria, subcategoria) {
+    let listar = false;
+    if (operacion == 'listar') {
+        listar = true;
+        operacion = 'todos'
+    }
+
     $('#contenedor_home').empty();
     var cuerpo = "";
     $.ajax({
         url: "php/traer_cursos_main.php",
         method: "POST",
         //dataType: "json", //preguntar por que en la version 7.4 de php tengo problemas 
-        data: { "comprados": comprados },
+        data: {
+            "operacion": operacion,
+            "categoria": categoria,
+            "subcategoria": subcategoria
 
-
+        },
         beforeSend: function () { //Previo a la peticion tenemos un cargando
             $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
             $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
         },
         success: function (rs) {
             $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            console.log(rs);
+
+
             if (rs == 0) { //No hay cursos
                 cuerpo = "<div class='text-center'><h3>No hay cursos</h3></div>";
-                $('#curso' + i).empty();
-                $('#curso' + i).append(cuerpo);
+                //$('#curso' + i).empty();
+                //$('#curso' + i).append(cuerpo);
             }
             if (rs != 0 && rs != 4) {
 
@@ -43,7 +57,7 @@ function carga(comprados, listar) {
                 //  let courses = eval(rs);
                 //console.log((rs));
                 let courses = JSON.parse(rs);
-
+                console.log(courses);
                 //mostramos los cursos en el body
                 //alert(courses);
                 if (!listar) {
@@ -63,19 +77,22 @@ function carga(comprados, listar) {
                                 '<div class="">' +
                                 '<h5 class="pt-2">' + r['name'] + '</h5>' +
                                 '<p class="">' + r['description'] + '</p>' +
-                                '<button class="curso btn btn-block btn-info text-white" title="'+r['name']+'" tipo="Ver" curso="' + r['id'] + '" id=curso' + r['id'] + '> Ver </button>' +
+                                '<button class="curso btn btn-block btn-info text-white" title="' + r['name'] + '" tipo="Ver" curso="' + r['id'] + '" id=curso' + r['id'] + '> Ver </button>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>');
                         } else if (!(r['bought'])) { //CURSOS SIN COMPRAR
                             let color;
                             let tipo;
+                            let opcion;
                             if (r['price'] == 0) {
                                 color = 'warning';
                                 tipo = "¡Curso Gratuito!";
+                                opcion = '';
                             } else {
                                 color = 'success';
-                                tipo = "¡Comprar Curso!";
+                                tipo = "¡Disponible pronto!";
+                                opcion = 'disabled';
                             }
                             $('#fila' + fila).append(
 
@@ -85,22 +102,11 @@ function carga(comprados, listar) {
                                 '<div class="">' +
                                 '<h5 class="pt-2">' + r['name'] + '</h5>' +
                                 '<p class="">' + r['description'] + '</p>' +
-                                '<button class="curso btn btn-block btn-' + color + ' "  title="'+r['name']+'" tipo=Comprar curso=' + r['id'] + ' id=curso' + r['id'] +'> ' + tipo + ' </button>' +
+                                '<button class="curso btn btn-block btn-' + color + ' "  title="' + r['name'] + '" tipo=Comprar curso=' + r['id'] + ' id="curso' + r['id'] + '" ' + opcion + '> ' + tipo + ' </button>' +
                                 '<p class="" id="pago' + r["preferenceid"] + '"></p>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>');
-
-                            /*var form = document.createElement("form");
-                            form.method = "POST";
-                            form.action = "/procesar-pago";
-                            form.id = "form_pago_" + r['preferenceid'];
-                            document.getElementById('pago' + r['preferenceid']).appendChild(form);
-                            var script = document.createElement("script");
-                            script.type = "text/javascript";
-                            script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
-                            script.setAttribute("data-preference-id", r['preferenceid']);
-                            document.getElementById('form_pago_' + r['preferenceid']).appendChild(script);*/
 
                         }
 
@@ -163,14 +169,83 @@ function carga(comprados, listar) {
 
                 $(".eliminar-curso").click(function () {
 
-                    let id = $(this).attr("ide");
-                    eliminarcurso(id);
+
+
+                    var opcion = confirm("¿Esta seguro que desea eliminar este curso?");
+                    if (opcion == true) {
+
+                        let id = $(this).attr("ide");
+                        eliminarcurso(id);
+                    } else {
+                        cartel("Ha cancelado la operación.");
+                    }
+
+
+
                 });
 
             }
         }
     });
 }
+
+//carga el dropdown de categorias
+function cargacategorias() {
+
+    let operacion = "cargar";
+    $.ajax({
+
+        url: "php/categoria.php",
+        type: "post",
+        data: {
+            'operacion': operacion,
+        },
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (cat) {
+
+
+            //console.log(cat);
+            $.getScript("./js/dropdown.js", function () { });//llamamos a dropdown.js par recargar el script con los datos traidos de la BD
+            $('#categorias').empty().append(cat);
+
+
+            //cuando hago clic en una subcategoria del dropdown
+            $(".subcategory").click(function () {
+
+                let subcategoria = $(this).text();
+                let categoria = $(this).attr("categoryname");
+                let idsubcategory = $(this).attr("idsubcategory");
+                let idcategory = $(this).attr("idcategory");
+
+
+                console.log(subcategoria);
+                jumbotron(true, categoria + "/" + subcategoria, '');
+                carga("categoria", idcategory, idsubcategory);
+            });
+
+
+        }
+    });
+
+
+}
+
+
+
+
 
 //Esta funcion solo sirve dentro de la funcion carga(), y se encarga de cargar los cursos si el curso fue comprado o traer la opcion de pago usando la api de mercado pago
 function cargacurso() {
@@ -282,7 +357,7 @@ function cargacurso() {
                         script.setAttribute("data-preference-id", preferenceid);
                         document.getElementById('form_pago').appendChild(script);
 
-                        
+
                     } else {
                         var cartel = rs['cartel'];
                         $('#pago').empty().append(cartel);
@@ -295,7 +370,7 @@ function cargacurso() {
 
                         $('#jumbotron').removeClass('d-none');
                         $('#jumbotron').addClass('d-block');
-                        carga(false, false);
+                        carga("todos", "", "");
 
 
                     });
@@ -369,7 +444,10 @@ function mostrarcurso(idcurso, modificar) {
 
         url: "./php/consulta_cursos.php",//hacemos una peticion al archivo de altabajamodificacion consulta
         type: "post",
-        data: { 'idcurso': idcurso },
+        data: {
+            'idcurso': idcurso,
+            'modificar': modificar
+        },
 
 
         beforeSend: function () { //Previo a la peticion tenemos un cargando
@@ -547,6 +625,9 @@ function mostrarcurso(idcurso, modificar) {
                 jumbotron(true, 'Modificar videos', 'Seleccione una opción');
                 //---------------------------------------MODIFICAR VIDEOS --------------------------------------------------
                 //--------------------------ENCABEZADO DE LA TABLA-----------------------------------------------
+                if (rs == 2) {
+                    console.log("se dio el caso 1");
+                }
                 listarvideos(rs);
                 modificarvideo();
 
@@ -571,52 +652,77 @@ function mostrarcurso(idcurso, modificar) {
 }
 //--------------LISTAR VIDEOS DE UN CURSO PARA MODIFICAR------------------------------------------- 
 function listarvideos(rs) {
-    let tabla = '<div class="container"> <table class="table table-light table-responsive-sm ">' +
-        '<thead class="thead-dark">' +
-        '<tr>' +
-        '<th scope="col">#</th>' +
-        '<th scope="col">Videos</th>' +
-        '<th colspan="2" scope="col" class="text-center">Opciones</th>' +
+    let tabla;
+    if (rs == 2) {
+        tabla = '<div class="alert alert-warning alert-dismissible fade show" role="alert">' +
+            '<strong>Información: </strong>Por motivos de seguridad debe tener el curso asignado para poder modificar su contenido.' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '</button>'
+        '</div>'
 
-        '</tr>' +
-        '</thead>';
-    let videos;
-    $.each(rs, (i, r) => {
-        //tema 
-        tabla +=
+    } else {
+        tabla = '<div class="container"> <table class="table table-light table-responsive-sm ">' +
             '<thead class="thead-dark">' +
             '<tr>' +
-            '<th colspan="3" scope="col" class="text-center">TEMA:' + r['name'] + '</th>' +
+            '<th scope="col">#</th>' +
+            '<th scope="col">Videos</th>' +
+            '<th colspan="2" scope="col" class="text-center">Opciones</th>' +
+
             '</tr>' +
             '</thead>';
-        //lista de videos de cada tema
-        $.each(r['videos'], (j, r1) => {
-
+        let videos;
+        $.each(rs, (i, r) => {
+            //tema 
             tabla +=
-                '<tbody>' +
+                '<thead class="thead-dark">' +
                 '<tr>' +
-                '<th scope="row">' + (j + 1) + '</th>' +
-                '<td>' + r1['title'] + '</td>' +
-                '<td colspan="2">' +
+                '<th colspan="3" scope="col" class="text-center">TEMA:' + r['name'] + '</th>' +
+                '</tr>' +
+                '</thead>';
+            //lista de videos de cada tema
+            $.each(r['videos'], (j, r1) => {
 
-                '<div class="row d-flex justify-content-around">' +
-                '<div class="col "> <button class="modificar-video btn btn-dark"  id="' + r1['id'] + '" >Modificar</button> </div>' +
-                '<div class="col"> <button class="eliminar-video btn btn-danger" id="video' + r1['id'] + '" ide="' + r1['id'] + '" >Eliminar</button></div>' +
-                '</div>' +
+                tabla +=
+                    '<tbody>' +
+                    '<tr>' +
+                    '<th scope="row">' + (j + 1) + '</th>' +
+                    '<td>' + r1['title'] + '</td>' +
+                    '<td colspan="2">' +
 
-                '</td>' +
+                    '<div class="row d-flex justify-content-around">' +
+                    '<div class="col "> <button class="modificar-video btn btn-dark"  id="' + r1['id'] + '" >Modificar</button> </div>' +
+                    '<div class="col"> <button class="eliminar-video btn btn-danger" id="video' + r1['id'] + '" ide="' + r1['id'] + '" >Eliminar</button></div>' +
+                    '</div>' +
 
-                '</tr>';
+                    '</td>' +
+
+                    '</tr>';
+            });
+
         });
+        tabla += '</tbody></table> </div>';
+    }
 
-    });
-    tabla += '</tbody></table> </div>';
     $('#contenedor_home').append(tabla);
 
     $(".eliminar-video").click(function () {
 
-        let id = $(this).attr("ide");
-        eliminarvideo(id);
+
+
+        var opcion = confirm("¿Esta seguro que desea eliminar este video?");
+        if (opcion == true) {
+
+            let id = $(this).attr("ide");
+            eliminarvideo(id);
+        } else {
+            cartel("Ha cancelado la operación.");
+        }
+
+
+
+
+
     });
 
 }
@@ -882,47 +988,60 @@ function modificarcurso(id) {
     });
 
 }
-function cartelModal(contenido,tipo){
-    let cartel='<div  class="text-center alert alert-'+tipo+' fade show mb-4" role="alert">'+contenido+'</div>';
+function cartelModal(contenido, tipo) {
+    let cartel = '<div  class="text-center alert alert-' + tipo + ' fade show mb-4" role="alert">' + contenido + '</div>';
 
 
     $('#pago').empty().append(cartel);
     $('#exampleModal').modal('show');
 }
-function resultadocompra(){
-    
+function resultadocompra() {
+
 
     let params = new URLSearchParams(location.search);
     let result = params.get('result');
-    let idcourse=params.get('idcourse');
-    let id='#curso'+idcourse;
-    let curso=$(id).attr('title');
+    let idcourse = params.get('idcourse');
+    let id = '#curso' + idcourse;
+    let curso = $(id).attr('title');
 
     //console.log(id);
-        switch (result){
-            case "success": 
-            cartelModal('¡Felicidades, has adquirido el curso <b>'+curso+'</b>!',"success");
+    switch (result) {
+        case "success":
+            cartelModal('¡Felicidades, has adquirido el curso <b>' + curso + '</b>!', "success");
             //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
-            ;break;
-            case "pending": 
-            cartelModal('¡Gracias por iniciar la compra de <b>'+curso+'</b>!, una vez que se registre el pago podrás ingresar al curso.',"info");
+            ; break;
+        case "pending":
+            cartelModal('¡Gracias por iniciar la compra de <b>' + curso + '</b>!, una vez que se registre el pago podrás ingresar al curso.', "info");
             //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
-            ;break;
-        }
-      
+            ; break;
+    }
+
 
 }
-$(document).ready(function () {
+function getRegistrados() {
+    $.ajax({
+        url: "./php/getRegistrados.php",
+        type: "get",
+        success: function (data) {
+            $('#registradosTotales').append('<b>' + data + '</b>');
+        }
+    });
+}
 
-    carga(false, false);
-    $("#cursos").click(function () {
+$(document).ready(function () {
+    getRegistrados();
+    cargacategorias();
+    carga("todos", "", "");
+
+
+
+    $("#inicio").click(function () {
         jumbotron(true, 'Todos los Cursos', '');
-        carga(false, false);
+        carga("todos", "", "");
     });
     $("#cursos_comprados").click(function () {
-        $('#jumbotron').removeClass('d-block');
-        $('#jumbotron').addClass('d-none');
-        carga(true, false);
+        jumbotron(true, 'Mis Cursos', '');
+        carga("comprados", "", "");
     });
 
     $('#adminpanel').click(() => {
@@ -942,7 +1061,7 @@ $(document).ready(function () {
 
     $('#modificarcurso').click(() => {
         jumbotron(false);
-        carga(false, true);
+        carga("listar", "", "");
 
     });
 

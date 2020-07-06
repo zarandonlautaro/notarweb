@@ -115,7 +115,7 @@ function curso($operacion, $dato)
 
                 $curso = array(
                     'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price']
+                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price'],'subcategory' => $rs['subcategory']
                 );
 
                 echo json_encode($curso);
@@ -127,10 +127,11 @@ function curso($operacion, $dato)
     {
         $formulario = $_POST;
 
-        if ($_POST['categoria'] != null) {
+        if ($_POST['categoria'] != "" && $_POST['subcategoria'] != "") {
             $category = trim(filter_var($_POST['categoria'], FILTER_SANITIZE_STRING));
+            $subcategory = trim(filter_var($_POST['subcategoria'], FILTER_SANITIZE_STRING));
         } else {
-            $msg[] = "Seleccione categoria,porfavor";
+            $msg[] = "Seleccione categoria y subcategoria, porfavor";
             echo resultBlock($msg, 2);
             die;
         }
@@ -181,8 +182,13 @@ function curso($operacion, $dato)
         $sql = MySQLDB::getInstance()->query("SELECT * FROM categories where name='$category'");
         $idcat = $sql->fetch_assoc();
         $categoryid = $idcat['id'];
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM subcategories WHERE name='$subcategory' AND idcategory='$categoryid'");
+        $idsubcat = $sql->fetch_assoc();
+        $subcategoryid = $idsubcat['id'];
 
-        $sql = MySQLDB::getInstance()->query("UPDATE course SET price='$price', name='$name', description='$description', category='$categoryid', modificationdate=NOW() , imgname='$imgname' WHERE id='$id'");
+
+
+        $sql = MySQLDB::getInstance()->query("UPDATE course SET price='$price', name='$name', description='$description', category='$categoryid', modificationdate=NOW() , imgname='$imgname',subcategory='$subcategoryid' WHERE id='$id'");
 
         if ($sql) {
             //movemos la imagen y el video desde su ubicación temporaria hasta los directorios imgcourses y coursesvideo respectivamente

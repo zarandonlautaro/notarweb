@@ -57,6 +57,30 @@
                         </div>
 
                     </div>
+                    <div class="input-group input-group-sm col-12">
+                        <div class="input-group-prepend ">
+                            <label class="input-group-text" for="input-select" required>Subcategoria</label>
+                        </div>
+
+                        <select class="custom-select custom-select col-6" id="input-select-sub" title="seleccionar subcategoría" disabled>
+                            <option selected>Seleccionar...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="-">Otro</option>
+
+                        </select>
+
+                        <!--Subcategorias select option-->                    
+                        <input type="text" class="form-control col-3 " id="subcategoria" name="subcategoria" disabled>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-success" id="btn-agregar-sub" type="button" title="agregar nueva subcategoría" disabled><i class="fas fa-check"></i></button>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-danger" id="btn-eliminar-sub" type="button" title="eliminar subcategoría" disabled><i class="fas fa-times"></i></button>
+                        </div>
+                      
+
+                    </div>
                     <div class="modal-header pt-0">
                         <!-- Separador -->
                     </div>
