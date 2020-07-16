@@ -84,12 +84,12 @@
         });
     }
     
-    function listarusuarios() {
+    function listarusuarios(){
         $("#listar-course-user-add").click(function(e) {
             e.preventDefault();
 
             let opcion ="listar"; 
-            let idcurso = 60;
+            let idcurso = 95;
             //console.log(id);
             //Comprobamos que tenga el curso comprado
 

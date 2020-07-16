@@ -8,7 +8,7 @@ $opcion = $_POST['opcion'];
 $idcourse = $_POST['idcourse'];
 $nombrecurso = 'Nombre de curso';
 
-if ($opcion == "agregar") { 
+if ($opcion == "agregar") {
     $dni = $_POST['dni'];
     $sql1 = MySQLDB::getInstance()->query("SELECT * FROM users WHERE dni='$dni'");
 
@@ -26,7 +26,7 @@ if ($opcion == "agregar") {
             resultBlock($msg, 2);
             die;
         } else {
-            $sql2 = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser) VALUES ('$idcourse','$id') ");
+            $sql2 = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser,saledate) VALUES ('$idcourse','$id',NOW())");
 
             $msg = array('<b>' . $nombre . "</b> <b>" . $apellido . "</b> id=" . $id . "  ha sido inscripto en el curso: <b>" . $nombrecurso . "</b>  con éxito");
             resultBlock($msg, 1);
@@ -46,16 +46,14 @@ if ($opcion == "agregar") {
             $sql4 = MySQLDB::getInstance()->query("SELECT * FROM users WHERE  id='$iduser'");
             $rs4 = $sql4->fetch_assoc();
 
-           $usuarios[] = array( 
-                'id' => $rs4['id'], 'name' => $rs4['name'], 'lastname' => $rs4['lastname'],'dni' => $rs4['dni']
-            );
-            
+            $usuarios[] = array('id' => $rs4['id'], 'name' => $rs4['name'], 'lastname' => $rs4['lastname'], 'dni' => $rs4['dni']);
+
             $usuarios2[] = array(
-                'id = '. $rs4['id'].'  name = '. $rs4['name'].' lastname = '. $rs4['lastname']
+                'id = ' . $rs4['id'] . '  name = ' . $rs4['name'] . ' lastname = ' . $rs4['lastname']
             );
         }
-      
-        echo json_encode($usuarios); 
+
+        echo json_encode($usuarios);
         die;
     }
 }
