@@ -26,8 +26,9 @@ if (!isset($_SESSION['id'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Mendumy</title>
+  <title>Notarweb</title>
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/vitalets-bootstrap-datepicker-c7af15b/css/datepicker.css" rel="stylesheet">
   <link href="css/home.css" rel="stylesheet">
   <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
   <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
@@ -43,8 +44,8 @@ if (!isset($_SESSION['id'])) {
 
 </head>
 
-<body>        
-<div class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top" role="navigation" style="background: #4e4e50 !important">
+<body>
+  <div class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top" role="navigation" style="background: #4e4e50 !important">
     <a class="navbar-brand" href="#"><img src="img/logo.jpeg" width="150" alt="Notarweb"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -53,13 +54,13 @@ if (!isset($_SESSION['id'])) {
       <ul class="navbar-nav mr-auto">
         <!--Item Inicio-->
         <li class="nav-item active">
-          <a id="inicio" class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+          <a id="inicio" class="nav-link nav-element" href="#">Inicio <span class="sr-only">(current)</span></a>
         </li>
         <!--Item Dropdown Cursos categoria-->
         <li class="nav-item dropdown active">
-          <a  class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cursos</a>
+          <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cursos</a>
           <ul id="categorias" class="dropdown-menu" aria-labelledby="dropdown1">
-          
+
             <!--Item categoria-->
             <li class="dropdown-item dropdown">
 
@@ -69,36 +70,37 @@ if (!isset($_SESSION['id'])) {
                 <li class="dropdown-item" href="#"><a>Subcategoria</a></li>
 
               </ul>
-          
+
             </li>
-            
+
           </ul>
         </li>
         <!--Item Mis Cursos-->
         <li class="nav-item active">
-          <a id="cursos_comprados" class="nav-link" href="#">Mis Cursos</a>
+          <a id="cursos_comprados" class="nav-link nav-element" href="#">Mis Cursos</a>
         </li>
         <!--Item Administrador-->
         <?php
         if ($_SESSION['rol'] == 0) {
-         
+
         ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Administrador
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" id="adminpanel">Subir cursos</a>
-              <a class="dropdown-item" id="subirvideo">Subir videos</a>
+            <a class="dropdown-item nav-element" id="ventas">Ventas</a>
+              <a class="dropdown-item nav-element" id="adminpanel">Subir cursos</a>
+              <a class="dropdown-item nav-element" id="subirvideo">Subir videos</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" id="modificarcurso">Modificar cursos</a>
+              <a class="dropdown-item nav-element" id="modificarcurso">Modificar cursos</a>
             </div>
           </li>
         <?php
         }
         ?>
 
-       <!--Item Salir-->
+        <!--Item Salir-->
         <li class="nav-item active">
           <a class="nav-link" href="php/cerrar_sesion.php">Salir</a>
         </li>
@@ -119,9 +121,271 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
 
-  <?php
-  include('sidebar.php');
-  ?>
+  <div class="d-flex" id="wrapper">
+    <!--INICIO DE CONTENIDO DE PAGINA -->
+
+    <div id="page-content-wrapper" style="background: rgb(250,250,250);">
+
+
+
+      <div class="jumbotron p-4" id="jumbotron">
+        <div class="container text-right">
+          <h1 class="display-4">¡Hola <?php echo $nombre; ?>!
+          </h1>
+          <?php
+          if ($sesion == 0) {
+          ?>
+            <h3 id="registradosTotales">
+            </h3>
+          <?php
+          }
+          ?>
+        </div>
+      </div>
+
+
+      <!-- Modal -->
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+
+          <div class="modal-content">
+
+            <div class="modal-header">
+
+              <h5 class="modal-title" id="exampleModalLabel">Comprar Curso</h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                <span aria-hidden="true">&times;</span>
+
+              </button>
+
+            </div>
+
+            <div id='pago' class="modal-body">
+
+
+
+            </div>
+
+            <!-- <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                <button type="button" class="btn btn-primary">Save changes</button>
+
+                            </div>-->
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="container-fluid">
+
+        <!-- SKELETON -->
+
+        <div id="carga_cursos" style="display:none;">
+
+          <div class="row">
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xl-4 ">
+
+              <div id="" class="ph-item" style="width: 18rem;">
+
+                <div class="ph-col-12">
+
+                  <div class="ph-picture"></div>
+
+                  <div class="ph-row">
+
+                    <div class="ph-col-6 big"></div>
+
+                    <div class="ph-col-6 empty"></div>
+
+                    <div class="ph-col-12"></div>
+
+                    <div class="ph-col-12 empty"></div>
+
+                    <div class="ph-col-12 big"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- RENDER COURSES BY JQUERY -->
+
+        <div id="contenedor_home" class="mb-4">
+
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+    <!--INICIO DE CONTENIDO DE PAGINA -->
+
+  </div>
 
   <div class="modal fade bd-example-modal-lg" id="modalvideo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -133,6 +397,7 @@ if (!isset($_SESSION['id'])) {
       </div>
     </div>
   </div>
+
 
 
 
