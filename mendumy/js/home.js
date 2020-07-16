@@ -232,7 +232,11 @@ function cargacategorias() {
 
 
                 console.log(subcategoria);
-                jumbotron(true, categoria + "/" + subcategoria, '');
+                jumbotron(true, categoria + " " + subcategoria, '');
+                $('.nav-element').click(() => {
+                    $('#navbarCollapse').removeClass('show');
+
+                });
                 carga("categoria", idcategory, idsubcategory);
             });
 
@@ -285,7 +289,7 @@ function cargacurso() {
                 $('#curso' + id).html(tipo);
             },
             success: function (courses) {
-                //console.log(courses);
+                console.log(courses);
                 let r = JSON.parse(courses);
                 let rs = r[0];
                 //console.log(rs[0]);
@@ -583,7 +587,7 @@ function mostrarcurso(idcurso, modificar) {
                     videocard =
                         '<div class=" row justify-content-center" >' +
                         '<div class="col-xl-6 mt-2">' +
-                        '<div class="  mendocard shadow-lg w-100" style="width: 18rem;">' +
+                        '<div class="  mendocard shadow-lg w-100 mt-4" style="width: 18rem;">' +
                         '<div class="embed-responsive embed-responsive-16by9">' +
                         '<iframe src="https://player.vimeo.com/video/' + videoID + '"  frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>' +
                         '</div>' +
@@ -594,7 +598,7 @@ function mostrarcurso(idcurso, modificar) {
                         archivos +
                         '<div class="container d-flex justify-content-around mb-3 mt-3 ">' +
                         '<button class=" btn btn-md p-1  btn-outline-dark mr-2 col-xs-12 col-xl-4"  id="' + idcourse + '">Volver</button>' +
-                        '<button class=" btn btn-md p-1  btn-warning mr-2 col-xs-12 col-xl-4" id="video' + id + '">Ver </button>' +
+                        '<a class=" btn btn-md p-1  btn-warning mr-2 col-xs-12 col-xl-4" href="mailto:soporte@notarweb.com.ar" id="video' + id + '">Consultas</a>' +
                         '</div>' +
                         '</div>' +
 
@@ -889,13 +893,12 @@ function jumbotron(accion, titulo, subtitulo) {
         if (titulo || subtitulo) {
             //script para cambiar el jumbotron
             $('#jumbotron').empty().append(
-                '<div class="container">' +
-                '<h1 class="display-4">' + titulo +
+                '<div class="container text-right">' +
+                '<h2 class="">' + titulo +
                 '</h1>' +
                 '<p class="lead">' + subtitulo +
-                '</p>' +
+                '</p> </div>'
 
-                '</div>'
             );
         }
     } else {
@@ -1008,11 +1011,11 @@ function resultadocompra() {
     switch (result) {
         case "success":
             cartelModal('¡Felicidades, has adquirido el curso <b>' + curso + '</b>!', "success");
-            //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            window.history.replaceState(null, null, window.location.pathname);//limpiamos url
             ; break;
         case "pending":
             cartelModal('¡Gracias por iniciar la compra de <b>' + curso + '</b>!, una vez que se registre el pago podrás ingresar al curso.', "info");
-            //window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            window.history.replaceState(null, null, window.location.pathname);//limpiamos url
             ; break;
     }
 
@@ -1027,6 +1030,181 @@ function getRegistrados() {
         }
     });
 }
+
+function ventas(id) {
+    $('#contenedor_home').empty();
+
+
+    $.ajax({
+
+        url: "./php/ventas.php",
+        type: "post",
+        data: { "id": id },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            $('#contenedor_home').empty().append(data);
+
+
+
+            $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js", function () {
+                $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js", function () {
+                    $('.datepicker').datepicker({
+                        uiLibrary: 'bootstrap4',
+                        language: 'es',
+                        format: 'dd-mm-yyyy'
+                    });
+                    //se cargan los cursos en el select
+                    ventacursos();
+
+                });
+
+            });
+
+
+
+
+        }
+
+    });
+
+}
+//funcion para rellenar el select de ventas con los cursos traidos de la base de datos
+function ventacursos() {
+    let operacion = "todos";
+    let categoria = "";
+    let subcategoria = "";
+
+    $.ajax({
+
+        url: "./php/traer_cursos_main.php",//script para subir cursos a la base de datos
+        type: "post",
+        data: {
+            "operacion": operacion,
+            "categoria": categoria,
+            "subcategoria": subcategoria
+        },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            //$('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            //$('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            //$('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+
+            let rs = JSON.parse(data);
+            let cursos = '<option selected>Seleccionar...</option>';
+            let option;
+            $.each(rs, (i, r) => {
+
+                option = '<option value="' + r['id'] + '">' + r['name'] + '</option>';
+                cursos = cursos + option;
+            });
+
+            //Agregamos los cursos al select 
+            $('#course-select').empty().append(cursos);
+            //Una vez terminada la carga del formulario ponemos un evento para detectar cuando se haga click en consultar y largamos la funcion correspondiente
+
+
+
+            $('#find-date').click(function (e) {
+                //capturamos los valores ingresados
+                e.preventDefault();
+
+                let idcourse = $('#course-select option:selected').val();
+                let f1 = $('#date1').val();
+                let f2 = $('#date2').val();
+
+                //console.log(" "+f1+" "+f2+" "+idcourse);
+                //los mandamos como parametros de funcion
+                cargaventas("traer", f1, f2, idcourse);
+
+            });
+
+        }
+
+    });
+
+}
+//funcion para consultar las ventas de un curso seleccionado en un rango de fechas
+function cargaventas(operation, date1, date2, courseid) {
+
+    $.ajax({
+
+        url: "./php/traer_ventas_main.php",//script para subir cursos a la base de datos
+        type: "post",
+        data: {
+
+            "operation": operation,
+            "date1": date1,
+            "date2": date2,
+            "courseid": courseid
+
+        },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            //$('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+            //$('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            //$('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            console.log(data);
+            //$('#alert').addClass('alert-warning');
+            if (data == 1) {
+                console.log("Error");
+                $('#alert').empty().append('<h6 class="alert alert-info"> <strong>Introduzca todos los campos</strong>. </h6>');
+            } else {
+                $('#contenedor_home').empty().append(data);
+            }
+
+
+        }
+
+    });
+
+}
+
 
 $(document).ready(function () {
     getRegistrados();
@@ -1062,6 +1240,17 @@ $(document).ready(function () {
     $('#modificarcurso').click(() => {
         jumbotron(false);
         carga("listar", "", "");
+
+    });
+
+    $('#ventas').click(() => {
+        jumbotron(true, 'Ventas', '');
+        ventas();
+
+    });
+
+    $('.nav-element').click(() => {
+        $('#navbarCollapse').removeClass('show');
 
     });
 
