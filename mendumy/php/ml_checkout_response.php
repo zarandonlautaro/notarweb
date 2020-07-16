@@ -39,7 +39,7 @@ if ($paid_amount >= $merchant_order->total_amount) {
     if ($sql->num_rows){
         echo "el curso ya fue comprado";
     }else{
-    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser) VALUES ('$idcourse','$iduser')");
+    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now())");
     }
 } else {
     print_r("Not paid yet. Do not release your item.");

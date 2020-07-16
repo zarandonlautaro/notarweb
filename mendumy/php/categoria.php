@@ -25,7 +25,7 @@ if (isset($_POST['operacion']) && $_POST['operacion'] == 'cargar'){
             while ($rs1=$sql1->fetch_assoc()) {    
                     
                     $categorias .= '<!--Item categoria-->
-                                    <li class="dropdown-item " href="#"><a categoryname="'.$rs['name'].'" idcategory="'.$rs['id'].'" idsubcategory="'.$rs1['id'].'" class="subcategory">'.$rs1['name'].'</a></li>
+                    <li class="dropdown-item " href="#"><a categoryname="'.$rs['name'].'" idcategory="'.$rs['id'].'" idsubcategory="'.$rs1['id'].'" class="subcategory nav-element">'.$rs1['name'].'</a></li>
                                 ';
                             
                 }
