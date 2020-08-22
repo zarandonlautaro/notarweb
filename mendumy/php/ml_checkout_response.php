@@ -1,22 +1,71 @@
 <?php
 include("mysqli.php");
 include("funcs.php");
-include("vars.php");
-
-//require __DIR__  . '/vendor/autoload.php';
 require('../vendor/autoload.php');
-// Agrega credenciales
+// respondemos ok al weebhook
 header("HTTP/1.2 200 OK");
+//generamos un log
+$event =  json_encode($_GET);
+$logFile = fopen("logml.txt", 'a') or die("Error creando archivo");
+fwrite($logFile, "\n" . date("d/m/Y H:i:s") . ' ' . $event) or die("Error escribiendo en el archivo");
+fclose($logFile);
 
+//obetenemos credenciales
+if (isset($_GET["credentialid"])) {
+    $credentialid = $_GET["credentialid"];
+    $query = MySQLDB::getInstance()->query("SELECT credential FROM credentials  WHERE id = $credentialid ");
+    $r = $query->fetch_assoc();
+    $accesstoken = $r['credential'];
+} else {
+
+    $idtransaccion = $_GET["id"];
+    $sql = MySQLDB::getInstance()->query("SELECT * FROM credentials ");
+
+    while ($rs = $sql->fetch_assoc()) {
+        
+        $accesstoken=$rs['credential'];
+        
+        MercadoPago\SDK::setAccessToken($accesstoken);
+        $payment = MercadoPago\Payment::find_by_id($idtransaccion);
+
+        echo $rs['credential'].'****************************** id='.$idtransaccion.'</br>';
+        echo '</br> ';
+        var_dump($payment);echo '</br> ';
+       // MercadoPago\SDK::cleanCredentials();
+        if (isset($payment)) {
+
+            
+            $accesstoken = $rs['credential'];
+            $event =  json_encode($payment);
+            $logFile = fopen("logml.txt", 'a') or die("Error creando archivo");
+            fwrite($logFile, "\n" . date("d/m/Y H:i:s") . ' ' . $event) or die("Error escribiendo en el archivo");
+            fclose($logFile);
+        }
+        
+        
+    }
+}
+
+MercadoPago\SDK::cleanCredentials();
+MercadoPago\SDK::initialize();
 MercadoPago\SDK::setAccessToken($accesstoken);
+
+
 //$json_event = file_get_contents('php://input', true);
 //$event = json_decode($json_event);
 //print_r($event->type);
 //die;
 
-$merchant_order = null;
 
-$payment = MercadoPago\Payment::find_by_id($_GET["id"]);
+
+
+
+$idtransaccion = $_GET["id"];
+echo $accesstoken.'****************************** id='.$idtransaccion.'</br>';
+
+$payment = MercadoPago\Payment::find_by_id($idtransaccion);
+
+$merchant_order = null;
 // Get the payment and the corresponding merchant_order reported by the IPN.
 $merchant_order = MercadoPago\MerchantOrder::find_by_id($payment->order->id);
 
@@ -36,10 +85,10 @@ if ($paid_amount >= $merchant_order->total_amount) {
     //var_export($payment);
 
     $sql = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse = $idcourse AND iduser = " . $iduser . " ");
-    if ($sql->num_rows){
+    if ($sql->num_rows) {
         echo "el curso ya fue comprado";
-    }else{
-    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now())");
+    } else {
+        $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now())");
     }
 } else {
     print_r("Not paid yet. Do not release your item.");
