@@ -31,11 +31,11 @@ function todos($cat, $subcat)
     //echo "cat ".$cat."subcat ".$subcat;
     
     if ($cat != "" && $subcat != "") {
-        $sql = MySQLDB::getInstance()->query("SELECT id,price,name,description, category, imgname,subcategory FROM course WHERE category='$cat' AND subcategory='$subcat' ORDER BY creationdate DESC");
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM course WHERE category='$cat' AND subcategory='$subcat' ORDER BY creationdate DESC");
         //el caso de que queramos mostrar todos los cursos
        
     } else {
-        $sql = MySQLDB::getInstance()->query("SELECT id,price,name,description, category, imgname, subcategory FROM course ORDER BY creationdate DESC");
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM course ORDER BY creationdate DESC");
     }
     
 
@@ -45,13 +45,13 @@ function todos($cat, $subcat)
             if ($sqlcheck->num_rows) {
                 $cursos[] = array(
                     'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price'], 'bought' => true
+                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price'], 'credentialid' => $rs['credentialid'] ,'bought' => true
                 );
             } else {
 
                 $cursos[] = array(
                     "id" => $rs['id'], "name" => $rs['name'], "description" => $rs['description'],
-                    "category" => $rs['category'], "imgname" => $rs['imgname'], 'price' => $rs['price'], "bought" => false, //"preferenceid"=>$preference->id
+                    "category" => $rs['category'], "imgname" => $rs['imgname'], 'price' => $rs['price'],'credentialid' => $rs['credentialid'] , 'bought' => false //"preferenceid"=>$preference->id
                 );
             }
         }
