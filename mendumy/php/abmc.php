@@ -135,7 +135,14 @@ function curso($operacion, $dato)
             echo resultBlock($msg, 2);
             die;
         }
-
+        if ($_POST['credencial'] != "Seleccionar...") {
+            $credentialid = trim(filter_var($_POST['credencial'], FILTER_SANITIZE_STRING));
+           
+        } else {
+            $msg[] = "Debe asignar credencial";
+            echo resultBlock($msg, 2);
+            die;
+        }
         if (isset($_POST['nombre']) && isset($_POST['precio'])) {
 
             $name = trim(filter_var($_POST['nombre'], FILTER_SANITIZE_STRING));
@@ -188,7 +195,7 @@ function curso($operacion, $dato)
 
 
 
-        $sql = MySQLDB::getInstance()->query("UPDATE course SET price='$price', name='$name', description='$description', category='$categoryid', modificationdate=NOW() , imgname='$imgname',subcategory='$subcategoryid' WHERE id='$id'");
+        $sql = MySQLDB::getInstance()->query("UPDATE course SET price='$price', name='$name', description='$description', category='$categoryid', modificationdate=NOW() , imgname='$imgname',subcategory='$subcategoryid',credentialid='$credentialid' WHERE id='$id'");
 
         if ($sql) {
             //movemos la imagen y el video desde su ubicación temporaria hasta los directorios imgcourses y coursesvideo respectivamente

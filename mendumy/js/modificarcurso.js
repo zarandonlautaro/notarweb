@@ -184,7 +184,7 @@ function subcategoria(operacion, idcategoria, subcate) {
         idsubcat = subcate;//salvamos el valor de idsubcat si tiene algo
         subcate = "";
     }
-    console.log("control ajax subcategoria "+subcate+" a categoria id: "+idcategoria);
+    //console.log("control ajax subcategoria " + subcate + " a categoria id: " + idcategoria);
     $.ajax({
 
         url: "./php/subcategoria.php",
@@ -221,10 +221,10 @@ function subcategoria(operacion, idcategoria, subcate) {
                 case "4": cartelError('Valor no permitido.'); break;
                 case "5": cartelError('No se pudo ejecutar la consulta a la base de datos'); break;
                 default:
-                    console.log("Respuesta"+rs);
+                    console.log("Respuesta" + rs);
                     $('#input-select-sub').empty().append(rs);
                     $("#subcategoria").empty();
-                    
+
                     ; break;
             }
 
@@ -254,8 +254,8 @@ function subcategoria(operacion, idcategoria, subcate) {
                 });
             }
 
-          
-            
+
+
         }
 
     });
@@ -263,35 +263,35 @@ function subcategoria(operacion, idcategoria, subcate) {
 
 }
 
-function agregasubcategoria(){
-    
-    $("#btn-agregar-sub").click(function() {
+function agregasubcategoria() {
+
+    $("#btn-agregar-sub").click(function () {
         let subcat = $("#subcategoria").val();
         let idcategoria = $("#input-select option:selected").val();
-        if(subcat!=""){
-            console.log("agregar subcategoria "+subcat+" a categoria id: "+idcategoria);
-            subcategoria('agrega', idcategoria,subcat);
-            
+        if (subcat != "") {
+            console.log("agregar subcategoria " + subcat + " a categoria id: " + idcategoria);
+            subcategoria('agrega', idcategoria, subcat);
+
         }
     });
 }
-function eliminarsubcat(){
+function eliminarsubcat() {
 
-    $("#btn-eliminar-sub").click(function() {
+    $("#btn-eliminar-sub").click(function () {
         let subcat = $("#subcategoria").val();//capturo el nombre de la subcategoria
         let idcategoria = $("#input-select option:selected").val();//capturo el id de la categoria dentro de la cual se va a a guardar la subcat
-        
-        if(subcat!=""){
-      
-        var opcion = confirm("¿Esta seguro que desea eliminar esta categoría?");
-        if (opcion == true) {
-            
-            console.log("eliminar subcategoria: " + subcat);
-            subcategoria('borra', idcategoria,subcat);
-        } else {
-            cartel("Ha cancelado la operación.");
+
+        if (subcat != "") {
+
+            var opcion = confirm("¿Esta seguro que desea eliminar esta categoría?");
+            if (opcion == true) {
+
+                console.log("eliminar subcategoria: " + subcat);
+                subcategoria('borra', idcategoria, subcat);
+            } else {
+                cartel("Ha cancelado la operación.");
+            }
         }
-     }
 
     });
 }
@@ -375,8 +375,71 @@ function cargarform() {
 
 
 }
+function traerCredenciales(operation, credential, name, id) {
+
+    //solo se usa operation
+    $.ajax({
+
+        url: "./php/credentials.php",//script para subir cursos a la base de datos
+        type: "post",
+        data: {
+
+            "operation": operation,
+            "credential": credential,
+            "name": name,
+            "id": id,
+
+        },
 
 
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+
+
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            if (data == 1) {
+                credenciales("traer2", "", "", "");
+                $('#alert').empty().append('<h6 class="alert alert-success"> <strong>¡Guardado exitoso!</strong>. </h6>');
+            } else {
+                if (data == 2) {
+                    credenciales("traer2", "", "", "");
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong>¡Error!</strong>. </h6>');
+                } else {
+                    $('#input-select-credential').empty().append(data);
+
+                    $('#input-select-credential option').each(function () {
+                        //console.log($(this).val() + " " + $(this).text());
+
+                        //seleccionamos el id en el select
+                        if ($(this).val() == rs['credentialid']) {
+
+                            $(this).attr("selected", rs['credentialid']);
+                        }
+                    });
+                }
+            }
+
+
+
+
+        }
+
+    });
+
+}
 $(document).ready(function () {
 
 
@@ -388,6 +451,8 @@ $(document).ready(function () {
         subir();
     });
 
+    let id = $('#cargarCurso').attr("idcurso");
+    traerCredenciales('traerselect', "", "", id);
     cargarCategorias('agregaconsulta', 'traer');
     //cargamos los datos del curso a modificar en el formulario
     cargarform();
@@ -420,6 +485,6 @@ $(document).ready(function () {
 
     agregasubcategoria();
     eliminarsubcat();
-   
+
 
 });

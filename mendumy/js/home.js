@@ -43,7 +43,7 @@ function carga(operacion, categoria, subcategoria) {
         },
         success: function (rs) {
             $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
-            console.log(rs);
+            //console.log(rs);
 
 
             if (rs == 0) { //No hay cursos
@@ -57,7 +57,7 @@ function carga(operacion, categoria, subcategoria) {
                 //  let courses = eval(rs);
                 //console.log((rs));
                 let courses = JSON.parse(rs);
-                console.log(courses);
+                //console.log(courses);
                 //mostramos los cursos en el body
                 //alert(courses);
                 if (!listar) {
@@ -85,14 +85,30 @@ function carga(operacion, categoria, subcategoria) {
                             let color;
                             let tipo;
                             let opcion;
+                            let precio;
                             if (r['price'] == 0) {
                                 color = 'warning';
                                 tipo = "¡Curso Gratuito!";
                                 opcion = '';
+                                precio = r['price'] + '$';
+
                             } else {
-                                color = 'success';
-                                tipo = "¡Disponible pronto!";
-                                opcion = 'disabled';
+                                //console.log("Precio ", r['price']);
+
+                                if (r['price'] == -1) {
+                                    color = 'success';
+                                    tipo = "Cupos agotados";
+                                    opcion = 'disabled';
+                                    precio = 'No disponible';
+                                } else {
+                                    color = 'success';
+                                    tipo = "¡Comprar!";
+                                    opcion = '';
+                                    precio = r['price'] + '$';
+
+
+                                }
+
                             }
                             $('#fila' + fila).append(
 
@@ -102,6 +118,7 @@ function carga(operacion, categoria, subcategoria) {
                                 '<div class="">' +
                                 '<h5 class="pt-2">' + r['name'] + '</h5>' +
                                 '<p class="">' + r['description'] + '</p>' +
+                                '<p class="">Precio: ' + precio + '</p>' +
                                 '<button class="curso btn btn-block btn-' + color + ' "  title="' + r['name'] + '" tipo=Comprar curso=' + r['id'] + ' id="curso' + r['id'] + '" ' + opcion + '> ' + tipo + ' </button>' +
                                 '<p class="" id="pago' + r["preferenceid"] + '"></p>' +
                                 '</div>' +
@@ -289,7 +306,7 @@ function cargacurso() {
                 $('#curso' + id).html(tipo);
             },
             success: function (courses) {
-                console.log(courses);
+                //console.log(courses);
                 let r = JSON.parse(courses);
                 let rs = r[0];
                 //console.log(rs[0]);
@@ -952,11 +969,11 @@ function subirvideo(ok) {
 }
 function modificarcurso(id) {
     $('#contenedor_home').empty();
-    jumbotron(false);
+
 
     $.ajax({
 
-        url: "./php/admin.php",//script para subir cursos a la base de datos
+        url: "./php/admin.php",//formulario de subida de cursos
         type: "post",
         data: { "id": id },
 
@@ -1004,14 +1021,20 @@ function resultadocompra() {
     let params = new URLSearchParams(location.search);
     let result = params.get('result');
     let idcourse = params.get('idcourse');
-    let id = '#curso' + idcourse;
-    let curso = $(id).attr('title');
+    let status = params.get('collection_status');
+    let credentialid = params.get('credentialid');
+    let ide = '#curso' + idcourse;
+    let curso = $(ide).attr('title');
+    let id = params.get('collection_id');
 
     //console.log(id);
     switch (result) {
         case "success":
-            cartelModal('¡Felicidades, has adquirido el curso <b>' + curso + '</b>!', "success");
-            window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            if (status == 'approved') {
+                successBuy(id, credentialid);
+                cartelModal('¡Felicidades, has adquirido el curso <b>' + curso + '</b>!', "success");
+                window.history.replaceState(null, null, window.location.pathname);//limpiamos url
+            }
             ; break;
         case "pending":
             cartelModal('¡Gracias por iniciar la compra de <b>' + curso + '</b>!, una vez que se registre el pago podrás ingresar al curso.', "info");
@@ -1020,6 +1043,16 @@ function resultadocompra() {
     }
 
 
+}
+function successBuy(id, credentialid) {
+    $.ajax({
+        url: "./php/ml_checkout_response.php",
+        type: "get",
+        data: { "id": id, "credentialid": credentialid },
+        success: function (r) {
+            carga("todos", "", "");
+        }
+    });
 }
 function getRegistrados() {
     $.ajax({
@@ -1204,7 +1237,119 @@ function cargaventas(operation, date1, date2, courseid) {
     });
 
 }
+//funcion para consultar las ventas de un curso seleccionado en un rango de fechas
+function credenciales(operation, credential, name, id) {
 
+
+    $.ajax({
+
+        url: "./php/credentials.php",//script para subir cursos a la base de datos
+        type: "post",
+        data: {
+
+            "operation": operation,
+            "credential": credential,
+            "name": name,
+            "id": id,
+
+        },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            if (operation == "traer2" || operation == "guardar" || operation == "eliminar" || operation == "modificar") {
+                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+
+            } else {
+                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            }
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            if (data == 1) {
+                credenciales("traer2", "", "", "");
+                $('#alert').empty().append('<h6 class="alert alert-success"> <strong>¡Guardado exitoso!</strong>. </h6>');
+            } else {
+                if (data == 2) {
+                    credenciales("traer2", "", "", "");
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong>¡Error!</strong>. </h6>');
+                } else {
+                    $('#contenedor_home').append(data);
+                }
+            }
+
+
+            $('.modificar-credencial').click(function () {
+
+                let id = $(this).attr("id");//obtenemos id de la credencial
+                let name = $('#credentialname' + id).val();
+                let credential = $('#credential' + id).val();
+                //console.log("name: " + name + " credential: " + cred + " id: " + id);
+                credenciales("modificar", credential, name, id);
+
+            });
+
+            $('.eliminar-credencial').click(function () {
+
+                var opcion = confirm("¿Esta seguro que desea eliminar este curso?");
+                if (opcion == true) {
+
+                    let id = $(this).attr("ide");
+                    let name = $('#credentialname' + id).val();
+                    let cred = $('#credential' + id).val();
+                    //console.log("name: " + name + " credential: " + cred + " id: " + id);
+                    credenciales("eliminar", credential, name, id);
+
+                } else {
+                    cartel("Ha cancelado la operación.");
+                }
+
+
+
+
+
+
+            });
+            $('#guardar-credencial').click(function () {
+
+                var opcion = true//confirm("¿Esta seguro que desea eliminar este curso?");
+                if (opcion == true) {
+
+                    let name = $('#credentialname').val();
+                    let credential = $('#credential').val();
+                    //console.log("name: " + name + " credential: " + credential + " id: ");
+                    credenciales("guardar", credential, name, "");
+
+                } else {
+                    cartel("Ha cancelado la operación.");
+                }
+
+
+
+
+
+
+            });
+
+
+        }
+
+    });
+
+}
 
 $(document).ready(function () {
     getRegistrados();
@@ -1246,6 +1391,11 @@ $(document).ready(function () {
     $('#ventas').click(() => {
         jumbotron(true, 'Ventas', '');
         ventas();
+
+    });
+    $('#credenciales').click(() => {
+        jumbotron(true, 'Credenciales', '');
+        credenciales("traer", "", "", "");
 
     });
 

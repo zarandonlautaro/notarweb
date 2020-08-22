@@ -285,7 +285,62 @@ function cartel(contenido) {
     );
 
 }
+function traerCredenciales(operation, credential, name, id) {
+  
+    //solo se usa operation
+    $.ajax({
 
+        url: "./php/credentials.php",//script para subir cursos a la base de datos
+        type: "post",
+        data: {
+
+            "operation": operation,
+            "credential": credential,
+            "name": name,
+            "id": id,
+
+        },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+                
+                   
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+            
+                
+           
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            if (data == 1) {
+                credenciales("traer2", "", "", "");
+                $('#alert').empty().append('<h6 class="alert alert-success"> <strong>¡Guardado exitoso!</strong>. </h6>');
+            } else {
+                if (data == 2) {
+                    credenciales("traer2", "", "", "");
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong>¡Error!</strong>. </h6>');
+                } else {
+                    $('#input-select-credential').empty().append(data);
+                   
+                }
+            }
+
+
+
+
+        }
+
+    });
+
+}
 
 
 
@@ -297,7 +352,7 @@ $(document).ready(function () {
         e.preventDefault(); //prevenimos accion por defecto del form
         subir();
     });
-
+    traerCredenciales('traerselect',"","","");
     cargarCategorias('agregaconsulta', 'traer');
 
     botonGratis();

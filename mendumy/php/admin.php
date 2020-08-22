@@ -35,7 +35,22 @@
                             <label class="custom-control-label" for="cb-gratis">Gratis</label>
                         </div>
                     </div>
-                    <div class="input-group input-group-sm col-12">
+                    <div class="input-group input-group-sm col-12 mb-2">
+                        <div class="input-group-prepend ">
+                            <label class="input-group-text" for="input-select-credential" required>Credencial</label>
+                        </div>
+
+                        <select class="custom-select custom-select col-12" name="credencial" id="input-select-credential" title="seleccionar credencial">
+                            <option selected>Seleccionar...</option>
+                            
+
+                        </select>
+
+
+                    </div>
+
+
+                    <div class="input-group input-group-sm col-12 mb-2">
                         <div class="input-group-prepend ">
                             <label class="input-group-text" for="input-select" required>Categoria</label>
                         </div>
@@ -57,7 +72,7 @@
                         </div>
 
                     </div>
-                    <div class="input-group input-group-sm col-12">
+                    <div class="input-group input-group-sm col-12 mb-2">
                         <div class="input-group-prepend ">
                             <label class="input-group-text" for="input-select" required>Subcategoria</label>
                         </div>

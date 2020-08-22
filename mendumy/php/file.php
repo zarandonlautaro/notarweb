@@ -4,9 +4,9 @@ include("mysqli.php");
 //print_r( $_FILES['imagen']['name']);
 /*if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0){
 print_r($_POST);}
-*/
+die;*/
 
-if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['subcategoria']) && isset($_POST['categoria']) && isset($_POST['descripcion'])) {
+if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['subcategoria']) && isset($_POST['categoria']) && isset($_POST['credencial'])) {
     //Almacenamos en variables llegadas por métodos post
     if ($_FILES['imagen']['error'] == 0) {
         $imagen = $_FILES['imagen'];
@@ -20,6 +20,11 @@ if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio'
         echo resultBlock($msg, 2);
         die;
     }
+    if ($_POST['credencial'] == "Seleccionar...") {
+        $msg[] = "Debe asignar credencial";
+        echo resultBlock($msg, 2);
+        die;
+    }
     if ($_POST['nombre'] == "") {
         $msg[] = "Escriba un nombre";
         echo resultBlock($msg, 2);
@@ -27,7 +32,7 @@ if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio'
     }
 
 
-
+    $credentialid= trim(filter_var($_POST['credencial'], FILTER_SANITIZE_STRING));
     $name = trim(filter_var($_POST['nombre'], FILTER_SANITIZE_STRING));
     $price = trim(filter_var($_POST['precio'], FILTER_SANITIZE_STRING));
     $category = trim(filter_var($_POST['categoria'], FILTER_SANITIZE_STRING));
@@ -61,7 +66,7 @@ if (isset($_FILES['imagen']) && isset($_POST['nombre']) && isset($_POST['precio'
         if ($sql->num_rows == 0) {
 
 
-            $sql = MySQLDB::getInstance()->query("INSERT INTO course (price, name, description, category, creationdate, modificationdate , imgname, subcategory) VALUES ('$price', '$name', '$description','$categoryid',NOW(), NULL ,'$imgname','$subcategoryid') ");
+            $sql = MySQLDB::getInstance()->query("INSERT INTO course (price, name, description, category, creationdate, modificationdate , imgname, subcategory,credentialid) VALUES ('$price', '$name', '$description','$categoryid',NOW(), NULL ,'$imgname','$subcategoryid','$credentialid') ");
 
             if ($sql) {
                 //movemos la imagen y el video desde su ubicación temporaria hasta los directorios imgcourses y coursesvideo respectivamente

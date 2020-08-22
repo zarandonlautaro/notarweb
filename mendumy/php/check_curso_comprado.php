@@ -2,7 +2,7 @@
 use MercadoPago\Preference;
 include("mysqli.php");
 require('../vendor/autoload.php');
-include("vars.php");
+//include("vars.php");
 //print_r($_SESSION);
 //die;
 $iduser=$_SESSION['id'];
@@ -34,7 +34,7 @@ if (isset($_POST['idcourse'])) {
         $user = $sql1->fetch_assoc();
         $dni=$user['dni'];
 
-        $sql = MySQLDB::getInstance()->query("SELECT id,name,description, category, imgname, price FROM course  WHERE id = $idcourse ");
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM course  WHERE id = $idcourse ");
         if ($sql->num_rows) {
             $rs = $sql->fetch_assoc();
 
@@ -44,6 +44,11 @@ if (isset($_POST['idcourse'])) {
                 // SDK de Mercado Pago
                 //require __DIR__  . '/vendor/autoload.php';
                 require('../vendor/autoload.php');
+                $credentialid=$rs['credentialid'];
+                //echo $credentialid; 
+                $query = MySQLDB::getInstance()->query("SELECT credential FROM credentials  WHERE id = $credentialid ");
+                $r= $query->fetch_assoc();
+                $accesstoken=$r['credential'];
                 // Agrega credenciales
                 MercadoPago\SDK::setAccessToken($accesstoken);
                 // Crea un objeto de preferencia
@@ -66,12 +71,10 @@ if (isset($_POST['idcourse'])) {
                 $preference->payer=$payer;
                 //urls a las que redirecciona al terminar la transaccion
                 $preference->back_urls = array(
-                    "success" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=success&idcourse=".$idcourse."",
-                    "failure" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=fairule&idcourse=".$idcourse."",
-                    "pending" => "http://localhost/mendumy2/mendumy/mendumy/home.php?result=pending&idcourse=".$idcourse."",
+                    "success" => "http://localhost/mendumy2/mendumy/mendumy/home.php?credentialid=".$credentialid."&result=success&idcourse=".$idcourse."",
+                    "failure" => "http://localhost/mendumy2/mendumy/mendumy/home.php?credentialid=".$credentialid."&result=fairule&idcourse=".$idcourse."",
+                    "pending" => "http://localhost/mendumy2/mendumy/mendumy/home.php?credentialid=".$credentialid."&result=pending&idcourse=".$idcourse."",
                 );
-                
-                
                 //excluimos algunos medios de pago
                 $preference->payment_methods = array(
 
@@ -84,7 +87,6 @@ if (isset($_POST['idcourse'])) {
                     "excluded_payment_methods" => array(
                         array("id" => "cargavirtual"),
                         array("id" => "atm"),
-                        
 
                     )
                     
@@ -107,7 +109,7 @@ if (isset($_POST['idcourse'])) {
                 if ($rs['price']==0) {
                     
                    
-                    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser) VALUES ('$idcourse','$iduser') ");
+                    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now()) ");
 
 
                     
