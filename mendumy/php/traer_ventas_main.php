@@ -30,7 +30,32 @@ if (isset($_POST['operation']) && !empty($_POST['operation']) && isset($_POST['c
 
         $sql = MySQLDB::getInstance()->query("SELECT * FROM course WHERE id = '$courseid'");
         $curso = $sql->fetch_assoc();
-        $tabla = '<div class="container"> <table class="table table-light table-responsive-sm ">' .
+
+
+
+        $tabla =
+            '<div class="container">' .
+            '<div class="row">' .
+            '<div class="col-lg-12">' .
+            '<div class="table-responsive">' .
+            '<table id="table" class="table table-striped table-bordered" style="width:100%">' .
+            '<thead class="tcabecera">' .
+            '<tr>' . $curso['name'] . ' ventas entre ' . $d1 . ' y ' . $d2 . '</tr>' .
+            '<tr>' .
+            '<th>Video</th>' .
+            '<th>Nombre</th>' .
+            '<th>DNI</th>' .
+            '<th>Correo</th>' .
+            '<th>Fecha</th>' .
+            '<th>¿Pagó?</th>' .
+            '</tr>' .
+            '</thead>' .
+            '<tbody>';
+
+
+
+
+        /*$tabla = '<div class="container"> <table id="table" class="table table-light table-responsive-sm ">' .
             '<thead class="thead-dark">' .
             '<tr>' . $curso['name'] . ' ventas entre ' . $d1 . ' y ' . $d2 . '</tr>' .
             '<tr>' .
@@ -39,9 +64,10 @@ if (isset($_POST['operation']) && !empty($_POST['operation']) && isset($_POST['c
             '<th  scope="col" class="text-center">DNI</th>' .
             '<th  scope="col" class="text-center" colspan="2">Correo</th>' .
             '<th  scope="col" class="text-center"colspan="2">Fecha de compra</th>' .
-
+            '<th  scope="col" class="text-center"colspan="2">Pago</th>' .
             '</tr>' .
-            '</thead>';
+            '</thead>'.
+            '<tbody>';*/
         $sqlcheck = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse = '$courseid' AND saledate BETWEEN '$date1' AND '$date2'");
         $i = 1;
         //$sqlcheck = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse=88 AND saledate BETWEEN '2020-03-20' AND '2020-07-08'"); 
@@ -53,15 +79,33 @@ if (isset($_POST['operation']) && !empty($_POST['operation']) && isset($_POST['c
             $user = $sqlcheck1->fetch_assoc();
             //print_r($rs);
 
+            if ($rs['paid'] == 1) {
+                $res = "si";
+            } else {
+                $res = "no";
+            }
+
             $tabla .=
-                '<tbody>' .
+
+                '<tr>' .
+                '<th scope="row" class="text-center">' . $i . '</th>' .
+                '<th class="text-center">' . $user['name'] . " " . $user['lastname'] . '</td>' .
+                '<th class="text-center">' . $user['dni'] . '</td>' .
+                '<th class="text-center">' . $user['username'] . '</td>' .
+                '<th class="text-center">' . $rs['saledate'] . '</td>' .
+                '<th class="text-center">' . $res . '</td>' .
+                '</tr>';
+            /*
+            $tabla .=
+                
                 '<tr>' .
                 '<th scope="row" class="text-center">' . $i . '</th>' .
                 '<td colspan="2" class="text-center">' . $user['name'] . " " . $user['lastname'] . '</td>' .
                 '<td class="text-center">' . $user['dni'] . '</td>' .
                 '<td colspan="2" class="text-center">' . $user['username'] . '</td>' .
                 '<td colspan="2" class="text-center">' . $rs['saledate'] . '</td>' .
-                '</tr>';
+                '<td colspan="2" class="text-center">' . $res. '</td>' .
+                '</tr>';*/
             $i++;
         }
         $tabla .= '</tbody></table> </div>';
