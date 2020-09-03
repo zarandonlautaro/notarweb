@@ -5,6 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
   $nombre = $_SESSION['nombre'];
   $sesion = $_SESSION['rol'];
+  $userid = $_SESSION['id'];
 
   if (isset($_POST['back_url'])) {
     $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -30,9 +31,14 @@ if (!isset($_SESSION['id'])) {
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="vendor/vitalets-bootstrap-datepicker-c7af15b/css/datepicker.css" rel="stylesheet">
   <link href="css/home.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
   <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
   <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
   <link href="css/dropdown.css" rel="stylesheet">
+  <!--datables CSS básico-->
+  <link rel="stylesheet" type="text/css" href="vendor/DataTables/datatables.min.css" />
+  <!--datables estilo bootstrap 4 CSS-->
+  <link rel="stylesheet" type="text/css" href="vendor/DataTables/DataTables-1.10.21/css/dataTables.bootstrap4.min.css">
   <!-- Deshabilitamos cache -->
   <meta http-equiv="expires" content="0">
 
@@ -45,6 +51,7 @@ if (!isset($_SESSION['id'])) {
 </head>
 
 <body>
+  <input type="hidden" id="role" name="" value="<?php echo $sesion ?>">
   <div class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top" role="navigation" style="background: #4e4e50 !important">
     <a class="navbar-brand" href="#"><img src="img/logo.jpeg" width="150" alt="Notarweb"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,8 +84,20 @@ if (!isset($_SESSION['id'])) {
         </li>
         <!--Item Mis Cursos-->
         <li class="nav-item active">
-          <a id="cursos_comprados" class="nav-link nav-element" href="#">Mis Cursos</a>
+          <a id="cursos_comprados" class="nav-link nav-element" href="#">Mis cursos</a>
         </li>
+        <!--Item Mi perfil-->
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Mi Perfil
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item nav-element" id="datosPersonales">Datos personales</a>
+          </div>
+        </li>
+
+
         <!--Item Administrador-->
         <?php
         if ($_SESSION['rol'] == 0) {
@@ -411,6 +430,15 @@ if (!isset($_SESSION['id'])) {
   <script src="js/admin.js"></script>
   <script src="js/subirvideo.js"></script>
   <script src="js/sweetalert2.js"></script>
+
+  <!-- datatables JS -->
+  <script src="vendor/popper/popper.min.js"></script>
+  <script type="text/javascript" src="vendor/DataTables/datatables.min.js"></script>
+  <script src="vendor/DataTables/Buttons-1.6.3/js/dataTables.buttons.min.js"></script>
+  <script src="vendor/DataTables/JSZip-2.5.0/jszip.min.js"></script>
+  <script src="vendor/DataTables/Buttons-1.6.3/js/buttons.html5.min.js"></script>
+  <script type="text/javascript" src="js/datatable-lanzador.js"></script>
+
 </body>
 
 </html>
