@@ -59,3 +59,11 @@
   width: auto !important;
   height: auto !important;
  }
+ /*estilos para la tabla*/
+ .tcabecera {
+  background-color: #254666 !important;
+  color: white;
+}
+table>tbody>tr>td {
+  vertical-align: middle !important;
+}
