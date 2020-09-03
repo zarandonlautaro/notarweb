@@ -12,7 +12,7 @@ $(function () {
 
 $("#menu-toggle").click(function (e) {
     e.preventDefault();
-    $("#wrapper").toggleClass("toggled");//agregamos la classe toggle al wrapper para que aparezca y desaparezca la barra lateral 
+    $("#wrapper").toggleClass("toggled"); //agregamos la classe toggle al wrapper para que aparezca y desaparezca la barra lateral 
 });
 
 //Realizamos la carga de cursos cuando la página ya está lista
@@ -38,11 +38,11 @@ function carga(operacion, categoria, subcategoria) {
 
         },
         beforeSend: function () { //Previo a la peticion tenemos un cargando
-            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
         },
         success: function (rs) {
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
             //console.log(rs);
 
 
@@ -136,38 +136,54 @@ function carga(operacion, categoria, subcategoria) {
                 } else {
                     //------------------mostramos los cursos en el body en forma de tabla con la opcion de modificar y eliminar---------- 
                     jumbotron(true, 'Modificar Cursos', '');
-                    let tabla = '<div class="container"> <table class="table table-light table-responsive-sm ">' +
+                    let tabla = '<div class="container"> <table id="table" class="table table-light table-responsive-sm ">' +
                         '<thead class="thead-dark">' +
                         '<tr>' +
-                        '<th scope="col">#</th>' +
-                        '<th scope="col">Curso</th>' +
-                        '<th colspan="2" scope="col" class="text-center">Opciones</th>' +
-
+                        '<th>#</th>' +
+                        '<th>Curso</th>' +
+                        '<th></th>' +
+                        '<th>Opciones</th>' +
+                        '<th></th>' +
                         '</tr>' +
-                        '</thead>';
+                        '</thead>' +
+                        '<tbody>';
                     $.each(courses, (i, r) => {
 
                         tabla +=
-                            '<tbody>' +
+
                             '<tr>' +
-                            '<th scope="row">' + (i + 1) + '</th>' +
-                            '<td>' + r['name'] + '</td>' +
-                            '<td colspan="2">' +
 
-                            '<div class="row d-flex justify-content-around">' +
-                            '<div class="col "> <button class="modificar-curso btn btn-dark"  id="' + r['id'] + '" >Modificar</button> </div>' +
-                            '<div class="col "> <button class="modificar-videos btn btn-info" id="' + r['id'] + '" >Modificar Videos</button> </div>' +
-                            '<div class="col"> <button class="eliminar-curso btn btn-danger" ide="' + r['id'] + '" id="curso' + r['id'] + '" >Eliminar</button></div>' +
-                            '</div>' +
+                            '<th >' + (i + 1) +
+                            '</th>' +
 
-                            '</td>' +
+                            '<th>' + r['name'] +
+                            '</th>' +
+
+                            '<th>' +
+                            '<a class="modificar-curso text-decoration-none btn btn-info" href="#"  id="' + r['id'] + '" >Modificar</a>' +
+                            '</th>' +
+
+                            '<th>' +
+                            '<a class="modificar-videos text-decoration-none btn btn-secondary" href="#"  id="' + r['id'] + '" >Modificar videos</a>' +
+                            '</th>' +
+
+                            '<th>' +
+                            '<a id="curso' + r['id'] + '" class="eliminar-curso text-decoration-none btn btn-danger" href="#"  ide="' + r['id'] + '" >Eliminar</a>' +
+                            '</th>' +
 
                             '</tr>';
-
 
                     });
                     tabla += '</tbody></table> </div>';
                     $('#contenedor_home').empty().append(tabla);
+
+
+                    $.getScript("js/datatable-lanzador.js", function () {
+
+
+                    });
+
+                    $('.buttons-excel').hide();
 
 
                 }
@@ -181,7 +197,7 @@ function carga(operacion, categoria, subcategoria) {
                 $(".modificar-videos").click(function () {
 
                     let id = $(this).attr("id");
-                    mostrarcurso(id, true);//el segundo parametro habilita la modificacion del curso
+                    mostrarcurso(id, true); //el segundo parametro habilita la modificacion del curso
                 });
 
                 $(".eliminar-curso").click(function () {
@@ -235,7 +251,7 @@ function cargacategorias() {
 
 
             //console.log(cat);
-            $.getScript("./js/dropdown.js", function () { });//llamamos a dropdown.js par recargar el script con los datos traidos de la BD
+            $.getScript("./js/dropdown.js", function () {}); //llamamos a dropdown.js par recargar el script con los datos traidos de la BD
             $('#categorias').empty().append(cat);
 
 
@@ -283,7 +299,9 @@ function cargacurso() {
         $.ajax({
             url: "php/check_curso_comprado.php",
             method: "POST",
-            data: { "idcourse": id },
+            data: {
+                "idcourse": id
+            },
             beforeSend: function () { //Previo a la peticion tenemos un cargando
                 $('#curso' + id).removeClass('btn-success');
                 $('#curso' + id).addClass('btn-dark');
@@ -320,11 +338,10 @@ function cargacurso() {
                     //$('#contenedor_home').empty().append('Aqui estará el curso');
                     //$('#video').attr('src', "coursesvideos/" + rs['videoname']);
                     //$('#modalvideo').modal("show");
-
+                    let sessionrol = $('#role').val();
                     $('#jumbotron').removeClass('d-none');
                     $('#jumbotron').addClass('d-block');
-                    $('#jumbotron').empty().append(
-                        '<div class="container">' +
+                    let videostarjeta = '<div class="container">' +
                         /*'<h1 class="display-4"> '+rs['name  ']+' </h1>'+
                         
                         '<p class="lead">¿Listo para continuar? </p>'+*/
@@ -339,20 +356,101 @@ function cargacurso() {
                         '<p class="card-text">' + rs['description'] + '</p>' +
                         // '<p class="card-text"><small class="text-muted">' + rs['description'] + '</small></p>' +
                         '</div>' +
+                        '</div>';
+                    if (sessionrol == 0) {
+                        videostarjeta += '<div class="mt-3 d-flex justify-content-end ">' +
+                            '<a id="view" href="#" class="text-info font-weight-bold text-decoration-none" >Visualizaciones   <i class="fas fa-download"></i></a>' +
+                            '</div>';
+                    }
+
+                    videostarjeta +=
                         '</div>' +
                         '</div>' +
+                        '</div>';
+
+                    videostarjeta +=
+                        '<div class="container d-flex justify-content-center  " id="ventana-admin">' +
+
+                        '<div id="box1" style="background:white;" class="mainbox-sm col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1 mb-5 d-none ">' +
+
+                        '<div class="panel panel-info">' +
+                        '<div class="modal-header">' +
+                        '<div class="panel-title ">Seleccione periodo </div> <i class="fas fa-photo-video"></i>' +
+
+                        '</div>' +
+
+                        '<div style="padding-top:30px" class="panel-body">' +
+
+                        '<form id="form-views" class="form-horizontal" >' +
+                        '<input type="hidden" name="courseid" value="' + id + '" />' +
+                        '<div class="form-group">' +
+                        '<label for="date1">Desde</label>' +
+                        '<input type="text" id="date1" class="form-control datepicker" name="date1" value="" placeholder="Fecha inicio" data-date-format="mm/dd/yyyy">' +
+
+                        '</div>' +
+
+                        '<div class="form-group">' +
+                        '<label for="date2">Hasta</label>' +
+                        '<input type="text" id="date2" class="form-control datepicker" name="date2" value="" placeholder="Fecha Fin" data-date-format="mm/dd/yyyy">' +
                         '</div>' +
 
 
+                        '<div style="margin-top:10px" class="form-group">' +
+                        '<div class="col-sm-12 controls">' +
+                        '<button id="find-views" type="submit"  class="btn btn-warning">Consultar</button>' +
+                        '<a id="courses-back-button" href="#" class="text-info font-weight-bold text-decoration-none"style="float:right; font-size: 80%; position: relative;" >Volver</a>' +
+                        '</div>' +
+                        '</div>' +
 
 
+                        '<div id="alert">' +
+
+                        '</div>' +
+
+                        '</form>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $('#jumbotron').empty().append(videostarjeta);
+
+                    $('#courses-back-button').click(function (e) {
+                        $('#box1').removeClass('d-block');
+                        $('#box1').addClass('d-none');
+                        $('#accordion').removeClass('d-none');
+                        $('#accordion').addClass('d-block');
+
+                    });
+                    $('#view').click(function (e) {
+                        $('#accordion').removeClass('d-block');
+                        $('#accordion').addClass('d-none');
+                        $('#box1').removeClass('d-none');
+                        $('#box1').addClass('d-block');
+
+                    });
+                    $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js", function () {
+                        $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js", function () {
+                            $('.datepicker').datepicker({
+                                uiLibrary: 'bootstrap4',
+                                language: 'es',
+                                format: 'dd-mm-yyyy'
+                            });
+
+                            $('.datepicker').datepicker()
+                                .on('changeDate', function (ev) {
+                                    $('.datepicker').datepicker('hide');
+                                });
+
+                        });
+
+                    });
+                    $('#find-views').click(function (e) {
+                        e.preventDefault();
+                        viewsquery();
+
+                    });
 
 
-                        '</div>'
-
-                    );
-
-                    mostrarcurso(id, false);//el segundo parametro habilita la edicion lo pasamos como falso
+                    mostrarcurso(id, false); //el segundo parametro habilita la edicion lo pasamos como falso
 
 
 
@@ -369,12 +467,12 @@ function cargacurso() {
                         $('#pago').empty();
                         var form = document.createElement("form");
                         form.method = "POST";
-                        form.action = "/mendumy2/mendumy/mendumy/home.php";//"/procesar-pago";
+                        form.action = "/mendumy2/mendumy/mendumy/home.php"; //"/procesar-pago";
                         form.id = "form_pago";
                         document.getElementById('pago').appendChild(form);
                         var script = document.createElement("script");
                         script.type = "text/javascript";
-                        script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';    // use this for linked script
+                        script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js'; // use this for linked script
                         script.setAttribute("data-preference-id", preferenceid);
                         document.getElementById('form_pago').appendChild(script);
 
@@ -401,6 +499,137 @@ function cargacurso() {
         });
     });
 }
+
+
+function viewsquery() {
+
+
+    let elemento = 'view';
+    let operacion = 'consultar';
+    var Form = new FormData($("#form-views")[0]);
+    Form.append('operacion', operacion);
+    Form.append('elemento', elemento);
+
+    $.ajax({
+
+        url: "./php/abmc.php",
+        type: "post",
+        dataType: "html",
+        data: Form,
+        cache: false,
+        contentType: false,
+        processData: false,
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+            $('#find-views').removeClass('btn-warning');
+            $('#find-views').addClass('btn-dark');
+            $('#find-views').html('<span class="spinner-border spinner-border-sm" disabled></span>');
+
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+            $('#find-views').removeClass('disabled');
+            $('#find-views').addClass('btn-primary');
+            $('#find-views').html('Consultar');
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+            $('#find-views').removeClass('btn-info');
+            $('#find-views').removeClass('btn-dark');
+            $('#find-views').addClass('btn-warning');
+            $('#find-views').html('Consultar');
+        },
+
+        success: function (data) {
+            //console.log("Resultado de la peticion " + data);
+            //$('#alert').addClass('alert-warning');
+            let r = JSON.parse(data);
+            //console.log(r);
+            if (r == 1) {
+                $('#alert').empty().append('<h6 class="alert alert-info mb-2"> <strong>No hay visualizaciones en el rango introducido.</strong></h6>');
+            } else {
+                printTablaView(r);
+
+
+            }
+
+        }
+
+    });
+
+
+
+
+}
+
+function printTablaView(data) {
+
+
+    //tabla creamos la tabla 
+    let tabla =
+        '<div class="container">' +
+        '<div class="row">' +
+        '<div class="col-lg-12">' +
+        '<div class="table-responsive">' +
+        '<table id="table" class="table table-striped table-bordered" style="width:100%">' +
+        '<thead class="tcabecera">' +
+        '<tr>' +
+        '<th>Video</th>' +
+        '<th>Nombre</th>' +
+        '<th>Apellido</th>' +
+        '<th>DNI</th>' +
+        '<th>Fecha</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>';
+    //lista elementos de tabla
+    $.each(data, (i, r) => {
+
+        tabla +=
+            '<tr>' +
+            '<th>' + r["title"] + '</th>' +
+            '<th>' + r["name"] + '</th>' +
+            '<th>' + r["lastname"] + '</th>' +
+            '<th>' + r["dni"] + '</th>' +
+            '<th>' + r["date"] + '</th>' +
+            '</tr>';
+    });
+    tabla +=
+        '</tbody>' +
+        '</table>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    //imprimimos
+    $('#jumbotron').empty().append(tabla);
+
+    $.getScript("vendor/popper/popper.min.js", function () {
+        $.getScript("vendor/DataTables/datatables.min.js", function () {
+            $.getScript("vendor/DataTables/Buttons-1.6.3/js/dataTables.buttons.min.js", function () {
+                $.getScript("vendor/DataTables/JSZip-2.5.0/jszip.min.js", function () {
+                    $.getScript("vendor/DataTables/Buttons-1.6.3/js/buttons.html5.min.js", function () {
+                        $.getScript("js/datatable-lanzador.js", function () {
+
+
+
+                        });
+
+
+                    });
+
+
+                });
+
+            });
+
+        });
+
+    });
+
+}
+
+
 
 function eliminarcurso(id) {
     let elemento = 'curso';
@@ -440,13 +669,12 @@ function eliminarcurso(id) {
 
         success: function (data) {
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
 
             //$('#alert').addClass('alert-warning');
             if (data == 1) {
-                $('#curso' + id).closest("tr").remove();//navego hasta el tr y lo borro 
-            }
-            else {
+                $('#curso' + id).closest("tr").remove(); //navego hasta el tr y lo borro 
+            } else {
                 alert("error al eliminar curso");
             }
 
@@ -463,7 +691,7 @@ function mostrarcurso(idcurso, modificar) {
     // console.log("id del curso a mostrar" + idcurso);
     $.ajax({
 
-        url: "./php/consulta_cursos.php",//hacemos una peticion al archivo de altabajamodificacion consulta
+        url: "./php/consulta_cursos.php", //hacemos una peticion al archivo de altabajamodificacion consulta
         type: "post",
         data: {
             'idcurso': idcurso,
@@ -473,8 +701,8 @@ function mostrarcurso(idcurso, modificar) {
 
         beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
         },
         error: function (error) { //Si ocurre un error en el ajax
             //alert("Error, reintentar. "+error);
@@ -487,7 +715,7 @@ function mostrarcurso(idcurso, modificar) {
         success: function (data) {
             //escondemos el jumbotron de bienvenida
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
 
             let rs = JSON.parse(data);
             //console.log(rs);
@@ -544,12 +772,31 @@ function mostrarcurso(idcurso, modificar) {
 
                 });
 
+                function registrarview(videoid, courseid) {
+                    $.ajax({
 
+                        url: "./php/abmc.php",
+                        type: "post",
+                        data: {
+                            'courseid': courseid,
+                            'videoid': videoid,
+                            'operacion': 'registrar',
+                            'elemento': 'view',
+
+                        },
+
+                        success: function (data) {
+
+                            console.log(data);
+
+                        }
+                    });
+                }
                 //Funcion que se ejecuta cuando presionamos un videos
                 $(".boton_video").click(function () {
 
                     $('.modal-body').empty();
-                    $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                    $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
                     $('#carga_cursos').show("fast");
                     $('#carga_cursos').hide("fast");
 
@@ -558,6 +805,7 @@ function mostrarcurso(idcurso, modificar) {
                     let idcourse = $(this).attr("curso");
                     let id = $(this).attr("id");
                     let tema = $(this).attr("tema");
+                    registrarview(id, idcourse);
                     //console.log(tema);
                     //console.log(rs[0]['videos'][0]['archivos']);
                     let description;
@@ -599,7 +847,7 @@ function mostrarcurso(idcurso, modificar) {
 
                     });
                     archivos += '</ul>';
-                    console.log(archivos);
+                    //console.log(archivos);
                     //preparamos video card del curso
                     videocard =
                         '<div class=" row justify-content-center" >' +
@@ -615,7 +863,7 @@ function mostrarcurso(idcurso, modificar) {
                         archivos +
                         '<div class="container d-flex justify-content-around mb-3 mt-3 ">' +
                         '<button class=" btn btn-md p-1  btn-outline-dark mr-2 col-xs-12 col-xl-4"  id="' + idcourse + '">Volver</button>' +
-                        '<a class=" btn btn-md p-1  btn-warning mr-2 col-xs-12 col-xl-4" href="mailto:soporte@notarweb.com.ar" id="video' + id + '">Consultas</a>' +
+                        '<a class=" btn btn-md p-1  btn-warning mr-2 col-xs-12 col-xl-4" href="mailto:soporte@notarweb.com.ar?subject=consulta en ' + title + '" id="video' + id + '">Consultas</a>' +
                         '</div>' +
                         '</div>' +
 
@@ -634,7 +882,7 @@ function mostrarcurso(idcurso, modificar) {
 
                     });
                     $('#' + idcourse).click(function () {
-                        console.log(idcourse);
+                        //console.log(idcourse);
                         mostrarcurso(idcourse);
 
                     });
@@ -647,7 +895,7 @@ function mostrarcurso(idcurso, modificar) {
                 //---------------------------------------MODIFICAR VIDEOS --------------------------------------------------
                 //--------------------------ENCABEZADO DE LA TABLA-----------------------------------------------
                 if (rs == 2) {
-                    console.log("se dio el caso 1");
+                    //console.log("se dio el caso 1");
                 }
                 listarvideos(rs);
                 modificarvideo();
@@ -787,13 +1035,12 @@ function eliminarvideo(id) {
 
         success: function (data) {
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
 
             //$('#alert').addClass('alert-warning');
             if (data == 1) {
-                $('#video' + id).closest("tr").remove();//navego hasta el tr y lo borro 
-            }
-            else {
+                $('#video' + id).closest("tr").remove(); //navego hasta el tr y lo borro 
+            } else {
                 alert("error al eliminar video");
             }
 
@@ -818,13 +1065,15 @@ function modificarvideo() {
 
             url: "./php/subirvideo.php",
             type: "post",
-            data: { 'id': id },
+            data: {
+                'id': id
+            },
 
 
             beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+                $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
@@ -836,7 +1085,7 @@ function modificarvideo() {
 
             success: function (data) {
 
-                $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+                $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
                 //console.log(data);
                 //$('#alert').addClass('alert-warning');
                 $('#contenedor_home').empty().append(data);
@@ -862,15 +1111,15 @@ function subircurso(ok) {
     if (ok) {
         $.ajax({
 
-            url: "./php/admin.php",//script para subir cursos a la base de datos
+            url: "./php/admin.php", //script para subir cursos a la base de datos
             type: "post",
             data: ok,
 
 
             beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+                $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
@@ -882,7 +1131,7 @@ function subircurso(ok) {
 
             success: function (data) {
 
-                $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+                $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
                 //console.log(data);
                 //$('#alert').addClass('alert-warning');
                 $('#contenedor_home').empty().append(data);
@@ -899,6 +1148,7 @@ function subircurso(ok) {
     }
 
 }
+
 function jumbotron(accion, titulo, subtitulo) {
 
 
@@ -937,8 +1187,8 @@ function subirvideo(ok) {
 
             beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+                $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
             },
             error: function (error) { //Si ocurre un error en el ajax
                 //alert("Error, reintentar. "+error);
@@ -950,7 +1200,7 @@ function subirvideo(ok) {
 
             success: function (data) {
 
-                $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+                $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
                 //console.log(data);
                 //$('#alert').addClass('alert-warning');
                 $('#contenedor_home').empty().append(data);
@@ -967,21 +1217,24 @@ function subirvideo(ok) {
     }
 
 }
+
 function modificarcurso(id) {
     $('#contenedor_home').empty();
 
 
     $.ajax({
 
-        url: "./php/admin.php",//formulario de subida de cursos
+        url: "./php/admin.php", //formulario de subida de cursos
         type: "post",
-        data: { "id": id },
+        data: {
+            "id": id
+        },
 
 
         beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
         },
         error: function (error) { //Si ocurre un error en el ajax
             //alert("Error, reintentar. "+error);
@@ -993,7 +1246,7 @@ function modificarcurso(id) {
 
         success: function (data) {
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
             //console.log(data);
             //$('#alert').addClass('alert-warning');
             $('#contenedor_home').empty().append(data);
@@ -1008,6 +1261,7 @@ function modificarcurso(id) {
     });
 
 }
+
 function cartelModal(contenido, tipo) {
     let cartel = '<div  class="text-center alert alert-' + tipo + ' fade show mb-4" role="alert">' + contenido + '</div>';
 
@@ -1015,6 +1269,7 @@ function cartelModal(contenido, tipo) {
     $('#pago').empty().append(cartel);
     $('#exampleModal').modal('show');
 }
+
 function resultadocompra() {
 
 
@@ -1033,27 +1288,33 @@ function resultadocompra() {
             if (status == 'approved') {
                 successBuy(id, credentialid);
                 cartelModal('¡Felicidades, has adquirido el curso <b>' + curso + '</b>!', "success");
-                window.history.replaceState(null, null, window.location.pathname);//limpiamos url
-            }
-            ; break;
+                window.history.replaceState(null, null, window.location.pathname); //limpiamos url
+            };
+            break;
         case "pending":
             cartelModal('¡Gracias por iniciar la compra de <b>' + curso + '</b>!, una vez que se registre el pago podrás ingresar al curso.', "info");
-            window.history.replaceState(null, null, window.location.pathname);//limpiamos url
-            ; break;
+            window.history.replaceState(null, null, window.location.pathname); //limpiamos url
+            ;
+            break;
     }
 
 
 }
+
 function successBuy(id, credentialid) {
     $.ajax({
         url: "./php/ml_checkout_response.php",
         type: "get",
-        data: { "id": id, "credentialid": credentialid },
+        data: {
+            "id": id,
+            "credentialid": credentialid
+        },
         success: function (r) {
             carga("todos", "", "");
         }
     });
 }
+
 function getRegistrados() {
     $.ajax({
         url: "./php/getRegistrados.php",
@@ -1072,13 +1333,15 @@ function ventas(id) {
 
         url: "./php/ventas.php",
         type: "post",
-        data: { "id": id },
+        data: {
+            "id": id
+        },
 
 
         beforeSend: function () { //Previo a la peticion tenemos un cargando
 
-            $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-            $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
         },
         error: function (error) { //Si ocurre un error en el ajax
             //alert("Error, reintentar. "+error);
@@ -1090,7 +1353,7 @@ function ventas(id) {
 
         success: function (data) {
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
             //console.log(data);
             //$('#alert').addClass('alert-warning');
             $('#contenedor_home').empty().append(data);
@@ -1104,6 +1367,10 @@ function ventas(id) {
                         language: 'es',
                         format: 'dd-mm-yyyy'
                     });
+                    $('.datepicker').datepicker()
+                        .on('changeDate', function (ev) {
+                            $('.datepicker').datepicker('hide');
+                        });
                     //se cargan los cursos en el select
                     ventacursos();
 
@@ -1127,7 +1394,7 @@ function ventacursos() {
 
     $.ajax({
 
-        url: "./php/traer_cursos_main.php",//script para subir cursos a la base de datos
+        url: "./php/traer_cursos_main.php", //script para subir cursos a la base de datos
         type: "post",
         data: {
             "operacion": operacion,
@@ -1194,7 +1461,7 @@ function cargaventas(operation, date1, date2, courseid) {
 
     $.ajax({
 
-        url: "./php/traer_ventas_main.php",//script para subir cursos a la base de datos
+        url: "./php/traer_ventas_main.php", //script para subir cursos a la base de datos
         type: "post",
         data: {
 
@@ -1222,13 +1489,36 @@ function cargaventas(operation, date1, date2, courseid) {
         success: function (data) {
 
             //$('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
-            console.log(data);
+            //console.log(data);
             //$('#alert').addClass('alert-warning');
             if (data == 1) {
-                console.log("Error");
+                //console.log("Error");
                 $('#alert').empty().append('<h6 class="alert alert-info"> <strong>Introduzca todos los campos</strong>. </h6>');
             } else {
                 $('#contenedor_home').empty().append(data);
+                $.getScript("vendor/popper/popper.min.js", function () {
+                    $.getScript("vendor/DataTables/datatables.min.js", function () {
+                        $.getScript("vendor/DataTables/Buttons-1.6.3/js/dataTables.buttons.min.js", function () {
+                            $.getScript("vendor/DataTables/JSZip-2.5.0/jszip.min.js", function () {
+                                $.getScript("vendor/DataTables/Buttons-1.6.3/js/buttons.html5.min.js", function () {
+                                    $.getScript("js/datatable-lanzador.js", function () {
+
+
+
+                                    });
+
+
+                                });
+
+
+                            });
+
+                        });
+
+                    });
+
+                });
+
             }
 
 
@@ -1237,13 +1527,13 @@ function cargaventas(operation, date1, date2, courseid) {
     });
 
 }
-//funcion para consultar las ventas de un curso seleccionado en un rango de fechas
+//funcion para consultar las credenciales
 function credenciales(operation, credential, name, id) {
 
 
     $.ajax({
 
-        url: "./php/credentials.php",//script para subir cursos a la base de datos
+        url: "./php/credentials.php", //script para subir cursos a la base de datos
         type: "post",
         data: {
 
@@ -1258,11 +1548,11 @@ function credenciales(operation, credential, name, id) {
         beforeSend: function () { //Previo a la peticion tenemos un cargando
 
             if (operation == "traer2" || operation == "guardar" || operation == "eliminar" || operation == "modificar") {
-                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
 
             } else {
-                $('#contenedor_home').empty();//vaciamos el contenedor en el cual van a cargarse los cursos
-                $('#carga_cursos').show("fast");//mostramos rapidamente los elementos que representan a los cursos
+                $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+                $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
             }
         },
         error: function (error) { //Si ocurre un error en el ajax
@@ -1275,7 +1565,7 @@ function credenciales(operation, credential, name, id) {
 
         success: function (data) {
 
-            $('#carga_cursos').hide("fast");//escondemos rapidamente los elementos que representan a los cursos
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
 
             //console.log(data);
             //$('#alert').addClass('alert-warning');
@@ -1294,7 +1584,7 @@ function credenciales(operation, credential, name, id) {
 
             $('.modificar-credencial').click(function () {
 
-                let id = $(this).attr("id");//obtenemos id de la credencial
+                let id = $(this).attr("id"); //obtenemos id de la credencial
                 let name = $('#credentialname' + id).val();
                 let credential = $('#credential' + id).val();
                 //console.log("name: " + name + " credential: " + cred + " id: " + id);
@@ -1325,7 +1615,7 @@ function credenciales(operation, credential, name, id) {
             });
             $('#guardar-credencial').click(function () {
 
-                var opcion = true//confirm("¿Esta seguro que desea eliminar este curso?");
+                var opcion = true //confirm("¿Esta seguro que desea eliminar este curso?");
                 if (opcion == true) {
 
                     let name = $('#credentialname').val();
@@ -1343,6 +1633,183 @@ function credenciales(operation, credential, name, id) {
 
 
             });
+
+
+        }
+
+    });
+
+}
+//traer el formulario de perfil
+function formPerfil(id) {
+    $('#contenedor_home').empty();
+
+
+    $.ajax({
+
+        url: "./php/form_perfil.php", //formulario de subida de cursos
+        type: "post",
+        data: {
+            "userid": id
+        },
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            $('#contenedor_home').empty().append(data);
+
+            //buscamos el id traido de la BD de las profesiones dentro de los values del select de profesiones
+            $('#input-select-formacion option').each(function () {
+                //console.log($(this).val() + " " + $(this).text());
+                let idprofesion = $('#input-select-formacion').attr("idprofesion");
+
+                if ($(this).val() == idprofesion) {
+
+                    $(this).attr("selected", idprofesion);
+
+                }
+            });
+
+            $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js", function () {
+                $.getScript("./vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js", function () {
+                    $('.datepicker').datepicker({
+                        uiLibrary: 'bootstrap4',
+                        language: 'es',
+                        format: 'dd-mm-yyyy'
+                    });
+                });
+            });
+            $('#change-pass').click(function (e) {
+                $('#loginbox1').removeClass('d-block');
+                $('#loginbox1').addClass('d-none');
+                $('#loginbox2').removeClass('d-none');
+                $('#loginbox2').addClass('d-block');
+
+            });
+            $('#back-perfil').click(function (e) {
+                $('#loginbox2').removeClass('d-block');
+                $('#loginbox2').addClass('d-none');
+                $('#loginbox1').removeClass('d-none');
+                $('#loginbox1').addClass('d-block');
+
+            });
+
+            $('#guardarDatos').click(function (e) {
+                e.preventDefault();
+                datoPerfil("modificar", "");
+            });
+            $('#cambiarPass').click(function (e) {
+                e.preventDefault();
+                datoPerfil("modificar", "contraseña");
+            });
+
+        }
+
+    });
+
+}
+//funcion traer,consultar y modificar datos personales
+function datoPerfil(operation, dato) {
+
+    if (dato != "contraseña") {
+        var datos = new FormData($("#formPerfil")[0]);
+        datos.append('operacion', operation);
+        datos.append('dato', dato);
+        datos.append('elemento', "perfil");
+    } else {
+        var datos = new FormData($("#passForm")[0]);
+        datos.append('operacion', operation);
+        datos.append('dato', dato);
+        datos.append('elemento', "perfil");
+    }
+
+    $.ajax({
+
+        url: "./php/abmc.php", //script para subir cursos a la base de datos
+        type: "post",
+        dataType: "html",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
+            console.log(data);
+            switch (data) {
+                case "1":
+                    $('#alert').empty().append('<h6 class="alert alert-success"> <strong>¡Guardado exitoso!</strong>. </h6>');
+                    $('#alert1').empty().append('<h6 class="alert alert-success"> <strong>¡Guardado exitoso!</strong>. </h6>');;
+                    break;
+                case "2":
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong>¡Error!</strong></h6>');
+                    $('#alert1').empty().append('<h6 class="alert alert-warning"> <strong>¡Error!</strong></h6>');;
+                    break;
+                case "3":
+                    $('#alert1').empty().append('<h6 class="alert alert-warning"> <strong> *La contraseña y su confirmación deben ser iguales <br>*y  su longitud mayor a 7 caracteres</strong>. </h6>');;
+                    break;
+                case "4":
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong> *Recuerde no dejar campos vacios! </strong>. </h6>');;
+                    break;
+                case "5":
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong> *el dni debe ser un campo numerico! </strong>. </h6>');;
+                    break;
+                case "6":
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong> *Solo caraceteres alfabéticos.</br>*No deje campos vacíos</strong> </h6>');;
+                    break;
+                case "7":
+                    $('#alert').empty().append('<h6 class="alert alert-warning"> <strong> *Seleccione formación.</strong> </h6>');;
+                    break;
+                default:
+                    $('#contenedor_home').append(data);
+                    break;
+
+            }
+
+
+
+
+            $('.modificar-datos').click(function () {
+
+                /*
+                let id = $(this).attr("id");//obtenemos id de la credencial
+                let name = $('#credentialname' + id).val();
+                let credential = $('#credential' + id).val();
+                //console.log("name: " + name + " credential: " + cred + " id: " + id);
+                credenciales("modificar", credential, name, id);*/
+
+            });
+
+
 
 
         }
@@ -1404,7 +1871,11 @@ $(document).ready(function () {
 
     });
 
+    $('#datosPersonales').click(() => {
+        jumbotron(true, 'Datos personales', '');
+        formPerfil();
 
+    });
 
 
 });

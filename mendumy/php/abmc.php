@@ -2,7 +2,6 @@
 //ABMC =ALTA BAJA MODIFICACION Y CONSULTA
 require_once('../php/funcs.php');
 include("mysqli.php");
-
 //lectura de parámetros elemento puede ser: curso,tema o video
 if (isset($_POST['elemento']) && isset($_POST['operacion'])) {
 
@@ -35,13 +34,172 @@ switch ($elemento) {
         tema($operacion, $dato);
         break;
     case "video":
-        video($operacion,$dato);
+        video($operacion, $dato);
+        break;
+    case "perfil":
+        perfil($operacion, $dato);
+        break;
+    case "view":
+        view($operacion);
         break;
     default:
         //error("elemento");//opcion de elemento no inexistente
 }
+function view($operacion)
+{
 
+    function registraview()
+    {
+        $userid = $_SESSION['id'];
+        $videoid = $_POST["videoid"];
+
+        $sql = MySQLDB::getInstance()->query("SELECT * FROM views WHERE videoid='$videoid' and userid='$userid'");
+
+        if ($sql->num_rows != 0) {
+            echo 1; //view existente existente
+            die;
+        } else {
+            //realizamos el insert del nuevo tema   
+
+            $sql = MySQLDB::getInstance()->query("INSERT INTO views (videoid,userid,created) VALUES ('$videoid','$userid',now())");
+            die;
+        }
+    }
+
+    function consultaview()
+    {
+
+        $d1 = $_POST["date1"];
+        $d2 = $_POST["date2"];
+        $date2 = date("Y/m/d", strtotime($d2));
+        $date1 = date("Y/m/d", strtotime($d1));
+        //echo $date1."  ".$date2;
+        $courseid = $_POST["courseid"];
+        $sql = MySQLDB::getInstance()->query("SELECT title,id FROM videoscourse WHERE idcourse = '$courseid'");
+        $v = $sql;
+        //AND created BETWEEN '$d1' AND '$d2'
+       
+        while ($r = $sql->fetch_assoc()) {
+            $videoid = $r['id'];
+            $title = $r['title'];
+            $sql1 = MySQLDB::getInstance()->query("SELECT * FROM views WHERE videoid = '$videoid' AND created BETWEEN '$date1' AND '$date2'");
+
+            while ($r1 = $sql1->fetch_assoc()) {
+                $userid = $r1['userid'];
+                $q = MySQLDB::getInstance()->query("SELECT * FROM users WHERE id = '$userid'");
+                $user = $q->fetch_assoc();
+                $views[] = array(
+                    'name' => $user['name'], 'lastname' => $user['lastname'], 'dni' => $user['dni'],
+                    'date' => $r1['created'],'title' => $title
+                );
+            }
+            /*if (isset($views)) {
+                $videos[] = array(
+                    'id' => $r['id'], 'title' => $r['title'], 'views' => $views
+                );
+            }
+            unset($views);*/
+        }
+
+        if (isset($views)) {
+            echo json_encode($views);
+            die;
+        } else {
+            echo 1;
+            die;
+        }
+    }
+    switch ($operacion) {
+
+        case "registrar":
+            registraview();
+            break;
+        case "consultar":
+            consultaview();
+            break;
+        default:
+            //error("operacion");//opcion de operacion no inexistente
+    }
+}
 //FUNCIONES DE ELEMENTO CURSO
+function perfil($operacion, $dato)
+{
+
+    function modificaperfil($dato)
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+
+            $userid = $_SESSION['id'];
+        } else {
+            $userid = $_SESSION['id'];
+        }
+
+        if ($dato == "contraseña") {
+            $p1 = trim(filter_var($_POST['password'], FILTER_SANITIZE_STRING));
+            $p2 = trim(filter_var($_POST['con_password'], FILTER_SANITIZE_STRING));
+
+            if (validaPassword($p1, $p2) && longitudPass($p1)) {
+                $pass = $pass_hash = hash("SHA256", $p1);
+                $q1 = MySQLDB::getInstance()->query("UPDATE recover SET password_request=0,last_modification=NOW() WHERE idusr = '$userid'");
+                $q2 = MySQLDB::getInstance()->query("UPDATE users SET password='$pass' WHERE id = '$userid'");
+                if ($q1 && $q2) {
+                    echo 1;
+                    die;
+                }
+            } else {
+                echo 3; //"La contraseña y su confirmación deben ser iguales y longitud mayor a 7 caracteres";
+                die;
+            }
+        } else {
+            if (!is_numeric($_POST['formacion']) || !($_POST['formacion'] > 0 && $_POST['formacion'] < 6)) {
+                echo 7; //error
+                die;
+            }
+            if (!ctype_alnum(limpia_espacios($_POST['nombre'])) || !ctype_alnum(limpia_espacios($_POST['apellido']))) {
+                echo 6;
+                die;
+            }
+            if (!is_numeric($_POST['dni'])) {
+                echo 5;
+                die;
+            }
+            if (isNull($_POST['nombre'], $_POST['apellido'], $_POST['formacion'],  $_POST['dni'], $_POST['fecha'])) {
+                echo 4;
+                die;
+            }
+            $name = trim(filter_var($_POST['nombre'], FILTER_SANITIZE_STRING));
+            $lastname = trim(filter_var($_POST['apellido'], FILTER_SANITIZE_STRING));
+            $idprofesion = trim(filter_var($_POST['formacion'], FILTER_SANITIZE_STRING));
+            $dni = trim(filter_var($_POST['dni'], FILTER_SANITIZE_STRING));
+            $d = trim(filter_var($_POST['fecha'], FILTER_SANITIZE_STRING));
+            $date = date("Y/m/d", strtotime($d));
+            $q2 = MySQLDB::getInstance()->query("UPDATE users SET name='$name', lastname='$lastname', idprofesion='$idprofesion',dni='$dni', date_birth='$date' WHERE id = '$userid'");
+            if ($q2) {
+                echo 1;
+                die;
+            } else {
+                echo 2;
+                die;
+            }
+        }
+    }
+    function consultaperfil($dato)
+    {
+        $userid = $dato;
+    }
+    switch ($operacion) {
+
+        case "modificar":
+            modificaperfil($dato);
+            break;
+        case "consultar":
+            consultaperfil($dato);
+            break;
+        default:
+            //error("operacion");//opcion de operacion no inexistente
+    }
+}
 function curso($operacion, $dato)
 {
 
@@ -64,31 +222,29 @@ function curso($operacion, $dato)
         $idcourse = $dato;
         $sql3 = MySQLDB::getInstance()->query("SELECT * FROM files  WHERE idcourse = $idcourse ");
         while ($rs2 = $sql3->fetch_assoc()) {
-            
-                $namefile=$rs2['filename'];
-                $idfile=$rs2['id'];
-                filedelete($idfile,$namefile);
-           
+
+            $namefile = $rs2['filename'];
+            $idfile = $rs2['id'];
+            filedelete($idfile, $namefile);
         }
         $sql = MySQLDB::getInstance()->query("SELECT imgname FROM course WHERE id ='$idcourse'");
         $rs = $sql->fetch_assoc();
-        $imgname=$rs['imgname'];
-        $rutaImg="../imgcourses/" .$imgname;
+        $imgname = $rs['imgname'];
+        $rutaImg = "../imgcourses/" . $imgname;
         unlink($rutaImg);
-        
-        
+
+
 
         $sql = MySQLDB::getInstance()->query("DELETE FROM course WHERE id ='$idcourse'");
-        if($sql){
+        if ($sql) {
             echo 1;
             die;
-        }else{
-            echo 2;//error al borrar video
+        } else {
+            echo 2; //error al borrar video
             die;
         }
-
     }
-    
+
 
     function consultacursos($dato)
     {
@@ -115,7 +271,7 @@ function curso($operacion, $dato)
 
                 $curso = array(
                     'id' => $rs['id'], 'name' => $rs['name'], 'description' => $rs['description'],
-                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price'],'subcategory' => $rs['subcategory']
+                    'category' => $rs['category'], 'imgname' => $rs['imgname'], 'price' => $rs['price'], 'subcategory' => $rs['subcategory']
                 );
 
                 echo json_encode($curso);
@@ -137,7 +293,6 @@ function curso($operacion, $dato)
         }
         if ($_POST['credencial'] != "Seleccionar...") {
             $credentialid = trim(filter_var($_POST['credencial'], FILTER_SANITIZE_STRING));
-           
         } else {
             $msg[] = "Debe asignar credencial";
             echo resultBlock($msg, 2);
@@ -353,32 +508,28 @@ function video($operacion, $dato)
     //modificación
     function modificacionvideo()
     {
-        
     }
     //baja 
     function bajavideo($dato)
     {
-        
+
         $idvideo = $dato;
         $sql3 = MySQLDB::getInstance()->query("SELECT * FROM files  WHERE idvideo = $idvideo ");
         while ($rs2 = $sql3->fetch_assoc()) {
-            
-                $namefile=$rs2['filename'];
-                $idfile=$rs2['id'];
-                filedelete($idfile,$namefile);
-           
+
+            $namefile = $rs2['filename'];
+            $idfile = $rs2['id'];
+            filedelete($idfile, $namefile);
         }
-        
+
         $sql = MySQLDB::getInstance()->query("DELETE FROM videoscourse WHERE id ='$idvideo'");
-        if($sql){
+        if ($sql) {
             echo 1;
             die;
-        }else{
-            echo 2;//error al borrar video
+        } else {
+            echo 2; //error al borrar video
             die;
         }
-       
-    
     }
     //Consulta
     function consultavideos($dato)
@@ -386,29 +537,28 @@ function video($operacion, $dato)
         $idvideo = $dato;
         //consultamos en la tabla de videos un video que tenga el mismo id
         $sql2 = MySQLDB::getInstance()->query("SELECT * FROM videoscourse  WHERE id = $idvideo");
-        
+
         while ($rs1 = $sql2->fetch_assoc()) {
-            
+
             $idvideo = $rs1['id'];
             $sql3 = MySQLDB::getInstance()->query("SELECT * FROM files  WHERE idvideo = $idvideo ");
             while ($rs2 = $sql3->fetch_assoc()) {
                 $archivos[] = array(
-                    'id'=>$rs2['id'], 'name' => $rs2['name'], 'filename' => $rs2['filename']
+                    'id' => $rs2['id'], 'name' => $rs2['name'], 'filename' => $rs2['filename']
                 );
             }
 
             if (!isset($archivos)) {
                 $videos = array(
-                    'idtheme' => $rs1['idtheme'],'idcourse' => $rs1['idcourse'],'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'], 
+                    'idtheme' => $rs1['idtheme'], 'idcourse' => $rs1['idcourse'], 'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'],
                     'description' => $rs1['description']
                 );
             } else {
                 $videos = array(
-                    'idtheme' => $rs1['idtheme'],'idcourse' => $rs1['idcourse'],'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'], 
+                    'idtheme' => $rs1['idtheme'], 'idcourse' => $rs1['idcourse'], 'id' => $rs1['id'], 'name' => $rs1['name'], 'title' => $rs1['title'],
                     'description' => $rs1['description'], 'archivos' => $archivos
                 );
             }
-            
         }
         echo json_encode($videos); //  Array de videos
         die;
@@ -436,4 +586,3 @@ function video($operacion, $dato)
 function error($tipoerror)
 {
 }
-?>
