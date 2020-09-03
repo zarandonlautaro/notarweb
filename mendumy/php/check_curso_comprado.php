@@ -109,7 +109,7 @@ if (isset($_POST['idcourse'])) {
                 if ($rs['price']==0) {
                     
                    
-                    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now()) ");
+                    $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser  (idcourse,iduser,saledate,paid) VALUES ('$idcourse','$iduser',now(),0) ");
 
 
                     
