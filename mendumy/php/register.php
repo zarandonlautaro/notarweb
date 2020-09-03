@@ -57,14 +57,14 @@ if ($valido) {
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$response}");
     $captcha_success = json_decode($verify);//decodifica el json y devuelve array asociativo 
     //fin reCaptcha Script--------------------------------------------------------------------------------------------------
-
+   // $captcha_success->success = true;
     if ($captcha_success->success == false) {
         //This user was not verified by recaptcha.
         echo 3; //No hizo el captcha
         die;
     } else if ($captcha_success->success == true) {
         //generamos hashes
-       	$pass_hash = hash("SHA256", $pass);
+        $pass_hash = hash("SHA256", $pass);
         $token = generateToken();
         $active=0;
 
@@ -72,19 +72,24 @@ if ($valido) {
         if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE username='$email'")->num_rows !=0){
             echo 4;//correo en uso
             die; 
-        }  
+        }
         if(MySQLDB::getInstance()->query("SELECT username FROM users WHERE dni='$dni'")->num_rows !=0){
             echo 5;//correo en uso
             die; 
         }
-        
-        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, idprofesion, dni, date_birth, username , password,active,token,	creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now()) ");
+    
+        $sql = MySQLDB::getInstance()->query("INSERT INTO users (name, lastname, idprofesion, dni, date_birth, username , password,active,token,creation_date) VALUES ('$name', '$lastname', '$legajo','$dni','$dateb', '$email' ,'$pass_hash','$active','$token',now())");
         $sqlid = MySQLDB::getInstance()->query("SELECT LAST_INSERT_ID() as idusr");
         $id = $sqlid->fetch_assoc();
         $iduser=$id['idusr'];
         $auth = MySQLDB::getInstance()->query("INSERT INTO auth (idusr) VALUES ('$iduser') ");
         //$sql = MySQLDB::getInstance()->query("INSERT INTO auth (idusr, last_auth) VALUES ( '$iduser', NOW() )"); //ultima logeo
-
+        /*if (!$sql) {
+        echo "user id ".$iduser.'  ';
+        echo $name.' '.$lastname.' '.$legajo.' '.$dni.' '.$dateb.' '.$email.' '.$pass_hash.' '.$active.' '.$token." ".$sql ;
+        //echo  " error al leer base de datos";
+        die;
+        }*/
         if (sendMail($email, 1, $iduser, $token) && $sql) {
             echo 1;
             die;
