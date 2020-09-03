@@ -87,7 +87,7 @@ function sendMail($to, $tipo, $idusr = 0, $add = 0)
         $mail->Port       = 587;                                    // TCP port to connect to
         $mail->CharSet = 'UTF-8';
         //Recipients
-        $mail->setFrom('brunomailtest@gmail.com', 'Mendumy');
+        $mail->setFrom('brunomailtest@gmail.com', 'Mailer');
         $mail->addAddress($to);     // Add a recipient
 
         // Attachments
