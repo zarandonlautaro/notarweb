@@ -574,6 +574,7 @@ function printTablaView(data) {
         '<table id="table" class="table table-striped table-bordered" style="width:100%">' +
         '<thead class="tcabecera">' +
         '<tr>' +
+        '<th>Tema</th>' +
         '<th>Video</th>' +
         '<th>Nombre</th>' +
         '<th>Apellido</th>' +
@@ -587,6 +588,7 @@ function printTablaView(data) {
 
         tabla +=
             '<tr>' +
+            '<th>' + r["theme"] + '</th>' +
             '<th>' + r["title"] + '</th>' +
             '<th>' + r["name"] + '</th>' +
             '<th>' + r["lastname"] + '</th>' +
@@ -1215,6 +1217,45 @@ function subirvideo(ok) {
         });
 
     }
+
+}
+function asignarcursos() {
+    $.ajax({
+
+        url: "./php/asignarcurso.php",
+        type: "post",
+        //data: ok,
+
+
+        beforeSend: function () { //Previo a la peticion tenemos un cargando
+
+            $('#contenedor_home').empty(); //vaciamos el contenedor en el cual van a cargarse los cursos
+            $('#carga_cursos').show("fast"); //mostramos rapidamente los elementos que representan a los cursos
+        },
+        error: function (error) { //Si ocurre un error en el ajax
+            //alert("Error, reintentar. "+error);
+
+        },
+        complete: function () { //Al terminar la peticion, sacamos la "carga" visual
+
+        },
+
+        success: function (data) {
+
+            $('#carga_cursos').hide("fast"); //escondemos rapidamente los elementos que representan a los cursos
+            //console.log(data);
+            //$('#alert').addClass('alert-warning');
+            $('#contenedor_home').empty().append(data);
+
+            $.getScript("./js/asignarcurso.js", function () {
+
+
+            });
+
+        }
+
+    });
+
 
 }
 
@@ -1847,7 +1888,13 @@ $(document).ready(function () {
         subirvideo(true);
 
     });
+    $('#asignarcurso').click(() => {
+        //$('#pago').empty().append('<h2 class="alert alert-info"> <strong>La subida de videos estará habilitada en breve</strong>. </br></br>¡Muchas gracias!</h2>');
+        //$('#exampleModal').modal('show');
+        jumbotron(true, 'Asignar Cursos', '');
+        asignarcursos();
 
+    });
 
     $('#modificarcurso').click(() => {
         jumbotron(false);

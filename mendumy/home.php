@@ -111,6 +111,7 @@ if (!isset($_SESSION['id'])) {
               <a class="dropdown-item nav-element" id="ventas">Ventas</a>
               <a class="dropdown-item nav-element" id="adminpanel">Subir cursos</a>
               <a class="dropdown-item nav-element" id="subirvideo">Subir videos</a>
+              <a class="dropdown-item nav-element" id="asignarcurso">Asignar</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item nav-element" id="modificarcurso">Modificar cursos</a>
               <a class="dropdown-item nav-element" id="credenciales">Credenciales de pago</a>

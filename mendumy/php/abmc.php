@@ -75,13 +75,17 @@ function view($operacion)
         $date1 = date("Y/m/d", strtotime($d1));
         //echo $date1."  ".$date2;
         $courseid = $_POST["courseid"];
-        $sql = MySQLDB::getInstance()->query("SELECT title,id FROM videoscourse WHERE idcourse = '$courseid'");
+        $sql = MySQLDB::getInstance()->query("SELECT title,id,idtheme FROM videoscourse WHERE idcourse = '$courseid'");
         $v = $sql;
         //AND created BETWEEN '$d1' AND '$d2'
        
         while ($r = $sql->fetch_assoc()) {
             $videoid = $r['id'];
             $title = $r['title'];
+            $idtheme = $r['idtheme'];
+            $sql2 = MySQLDB::getInstance()->query("SELECT name FROM themes WHERE id = '$idtheme'");
+            $r2 = $sql2->fetch_assoc();
+            $theme=$r2['name'];
             $sql1 = MySQLDB::getInstance()->query("SELECT * FROM views WHERE videoid = '$videoid' AND created BETWEEN '$date1' AND '$date2'");
 
             while ($r1 = $sql1->fetch_assoc()) {
@@ -90,7 +94,7 @@ function view($operacion)
                 $user = $q->fetch_assoc();
                 $views[] = array(
                     'name' => $user['name'], 'lastname' => $user['lastname'], 'dni' => $user['dni'],
-                    'date' => $r1['created'],'title' => $title
+                    'date' => $r1['created'],'title' => $title,'theme'=>$theme
                 );
             }
             /*if (isset($views)) {
