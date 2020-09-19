@@ -47,7 +47,7 @@ if (isset($_POST['operation']) && !empty($_POST['operation']) && isset($_POST['c
             '<th>DNI</th>' .
             '<th>Correo</th>' .
             '<th>Fecha</th>' .
-            '<th>¿Pagó?</th>' .
+            '<th>Tipo</th>' .
             '</tr>' .
             '</thead>' .
             '<tbody>';
@@ -80,9 +80,9 @@ if (isset($_POST['operation']) && !empty($_POST['operation']) && isset($_POST['c
             //print_r($rs);
 
             if ($rs['paid'] == 1) {
-                $res = "si";
+                $res = "Pago";
             } else {
-                $res = "no";
+                $res = "Invitado";
             }
 
             $tabla .=

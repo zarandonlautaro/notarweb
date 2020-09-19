@@ -85,7 +85,7 @@ if ($paid_amount >= $merchant_order->total_amount) {
     //var_export($payment);
 
     $sql = MySQLDB::getInstance()->query("SELECT * FROM courseuser WHERE idcourse = $idcourse AND iduser = " . $iduser . " ");
-    if ($sql->num_rows) {
+    if ($sql->num_rows!=0) {
         echo "el curso ya fue comprado";
     } else {
         $sql = MySQLDB::getInstance()->query("INSERT INTO courseuser (idcourse,iduser,saledate) VALUES ('$idcourse','$iduser',now())");
