@@ -5,11 +5,13 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="Cursos del Colegio Notarial de Mendoza"
+        content="Create una cuenta para acceder a charlas y cursos gratuitos">
+    <meta name="keywords" content="curso, notarial, mendoza">
+    <meta name="author" content="Di Giorgio Bruno">
     <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
 
-    <title>Mendumy</title>
+    <title>Notarweb</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -22,6 +24,30 @@
 
     <!-- Custom styles for this template -->
     <link href="css/agency.css" rel="stylesheet">
+
+
+    <!--
+    <script type="text/javascript">
+        var verifyCallback = function (response) {
+            alert(response);
+        };
+        var onloadCallback = function () {
+            //necesitamos dos captchas diferentes para cada modal,ya que al poner uno solo tenemos errores.La forma de poner multiples captchas 
+            //es con Explicit rendering sacado de https://developers.google.com/recaptcha/docs/display
+            widgetId1 = grecaptcha.render('recaptcha1', {
+                'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+                'theme': 'light'
+            });
+            widgetId2 = grecaptcha.render('recaptcha2', {
+                'sitekey': '6LfM59sUAAAAABDJzCxvVSSV4npQ17JkcaSoXESB', //key del lado del cliente
+                'theme': 'light'
+            });
+        };
+    </script>-->
+
+
+
+
 </head>
 
 <body id="page-top">
@@ -47,14 +73,17 @@
     </nav>
 
     <!-- Header -->
-    <header class="masthead">
+    <header class="masthead vh-100">
         <div class="row">
             <div class="col-sm-12 col-lg-4 col-xl-4 p-0 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <img src="img/logo_transparent.png" width="170" alt="">
+                                <div class="container d-flex align-items-center justify-content-center "
+                                    style="height: 204px;">
+                                    <img class="w-100" src="img/logo.jfif" alt="logo">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -72,7 +101,7 @@
                         <div class="row mt-2">
                             <div class="col-lg-12 col-sm-12 text-center">
                                 <button id="login_button" class="btn btn-primary btn-xl text-uppercase mb-1"
-                                    type="button">Ingresar</button>
+                                    type="button"> Ingresar</button>
                             </div>
                             <div class="col-lg-12 col-sm-12 text-center">
                                 <button type="button" class="btn btn-outline-primary btn-xl text-uppercase mb-1"
@@ -84,7 +113,7 @@
                         <div class="row mt-0">
                             <div class="col-lg-12 text-center">
                                 <a href="#resetModalCenter" data-toggle="modal" data-target="#resetModalCenter">
-                                    Olvido su contraseña?
+                                    ¿Olvidó su contraseña?
                                 </a>
                             </div>
                         </div>
@@ -124,17 +153,17 @@
                     <ul class="list-inline social-buttons">
                         <li class="list-inline-item">
                             <a href="#">
-                                <i class="fab fa-twitter"></i>
+                                <i class="fab fa-linkedin-in"></i>
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="https://www.facebook.com/notarweb-107521924241008/?ref=bookmarks" target="_blank">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="#">
-                                <i class="fab fa-linkedin-in"></i>
+                            <a href="https://www.instagram.com/notarweb/" target="_blank">
+                                <i class="fab fa-instagram"></i>
                             </a>
                         </li>
                     </ul>
@@ -185,7 +214,17 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-12">
-                            <input class="form-control" type="text" id="legajoR" placeholder="Legajo">
+                            <select class="custom-select custom-select " id="input-select"
+                                title="seleccionar categoría">
+                                <option selected>Seleccionar...</option>
+                                <option value="1">Estudiante de Derecho</option>
+                                <option value="2">Abogado</option>
+                                <option value="3">Escribano</option>
+                                <option value="4">Escribano Novel</option>
+                                <option value="5">Otros</option>
+                            </select>
+
+                            <!--   <input class="form-control" type="text" id="legajoR" placeholder="Legajo">-->
                         </div>
                     </div>
 
@@ -197,8 +236,13 @@
 
                     <div class="row mb-2">
                         <div class="col-12">
+                            <input class="form-control" type="password" id="passRe" placeholder="Confirmar Contraseña">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12">
                             <input type="text" class="form-control datepicker" value="" placeholder="Fecha Nacimiento"
-                                data-date-format="mm/dd/yy" id="dp2">
+                                data-date-format="mm/dd/yyyy" id="dp2">
                         </div>
                     </div>
                     <div class="row mb-2 text-center">
@@ -209,16 +253,18 @@
                     </div>
 
                     <div class="row text-xs-center">
-                        <div class="g-recaptcha" data-sitekey="6Lf9lsMUAAAAAAokMTi3QuJeIQf7BB7HfN0Oag12"></div>
+                        <div id="recaptcha1" class="g-recaptcha"></div>
                     </div>
 
 
                 </div>
-                <div class="modal-footer">
-                    <div id="register_button">
-                        <button type="button" class="btn btn-primary">Aceptar</button>
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                <div class="container d-flex justify-content-end mb-3 ">
+
+                    <button id="register_button" type="button"
+                        class="btn btn-md p-1  btn-primary mr-2 col-xs-12 col-xl-2">Aceptar</button>
+                    <button type="button" class="btn btn-outline-secondary mr-2 col-xs-12 col-xl-2"
+                        data-dismiss="modal">Cerrar</button>
+
                 </div>
             </div>
         </div>
@@ -238,36 +284,72 @@
                 <div class="modal-body">
                     <div class="row mb-2">
                         <div class="col-12">
-                            <input class="form-control" type="email" id="emailR" placeholder="Email">
+                            <input class="form-control" type="email" id="emailR2" placeholder="Email">
                         </div>
                     </div>
                     <div class="row mb-2 text-center">
                         <div class="col-12">
-                            <span id="validate_register" class="help-block text-danger"
+                            <span id="validate_restore" class="help-block text-danger"
                                 style="font-weight: bold;"></span>
                         </div>
                     </div>
                     <div class="row text-xs-center">
-                        <div class="g-recaptcha" data-sitekey="6Lf9lsMUAAAAAAokMTi3QuJeIQf7BB7HfN0Oag12"></div>
+                        <div id="recaptcha2" class="g-recaptcha"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div id="pass_button">
-                        <button type="button" class="btn btn-primary">Aceptar</button>
-                    </div>
+
+                    <button id="pass_button" type="button" class="btn btn-primary">Aceptar</button>
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-lg" id="modalcartel" data-backdrop="static" data-keyboard="false"
+        tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4 text-center">Sitio en construccion</h1>
+                        <p class="lead text-center">Estamos trabajando para poder brindarle un servicio
+                            mejor,regresaremos pronto...</p>
 
+                        <img class="w-100" src="img/logo.jfif" alt="logo">
+                        <p class="lead text-center">Nuestras redes sociales:</p>
+                        <ul class="list-inline social-buttons mt-4 pt-3 text-center">
+
+                            <li class="list-inline-item">
+                                <a href="https://www.facebook.com/notarweb-107521924241008/?ref=bookmarks"
+                                    target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="https://www.instagram.com/notarweb/" target="_blank">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                        </ul>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="js/jqBootstrapValidation.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/bootstrap-datepicker.js"></script>
     <script src="vendor/vitalets-bootstrap-datepicker-c7af15b/js/locales/bootstrap-datepicker.es.js"></script>
-
+    <!-- recaptcha v2 JavaScript -->
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+    </script>
 
     <!-- Plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -280,7 +362,7 @@
     <script src="js/agency.js"></script>
     <script src="js/sweetalert2.js"></script>
     <script src="js/landing.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
 </body>
 

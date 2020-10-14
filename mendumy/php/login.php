@@ -8,20 +8,29 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
         echo 4; //Quiere romper algo
         die;
     }
-
-    $pass = hash("SHA256", $pass);
-    $sql = MySQLDB::getInstance()->query("SELECT idusr FROM auth WHERE username = '$email' AND password = '$pass' ");
-    if ($sql->num_rows) {
+    $pass_hash = hash("SHA256", $pass);
+    $sql = MySQLDB::getInstance()->query("SELECT * FROM users WHERE username = '$email' AND password = '$pass_hash' ");
+    
+    if ($sql->num_rows == 1){
         $rs = $sql->fetch_assoc();
-        $_SESSION['idusr'] = $rs["idusr"];
-        $sqlInfo = MySQLDB::getInstance()->query("SELECT rol FROM users WHERE id = " . $_SESSION['idusr'] . " ");
-        if ($sqlInfo->num_rows) {
-            $rsInfo = $sqlInfo->fetch_assoc();
-            $_SESSION['rol'] = $rsInfo['rol'];
+        if($rs["active"]==1){
+        
+            $id=$rs["id"];
+            $_SESSION['id'] =$id;
+            $_SESSION['rol'] = $rs['rol'];
+            $_SESSION['nombre'] = $rs['name'];
+            $auth = MySQLDB::getInstance()->query("UPDATE auth SET  last_auth=now() WHERE idusr = '$id'");
             echo 3; //Login OK
-        }
+            die;
+        
+        }else{
+
+                echo 4;//falta activar usuario
+                die;  
+             }
+            
     } else {
-        echo 2; //ERROR usr/pass
+        echo 2 ;//ERROR usr/pass
         die;
     }
 } else {

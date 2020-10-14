@@ -1,0 +1,25 @@
+
+20/07/2020 20:04:01Array
+20/07/2020 20:04:16dsd
+20/07/2020 20:05:431
+20/07/2020 20:06:021
+20/07/2020 20:06:35Array
+20/07/2020 20:07:05 Array
+20/07/2020 20:12:06success1187680057963approved11credit_card1609898700566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1aMLAaggregatornull
+20/07/2020 20:13:22success;118;7680057963;approved;11;credit_card;1609898700;566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1a;MLA;aggregator;null
+20/07/2020 20:14:07 success; 118; 7680057963; approved; 11; credit_card; 1609898700; 566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1a; MLA; aggregator; null
+20/07/2020 20:15:25 
+20/07/2020 20:16:58 a:11:{s:6:"result";s:7:"success";s:8:"idcourse";s:3:"118";s:13:"collection_id";s:10:"7680057963";s:17:"collection_status";s:8:"approved";s:18:"external_reference";s:2:"11";s:12:"payment_type";s:11:"credit_card";s:17:"merchant_order_id";s:10:"1609898700";s:13:"preference_id";s:46:"566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1a";s:7:"site_id";s:3:"MLA";s:15:"processing_mode";s:10:"aggregator";s:19:"merchant_account_id";s:4:"null";}
+20/07/2020 20:18:01 a:11:{s:6:"result";s:7:"success";s:8:"idcourse";s:3:"118";s:13:"collection_id";s:10:"7680057963";s:17:"collection_status";s:8:"approved";s:18:"external_reference";s:2:"11";s:12:"payment_type";s:11:"credit_card";s:17:"merchant_order_id";s:10:"1609898700";s:13:"preference_id";s:46:"566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1a";s:7:"site_id";s:3:"MLA";s:15:"processing_mode";s:10:"aggregator";s:19:"merchant_account_id";s:4:"null";}
+20/07/2020 20:22:01 {"result":"success","idcourse":"118","collection_id":"7680057963","collection_status":"approved","external_reference":"11","payment_type":"credit_card","merchant_order_id":"1609898700","preference_id":"566667855-f2001258-97e3-43b1-ba20-e57a90eb8b1a","site_id":"MLA","processing_mode":"aggregator","merchant_account_id":"null"}
+21/07/2020 19:36:06 {"data_id":"7695625985","type":"payment"}
+21/07/2020 19:36:08 {"id":"7695625985","credentialid":""}
+21/07/2020 19:37:24 {"data_id":"7695633784","type":"payment"}
+21/07/2020 19:38:08 {"data_id":"7695806162","type":"payment"}
+21/07/2020 19:38:11 {"id":"7695806162","credentialid":""}
+21/07/2020 19:41:08 {"data_id":"7695336944","type":"payment"}
+21/07/2020 19:41:12 {"id":"7695336944","credentialid":"25"}
+21/07/2020 19:42:34 {"id":"7695336944"}
+21/07/2020 19:42:35 {"charges_details":[]}
+21/07/2020 19:42:36 {"charges_details":[]}
+21/07/2020 19:42:36 {"charges_details":[]}
